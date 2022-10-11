@@ -1,0 +1,39 @@
+{
+  "name": "nextjs-with-typescript",
+  "version": "5.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.0",
+    "@emotion/cache": "latest",
+    "@emotion/react": "latest",
+    "@emotion/server": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "latest",
+    "@mui/material": "latest",
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "axios": "^1.1.2",
+    "classnames": "^2.3.2",
+    "graphql": "^16.6.0",
+    "lodash": "^4.17.21",
+    "micro": "^9.4.1",
+    "next": "latest",
+    "node-fetch": "^3.2.10",
+    "react": "latest",
+    "react-dom": "latest",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "typescript": "latest"
+  }
+}
