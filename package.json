@@ -24,9 +24,11 @@
     "lodash": "^4.17.21",
     "micro": "^9.4.1",
     "next": "latest",
-    "node-fetch": "^3.2.10",
+    "node-fetch": "^2.6.1",
+    "nprogress": "^0.2.0",
     "react": "latest",
     "react-dom": "latest",
+    "tss-react": "^4.3.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
