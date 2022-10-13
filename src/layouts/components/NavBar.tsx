@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import GET_CATEGORIES_QUERY from "../../utils/gql/queries/get-categories";
 import Box from "@mui/material/Box";
@@ -23,12 +24,28 @@ const useStyles = makeStyles()((theme) => {
         },
       },
     },
+    navLinkActive: {
+      "& a": {
+        cursor: "pointer",
+        textDecoration: "none",
+        height: "20px",
+        display: "flex",
+        color: theme.palette.primary.main,
+        fontWeight: "bold",
+        alignItems: "center",
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        "&: hover": {
+          color: theme.palette.text.primary,
+        },
+      },
+    },
   };
 });
 
 const NavBar: React.FC = () => {
   const { classes } = useStyles();
-
+  const router = useRouter();
   const { data, loading, error } = useQuery(GET_CATEGORIES_QUERY);
 
   if (loading) {
@@ -52,9 +69,17 @@ const NavBar: React.FC = () => {
         </Box>
         {data.productCategories.nodes.map((category: any) => {
           const { id, name, slug } = category;
+
           return (
-            <Box className={classes.navLink}>
-              <Link key={id} href={`/products/${encodeURIComponent(slug)}`}>
+            <Box
+              key={id}
+              className={
+                router.asPath === `/category/${encodeURIComponent(slug)}`
+                  ? classes.navLinkActive
+                  : classes.navLink
+              }
+            >
+              <Link key={id} href={`/category/${encodeURIComponent(slug)}`}>
                 {name}
               </Link>
             </Box>
