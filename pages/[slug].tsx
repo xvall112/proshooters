@@ -1,18 +1,19 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
-import client from "../../src/utils/ApolloClient";
+import client from "../src/utils/ApolloClient";
 import {
   PRODUCT_BY_CATEGORY_SLUG,
   PRODUCT_CATEGORIES_SLUGS,
-} from "../../src/utils/gql/queries/product-by-category";
+} from "../src/utils/gql/queries/product-by-category";
 //components
-import Layout from "../../src/layouts/Layout";
-import Category from "../../src/views/category/category";
+import Layout from "../src/layouts/Layout";
+import Category from "../src/views/category/Category";
 
 interface Props {
   categoryName: any;
   products: any;
+  categoryChildren: any;
 }
 
 const CategorySingle = (props: Props) => {
@@ -24,11 +25,15 @@ const CategorySingle = (props: Props) => {
     return <div>Loading...</div>;
   }
 
-  const { categoryName, products } = props;
+  const { categoryName, products, categoryChildren } = props;
 
   return (
     <Layout>
-      <Category categoryName={categoryName} products={products} />
+      <Category
+        categoryName={categoryName}
+        products={products}
+        categoryChildren={categoryChildren}
+      />
     </Layout>
   );
 };
@@ -46,6 +51,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
+      categoryChildren: data?.productCategory?.children.nodes ?? [],
       categoryName: data?.productCategory?.name ?? "",
       products: data?.productCategory?.products?.nodes ?? [],
     },

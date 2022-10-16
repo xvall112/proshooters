@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
  */
 const GET_CATEGORIES_QUERY = gql`
   query {
-    productCategories {
+    productCategories(where: { parent: 0 }) {
       nodes {
         id
         name

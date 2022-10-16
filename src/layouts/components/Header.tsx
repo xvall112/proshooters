@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     threshold: 38,
   });
   return (
-    <Box>
+    <AppBar position={"sticky"} elevation={trigger ? 1 : 0} color="inherit">
       <Box
         position={"relative"}
         zIndex={theme.zIndex.appBar}
@@ -31,16 +31,10 @@ const Header: React.FC = () => {
           <TopNav />
         </Container>
       </Box>
-      <AppBar
-        position={"sticky"}
-        elevation={trigger ? 1 : 0}
-        color="transparent"
-      >
-        <Container paddingY={1}>
-          <NavBar />
-        </Container>
-      </AppBar>
-    </Box>
+      <Container paddingY={1}>
+        <NavBar />
+      </Container>
+    </AppBar>
   );
 };
 
