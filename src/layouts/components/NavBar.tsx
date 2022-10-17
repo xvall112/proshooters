@@ -6,6 +6,7 @@ import { useQuery } from "@apollo/client";
 import GET_CATEGORIES_QUERY from "../../utils/gql/queries/get-categories";
 //materialUI
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import Grid from "@mui/material/Unstable_Grid2";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
@@ -50,6 +51,31 @@ const useStyles = makeStyles()((theme) => {
   };
 });
 
+//Link modification
+const MyLinkLogo = React.forwardRef(({ onClick, href }, ref) => {
+  return (
+    <Box component="a" onClick={onClick} ref={ref} href={href}>
+      <Image
+        src={logo}
+        alt="Logo Pro Shooters"
+        width={50}
+        height={50}
+        blurDataURL="data:..."
+        placeholder="blur"
+      />
+    </Box>
+  );
+});
+
+const MyLinkCart = React.forwardRef(({ onClick, href }, ref) => {
+  const theme = useTheme();
+  return (
+    <Box component="a" onClick={onClick} ref={ref} href={href}>
+      <LocalMallIcon fontSize="large" color="secondary" />
+    </Box>
+  );
+});
+
 const NavBar = () => {
   const [cart] = useContext(AppContext);
   const productsCount =
@@ -72,15 +98,11 @@ const NavBar = () => {
       spacing={2}
     >
       <Grid xs="auto">
-        <Image
-          src={logo}
-          alt="Picture of the author"
-          width={50}
-          height={50}
-          blurDataURL="data:..."
-          placeholder="blur"
-        />
+        <Link href="/" passHref>
+          <MyLinkLogo />
+        </Link>
       </Grid>
+
       <Grid container xs={10} alignItems="center">
         <nav style={{ width: "100%" }}>
           <Box
@@ -103,7 +125,7 @@ const NavBar = () => {
                       : classes.navLink
                   }
                 >
-                  <Link key={id} href={`${encodeURIComponent(slug)}`}>
+                  <Link key={id} href={`/${encodeURIComponent(slug)}`}>
                     {name}
                   </Link>
                 </Box>
@@ -121,7 +143,9 @@ const NavBar = () => {
           }}
           badgeContent={productsCount ? productsCount : null}
         >
-          <LocalMallIcon fontSize="large" />
+          <Link href="/cart" passHref>
+            <MyLinkCart />
+          </Link>
         </Badge>
       </Grid>
     </Grid>

@@ -2,8 +2,9 @@ import React from "react";
 import Link from "next/link";
 //materialUI
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
 //components
 import Container from "../../components/Container";
 import Product from "./components/Product";
@@ -15,11 +16,12 @@ interface Props {
 }
 
 const Category = ({ categoryName, products, categoryChildren }: Props) => {
+  const theme = useTheme();
   return (
     <>
       <Container>
         <Grid container spacing={2} direction="column">
-          <Grid xs={12}>
+          <Grid item xs={12}>
             {categoryName ? (
               <Box component={Typography} variant="h4" fontWeight="bold">
                 {categoryName}
@@ -28,22 +30,38 @@ const Category = ({ categoryName, products, categoryChildren }: Props) => {
               ""
             )}
           </Grid>
-          <Grid container xs={12}>
+          <Grid
+            item
+            container
+            spacing={1}
+            xs={12}
+            sx={{ marginBottom: theme.spacing(2) }}
+          >
             {undefined !== categoryChildren && categoryChildren?.length
               ? categoryChildren.map((catChildren: any) => {
                   return (
-                    <Grid xs={6} md={2}>
+                    <Grid item xs={12} md={2}>
                       <CategoryChildren catChildren={catChildren} />
                     </Grid>
                   );
                 })
               : ""}
           </Grid>
-          <Grid xs={12} container spacing={8} direction="row">
+
+          <Grid item xs={12}>
+            {undefined !== categoryChildren && categoryChildren?.length ? (
+              <Box component={Typography} variant="h5" fontWeight="bold">
+                Nejnovější
+              </Box>
+            ) : (
+              ""
+            )}
+          </Grid>
+          <Grid item xs={12} container spacing={8} direction="row">
             {undefined !== products && products?.length
               ? products.map((product: any) => {
                   return (
-                    <Grid xs={12} md={3} key={product.id}>
+                    <Grid item xs={12} md={3} key={product.id}>
                       <Product product={product} />
                     </Grid>
                   );

@@ -7,7 +7,7 @@ import {
 import { isEmpty } from "lodash";
 
 //components
-import Products from "../../src/views/product/Product";
+import ProductOverview from "../../src/views/ProductOverview/ProductOverview";
 import Layout from "../../src/layouts/Layout";
 
 export default function Product(props) {
@@ -24,7 +24,7 @@ export default function Product(props) {
   return (
     <>
       <Layout>
-        <Products product={product} />
+        <ProductOverview product={product} />
       </Layout>
     </>
   );

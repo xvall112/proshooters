@@ -12,6 +12,8 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 //components
 import AddToCartButton from "../../../components/AddToCartButton";
+import Price from "./Price";
+
 interface Props {
   product: any;
 }
@@ -37,8 +39,10 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
 });
 
 const Product = ({ product }: Props) => {
-  const { slug, name, image, price } = product;
+  const { slug, name, image, shortDescription, regularPrice, salePrice } =
+    product;
   const theme = useTheme();
+
   return (
     <>
       <Box display={"block"} width={1} height={1}>
@@ -66,9 +70,9 @@ const Product = ({ product }: Props) => {
             <Typography fontWeight={700} sx={{ textTransform: "uppercase" }}>
               {name}
             </Typography>
-            <Typography variant={"subtitle2"} color={"text.secondary"}>
-              "description"
-            </Typography>
+            {/* <Typography variant={"subtitle2"} color={"text.secondary"}>
+              <div dangerouslySetInnerHTML={{ __html: shortDescription }} />
+            </Typography> */}
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box
@@ -77,8 +81,9 @@ const Product = ({ product }: Props) => {
             alignItems={"center"}
             justifyContent={"space-between"}
           >
-            <Typography fontWeight={700}>{price}</Typography>
-            <Box display={"flex"} alignItems={"center"}>
+            <Price salesPrice={salePrice} regularPrice={regularPrice} />
+
+            {/* <Box display={"flex"} alignItems={"center"}>
               <Box display={"flex"} alignItems={"center"}>
                 {[1, 2, 3, 4, 5].map((r) => (
                   <Box
@@ -86,7 +91,7 @@ const Product = ({ product }: Props) => {
                     component={"svg"}
                     color={
                       r <= 5
-                        ? theme.palette.secondary.main
+                        ? theme.palette.primary.light
                         : theme.palette.divider
                     }
                     width={16}
@@ -106,7 +111,7 @@ const Product = ({ product }: Props) => {
               >
                 10 reviews
               </Typography>
-            </Box>
+            </Box> */}
           </Box>
           <Box marginTop={2}>
             <AddToCartButton product={product} />

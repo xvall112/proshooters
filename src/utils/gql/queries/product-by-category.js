@@ -10,6 +10,10 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql`
           id
           name
           slug
+          image {
+            sourceUrl
+            altText
+          }
         }
       }
       products(first: 50) {
@@ -19,6 +23,7 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql`
           averageRating
           slug
           description
+          shortDescription
           image {
             id
             uri
@@ -30,6 +35,7 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql`
           ... on SimpleProduct {
             price
             regularPrice
+            salePrice
             id
           }
           ... on VariableProduct {
