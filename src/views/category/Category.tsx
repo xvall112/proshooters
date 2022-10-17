@@ -57,7 +57,7 @@ const Category = ({ categoryName, products, categoryChildren }: Props) => {
               ""
             )}
           </Grid>
-          <Grid item xs={12} container spacing={8} direction="row">
+          <Grid item xs={12} container spacing={6} direction="row">
             {undefined !== products && products?.length
               ? products.map((product: any) => {
                   return (

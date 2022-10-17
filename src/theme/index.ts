@@ -3,11 +3,11 @@ import { createTheme, ComponentsOverrides } from '@mui/material/styles';
 import shadows from './shadows';
 import { light, dark } from './palette';
 
-const getTheme = (mode: string, themeToggler: () => void): Theme =>
-  responsiveFontSizes(
+const getTheme = 
+  
     createTheme({
-      palette: mode === 'light' ? light : dark,
-      shadows: shadows(mode),
+      palette: light,
+      
       typography: {
         fontFamily: '"Inter", sans-serif',
         button: {
@@ -27,10 +27,14 @@ const getTheme = (mode: string, themeToggler: () => void): Theme =>
               borderRadius: 5,
               paddingTop: 10,
               paddingBottom: 10,
+              
             },
-            containedSecondary: mode === 'light' ? { color: 'white' } : {},
+            contained:{
+              background: `linear-gradient(90deg, rgba(198,21,23,1) 32%, rgba(250,31,33,1) 100%)`
+            }
           } as ComponentsOverrides['MuiButton'],
         },
+      
         MuiInputBase: {
           styleOverrides: {
             root: {
@@ -56,8 +60,8 @@ const getTheme = (mode: string, themeToggler: () => void): Theme =>
           } as ComponentsOverrides['MuiCard'],
         },
       },
-      themeToggler,
-    }),
-  );
+      
+    })
+  
 
 export default getTheme;

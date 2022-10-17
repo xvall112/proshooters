@@ -3,9 +3,9 @@ import { isEmpty } from "lodash";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import theme from "../../../theme";
 
 const Price = ({ regularPrice = 0, salesPrice }) => {
+  const theme = useTheme();
   if (isEmpty(salesPrice)) {
     return (
       <Box sx={{ color: theme.palette.text.primary }} fontWeight="bold">

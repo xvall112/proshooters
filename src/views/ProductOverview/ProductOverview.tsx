@@ -2,16 +2,17 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import { isEmpty } from "lodash";
 
 import {
   Headline,
   Image,
   Details,
-  Reviews,
   SimilarProducts,
   Newsletter,
 } from "./components";
 
+import Describe from "./components/Describe";
 import Container from "../../components/Container";
 
 const mock = {
@@ -32,6 +33,7 @@ interface Props {
   product: any;
 }
 const ProductOverview = ({ product }: Props): JSX.Element => {
+  console.log(product.related);
   return (
     <>
       <Box bgcolor={"alternate.main"}>
@@ -47,9 +49,6 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
             </Grid>
             <Grid item xs={12} md={5}>
               <Details
-                title={product.name}
-                description={product.description}
-                price={product.price}
                 reviewCount={mock.reviewCount}
                 reviewScore={mock.reviewScore}
                 product={product}
@@ -62,14 +61,32 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
         <Divider />
       </Container>
       <Container>
-        <Reviews />
+        <Describe
+          description={
+            product.description ? product.description : product.shortDescription
+          }
+        />
       </Container>
       <Container paddingY={4}>
         <Divider />
       </Container>
-      <Container>
-        <SimilarProducts />
-      </Container>
+      {!isEmpty(product.related.nodes) && (
+        <Container>
+          <SimilarProducts
+            similarProducts={product.related.nodes}
+            title={"Related products"}
+          />
+        </Container>
+      )}
+      {!isEmpty(product.upsell.nodes) && (
+        <Container>
+          <SimilarProducts
+            similarProducts={product.upsell.nodes}
+            title={"Upsell Product"}
+          />
+        </Container>
+      )}
+
       <Box bgcolor={"alternate.main"}>
         <Container>
           <Newsletter />

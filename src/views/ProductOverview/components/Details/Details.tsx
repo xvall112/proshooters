@@ -12,11 +12,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 //component
 import AddToCart from "../../../../components/AddToCartButton";
+import Price from "./Price";
 
 const mock = [
   {
-    title: "30 Days return",
-    subtitle: "We offer you a full refund within 30 days of purchase.",
+    title: "30 Dní na vrácení zboží",
+    subtitle: "Možnost vrácení zboži do 30 od zakoupení.",
     icon: (
       <svg
         width={24}
@@ -36,8 +37,52 @@ const mock = [
     ),
   },
   {
-    title: "Fast delivery",
-    subtitle: "Automatically receive free standard shipping on every order.",
+    title: "Doprava Zdarma",
+    subtitle: "Doprava zdarma při nákupu nad 2000 Kč.",
+    icon: (
+      <svg
+        width={24}
+        height={24}
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Flexibilita",
+    subtitle: "Vyhovíme vašim požadavkům",
+    icon: (
+      <svg
+        width={24}
+        height={24}
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Podpora 24/7",
+    subtitle: "Jsme tu pro Vás kdykoliv",
     icon: (
       <svg
         width={24}
@@ -60,32 +105,38 @@ const mock = [
 ];
 
 interface Props {
-  title: string;
-  description: string;
-  price: string;
   reviewScore: number;
   reviewCount: number;
   product: any;
 }
 
-const Details = ({
-  title,
-  price,
-  reviewCount,
-  reviewScore,
-  product,
-  shortDescription,
-}: Props): JSX.Element => {
+const Details = ({ reviewCount, reviewScore, product }: Props): JSX.Element => {
   const theme = useTheme();
   const [size, setSize] = useState("M");
   const [color, setColor] = useState("white");
-
+  const { regularPrice, salePrice, shortDescription, name } = product;
   return (
     <Box>
-      <Box display={"flex"} justifyContent={"space-between"}>
-        <Typography fontWeight={700}>{title}</Typography>
-        <Typography fontWeight={700}>{price}</Typography>
-      </Box>
+      <Grid
+        container
+        direction="row"
+        spacing={2}
+        justifyContent="space-between"
+      >
+        <Grid item xs={12} md={8}>
+          <Typography fontWeight={700}>{name}</Typography>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Box
+            component={Typography}
+            color={theme.palette.primary.main}
+            fontWeight={700}
+            textAlign={{ xs: "left", md: "right" }}
+          >
+            <Price regularPrice={regularPrice} salesPrice={salePrice} />
+          </Box>
+        </Grid>
+      </Grid>
       <Box display={"flex"} alignItems={"center"} marginTop={2}>
         <Typography marginRight={1} fontWeight={700} color={"text.secondary"}>
           {reviewScore}.0
@@ -95,7 +146,9 @@ const Details = ({
             <Box
               key={item}
               color={
-                item <= reviewScore ? "theme.pallete.priamry.main" : "divider"
+                item <= reviewScore
+                  ? `${theme.palette.primary.light}`
+                  : "divider"
               }
               display={"flex"}
               alignItems={"center"}
@@ -116,7 +169,7 @@ const Details = ({
           See all {reviewCount} reviews
         </Link>
       </Box>
-      <Box marginTop={4}>
+      {/*  <Box marginTop={4}>
         <Typography>Color</Typography>
         <Stack direction={"row"} spacing={1} marginTop={1}>
           {["black", "gray", "white"].map((item) => (
@@ -145,8 +198,8 @@ const Details = ({
             </Box>
           ))}
         </Stack>
-      </Box>
-      <Box marginTop={4}>
+      </Box> */}
+      {/* <Box marginTop={4}>
         <Typography>Size</Typography>
         <Stack direction={"row"} spacing={1} marginTop={1}>
           {["XXS", "XS", "S", "M", "L", "XL", "XXL"].map((item) => (
@@ -169,22 +222,23 @@ const Details = ({
             </Box>
           ))}
         </Stack>
-      </Box>
+      </Box> */}
+
       <Box marginTop={4}>
-        <AddToCart product={product} />
-      </Box>
-      <Box marginTop={4}>
-        <Typography>Description</Typography>
+        <Typography>Popis</Typography>
         <Typography
           variant={"subtitle2"}
           color={"text.secondary"}
           marginTop={1}
         >
-          {shortDescription}
+          <div dangerouslySetInnerHTML={{ __html: shortDescription }} />
         </Typography>
       </Box>
-      <Divider sx={{ marginTop: 4 }} />
       <Box marginTop={4}>
+        <AddToCart product={product} />
+      </Box>
+      <Divider sx={{ marginTop: 4 }} />
+      {/* <Box marginTop={4}>
         <Typography>Fabric & care</Typography>
         <Box marginTop={1}>
           <ul>
@@ -226,7 +280,7 @@ const Details = ({
             </li>
           </ul>
         </Box>
-      </Box>
+      </Box> */}
       <Box marginTop={4}>
         <Grid container spacing={2}>
           {mock.map((item, i) => (
@@ -263,11 +317,11 @@ const Details = ({
       </Box>
       <Box marginTop={4}>
         <Button variant={"outlined"} color={"primary"} size={"large"} fullWidth>
-          Add to Favorite
+          Přidat do vytoužených
         </Button>
       </Box>
       <Box marginTop={4}>
-        <Typography>Need a support?</Typography>
+        <Typography>Potřebujete poradit?</Typography>
         <Stack direction={"row"} spacing={2} marginTop={0.5}>
           <Button
             sx={{
@@ -285,7 +339,7 @@ const Details = ({
               </svg>
             }
           >
-            Contact sales
+            Kontakt
           </Button>
           <Button
             sx={{
@@ -304,7 +358,7 @@ const Details = ({
               </svg>
             }
           >
-            Email us
+            Email
           </Button>
         </Stack>
       </Box>

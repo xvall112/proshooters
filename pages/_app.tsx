@@ -5,7 +5,7 @@ import { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import theme from "../src/theme";
+import theme from "../src/theme/index";
 import createEmotionCache from "../src/createEmotionCache";
 
 import Router from "next/router";

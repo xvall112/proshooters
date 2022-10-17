@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import Image from "../../../components/Image";
-import { DEFAULT_PRODUCT_HOME_IMG_URL } from "../../../constants/urls";
+import Image from "../../../../components/Image";
+import { DEFAULT_PRODUCT_HOME_IMG_URL } from "../../../../constants/urls";
 
 //materialUI
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 //components
-import AddToCartButton from "../../../components/AddToCartButton";
+import AddToCartButton from "../../../../components/AddToCartButton";
 import Price from "./Price";
 
 interface Props {

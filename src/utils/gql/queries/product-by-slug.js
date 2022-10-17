@@ -25,6 +25,48 @@ export const PRODUCT_BY_SLUG_QUERY = gql`
         sourceUrl
       }
       name
+      related(first: 4) {
+        nodes {
+          id
+          productId: databaseId
+          slug
+          name
+          image {
+            id
+            uri
+            title
+            srcSet
+            sourceUrl
+          }
+          ... on SimpleProduct {
+            price
+            id
+            regularPrice
+            salePrice
+          }
+        }
+      }
+      upsell(first: 4) {
+        nodes {
+          id
+          productId: databaseId
+          slug
+          name
+          image {
+            id
+            uri
+            title
+            srcSet
+            sourceUrl
+          }
+          ... on SimpleProduct {
+            price
+            id
+            regularPrice
+            salePrice
+          }
+        }
+      }
       ... on SimpleProduct {
         price
         id

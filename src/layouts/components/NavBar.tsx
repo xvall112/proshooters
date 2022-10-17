@@ -8,7 +8,7 @@ import GET_CATEGORIES_QUERY from "../../utils/gql/queries/get-categories";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import Badge from "@mui/material/Badge";
 import logo from "../../images/pro-shooters_lg_negative-round_web.svg";
@@ -86,24 +86,21 @@ const NavBar = () => {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_CATEGORIES_QUERY);
 
-  if (loading) {
-    return <h5>Loading</h5>;
-  }
   return (
     <Grid
       container
-      direction="row"
-      justifyContent="space-around"
+      justifyContent="space-between"
       alignItems="center"
       spacing={2}
+      sx={{ gridAutoFlow: "row dense" }}
     >
-      <Grid xs="auto">
+      <Grid item xs={3} md={1}>
         <Link href="/" passHref>
           <MyLinkLogo />
         </Link>
       </Grid>
 
-      <Grid container xs={10} alignItems="center">
+      <Grid item container xs={12} md={10} alignItems="center">
         <nav style={{ width: "100%" }}>
           <Box
             sx={{
@@ -114,27 +111,29 @@ const NavBar = () => {
               whiteSpace: "nowrap",
             }}
           >
-            {data.productCategories.nodes.map((category: any) => {
-              const { id, name, slug } = category;
-              return (
-                <Box
-                  key={id}
-                  className={
-                    router.asPath === `/${encodeURIComponent(slug)}`
-                      ? classes.navLinkActive
-                      : classes.navLink
-                  }
-                >
-                  <Link key={id} href={`/${encodeURIComponent(slug)}`}>
-                    {name}
-                  </Link>
-                </Box>
-              );
-            })}
+            {loading
+              ? "Loading"
+              : data.productCategories.nodes.map((category: any) => {
+                  const { id, name, slug } = category;
+                  return (
+                    <Box
+                      key={id}
+                      className={
+                        router.asPath === `/${encodeURIComponent(slug)}`
+                          ? classes.navLinkActive
+                          : classes.navLink
+                      }
+                    >
+                      <Link key={id} href={`/${encodeURIComponent(slug)}`}>
+                        {name}
+                      </Link>
+                    </Box>
+                  );
+                })}
           </Box>
         </nav>
       </Grid>
-      <Grid xs="auto">
+      <Grid item xs={3} md={1}>
         <Badge
           color="primary"
           anchorOrigin={{

@@ -1,47 +1,47 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const Newsletter = (): JSX.Element => {
   const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.up('sm'), {
+  const isSm = useMediaQuery(theme.breakpoints.up("sm"), {
     defaultMatches: true,
   });
 
   return (
     <Box
-      display={'flex'}
-      flexDirection={'column'}
-      justifyContent={'center'}
-      alignItems={'center'}
+      display={"flex"}
+      flexDirection={"column"}
+      justifyContent={"center"}
+      alignItems={"center"}
     >
       <Box marginBottom={4}>
         <Typography
           variant="caption"
-          component={'p'}
-          align={'center'}
-          color={'text.secondary'}
+          component={"p"}
+          align={"center"}
+          color={"text.secondary"}
           gutterBottom
-          sx={{ fontWeight: 700, textTransform: 'uppercase' }}
+          sx={{ fontWeight: 700, textTransform: "uppercase" }}
         >
-          Subscribe
+          Novinky
         </Typography>
-        <Typography variant="h4" align={'center'} sx={{ fontWeight: 700 }}>
-          Get the latest from our store
+        <Typography variant="h4" align={"center"} sx={{ fontWeight: 700 }}>
+          Odebírejte novinky ať vám nic neunikne
         </Typography>
       </Box>
       <Box
         width={1}
         display="flex"
-        flexDirection={{ xs: 'column', sm: 'row' }}
-        alignItems={{ xs: 'stretched', sm: 'flex-start' }}
-        justifyContent={'center'}
+        flexDirection={{ xs: "column", sm: "row" }}
+        alignItems={{ xs: "stretched", sm: "flex-start" }}
+        justifyContent={"center"}
       >
         <FormControl
           fullWidth
@@ -49,12 +49,12 @@ const Newsletter = (): JSX.Element => {
           sx={{ maxWidth: { xs: 1, sm: 400 }, width: 1 }}
         >
           <OutlinedInput
-            placeholder="Enter your email"
+            placeholder="Email"
             sx={{
               borderTopRightRadius: { sm: 0 },
               borderBottomRightRadius: { sm: 0 },
               maxHeight: 54,
-              bgcolor: 'background.paper',
+              bgcolor: "background.paper",
             }}
           />
         </FormControl>
@@ -89,7 +89,7 @@ const Newsletter = (): JSX.Element => {
             </svg>
           }
         >
-          Subscribe
+          Odebírat
         </Box>
       </Box>
     </Box>

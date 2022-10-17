@@ -3,9 +3,9 @@ import { isEmpty } from "lodash";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import theme from "../../../theme";
 
 const Price = ({ regularPrice = 0, salesPrice }) => {
+  const theme = useTheme();
   if (isEmpty(salesPrice)) {
     return (
       <Box sx={{ color: theme.palette.text.primary }} fontWeight="bold">
@@ -24,14 +24,12 @@ const Price = ({ regularPrice = 0, salesPrice }) => {
     if (isEmpty(regularPrice) || isEmpty(salesPrice)) {
       return null;
     }
-    console.log(regularPrice);
 
     const RegularPrice = regularPrice.split(`&nbsp;`);
     const formattedRegularPrice = parseInt(RegularPrice[0]);
     const SalesPrice = salesPrice.split(`&nbsp;`);
     const formattedSalesPrice = parseInt(SalesPrice[0]);
 
-    console.log(formattedRegularPrice, formattedSalesPrice);
     const discountPercent =
       ((formattedRegularPrice - formattedSalesPrice) / formattedRegularPrice) *
       100;
@@ -50,14 +48,13 @@ const Price = ({ regularPrice = 0, salesPrice }) => {
     <>
       {/* Regular price */}
       {productMeta?.discountPercent ? (
-        <Box sx={{ color: theme.palette.primary.main }} fontWeight="bold">
+        <Box sx={{ color: theme.palette.primary.main }} fontSize="18px">
           <div dangerouslySetInnerHTML={{ __html: salesPrice }} />
         </Box>
       ) : null}
 
       {/* Discounted price */}
       <Box
-        px={1}
         sx={{
           color: theme.palette.text.secondary,
           textDecorationLine: "line-through",

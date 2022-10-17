@@ -22,11 +22,11 @@ const MyPaper = React.forwardRef(({ onClick, href, name, image }, ref) => {
         direction: "row",
         alignItems: "center",
         color: "white",
-        padding: "20px",
+        padding: "10px",
         textDecoration: "none",
-        backgroundColor: theme.palette.primary.main,
+        background: `linear-gradient(90deg, rgba(198,21,23,1) 32%, rgba(250,31,33,1) 100%)`,
         "&: hover": {
-          backgroundColor: theme.palette.primary.dark,
+          background: theme.palette.primary.dark,
         },
       }}
       fullWidth
