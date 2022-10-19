@@ -7,6 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "../src/theme/index";
 import createEmotionCache from "../src/createEmotionCache";
+import "keen-slider/keen-slider.min.css";
 
 import Router from "next/router";
 import NProgress from "nprogress";

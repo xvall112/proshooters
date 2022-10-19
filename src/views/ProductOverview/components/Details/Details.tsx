@@ -12,7 +12,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 //component
 import AddToCart from "../../../../components/AddToCartButton";
-import Price from "./Price";
+import Price from "./components/Price";
 
 const mock = [
   {
