@@ -25,6 +25,20 @@ export const PRODUCT_BY_SLUG_QUERY = gql`
         sourceUrl
       }
       name
+      productCategories {
+        nodes {
+          id
+          name
+          slug
+          parent {
+            node {
+              slug
+              name
+              id
+            }
+          }
+        }
+      }
       related(first: 4) {
         nodes {
           id

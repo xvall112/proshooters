@@ -40,7 +40,7 @@ const Category = ({ categoryName, products, categoryChildren }: Props) => {
             {undefined !== categoryChildren && categoryChildren?.length
               ? categoryChildren.map((catChildren: any) => {
                   return (
-                    <Grid item xs={12} md={2}>
+                    <Grid item xs={12} sm={4} md={3} lg={2}>
                       <CategoryChildren catChildren={catChildren} />
                     </Grid>
                   );
@@ -61,7 +61,7 @@ const Category = ({ categoryName, products, categoryChildren }: Props) => {
             {undefined !== products && products?.length
               ? products.map((product: any) => {
                   return (
-                    <Grid item xs={12} md={3} key={product.id}>
+                    <Grid item xs={12} sm={6} md={3} key={product.id}>
                       <Product product={product} />
                     </Grid>
                   );

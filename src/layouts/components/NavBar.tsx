@@ -10,8 +10,10 @@ import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import Grid from "@mui/material/Grid";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
+import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
 import Badge from "@mui/material/Badge";
-import logo from "../../images/pro-shooters_lg_negative-round_web.svg";
+import logo from "../../images/pro-shooters_lg_web.svg";
 //context
 import { AppContext } from "../../context/AppContext";
 
@@ -58,8 +60,8 @@ const MyLinkLogo = React.forwardRef(({ onClick, href }, ref) => {
       <Image
         src={logo}
         alt="Logo Pro Shooters"
-        width={50}
-        height={50}
+        width={70}
+        height={70}
         blurDataURL="data:..."
         placeholder="blur"
       />
@@ -94,13 +96,20 @@ const NavBar = () => {
       spacing={2}
       sx={{ gridAutoFlow: "row dense" }}
     >
-      <Grid item xs={3} md={1}>
+      <Grid item xs={3} md={1} sx={{ order: { xs: 1, md: 1 } }}>
         <Link href="/" passHref>
           <MyLinkLogo />
         </Link>
       </Grid>
 
-      <Grid item container xs={12} md={10} alignItems="center">
+      <Grid
+        item
+        container
+        xs={12}
+        md={9}
+        alignItems="center"
+        sx={{ order: { xs: 3, md: 2 } }}
+      >
         <nav style={{ width: "100%" }}>
           <Box
             sx={{
@@ -109,6 +118,9 @@ const NavBar = () => {
               alignItems: "center",
               overflowX: "auto",
               whiteSpace: "nowrap",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
             }}
           >
             {loading
@@ -133,7 +145,19 @@ const NavBar = () => {
           </Box>
         </nav>
       </Grid>
-      <Grid item xs={3} md={1}>
+      <Grid
+        container
+        item
+        xs={6}
+        md={2}
+        direction="row"
+        justifyContent="flex-end"
+        sx={{ order: { xs: 2, md: 3 } }}
+      >
+        <SearchIcon fontSize="large" color="secondary" />
+        <Box px={2}>
+          <PersonIcon fontSize="large" color="secondary" />
+        </Box>
         <Badge
           color="primary"
           anchorOrigin={{

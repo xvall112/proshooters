@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import Image from "../../../components/Image";
+import Image from "next/image";
+/* import Image from "../../../components/Image"; */
 import { DEFAULT_PRODUCT_HOME_IMG_URL } from "../../../constants/urls";
 
 //materialUI
@@ -57,21 +58,27 @@ const Product = ({ product }: Props) => {
             alignItems: "stretch",
           }}
         >
-          <Image
-            width="308"
-            height="308"
-            loading="lazy"
-            sourceUrl={image?.sourceUrl ?? ""}
-            defaultImgUrl={DEFAULT_PRODUCT_HOME_IMG_URL}
-            altText={image?.altText ?? slug}
-          />
+          <Link href={`/product/${encodeURIComponent(slug)}`} passHref>
+            <Box component={"a"} position="relative">
+              <Image
+                layout="responsive"
+                width={300}
+                height={300}
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPMySurBwAEbwHRc8mW/gAAAABJRU5ErkJggg=="
+                src={image?.sourceUrl ?? DEFAULT_PRODUCT_HOME_IMG_URL}
+                alt={image?.altText ?? slug}
+              />
+            </Box>
+          </Link>
           {salePrice && (
             <Box
               sx={{
                 position: "absolute",
                 bgcolor: theme.palette.error.light,
-                paddingY: "4px",
-                paddingX: "8px",
+                paddingY: "8px",
+                paddingX: "16px",
                 borderRadius: 1,
                 display: "flex",
                 alignItems: "center",
@@ -96,7 +103,7 @@ const Product = ({ product }: Props) => {
             </Typography>
             {/* <Typography variant={"subtitle2"} color={"text.secondary"}>
               <div dangerouslySetInnerHTML={{ __html: shortDescription }} />
-            </Typography> */}
+              </Typography> */}
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box marginTop={2} display={"flex"} alignItems={"center"}>
@@ -130,8 +137,9 @@ const Product = ({ product }: Props) => {
               >
                 10 reviews
               </Typography>
-            </Box> */}
+              </Box> */}
           </Box>
+
           <Box marginTop={2}>
             <AddToCartButton product={product} />
             <Link href={`/product/${encodeURIComponent(slug)}`} passHref>
