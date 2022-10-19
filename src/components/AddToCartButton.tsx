@@ -10,7 +10,7 @@ import GET_CART from "../utils/gql/queries/get-cart";
 import ADD_TO_CART from "../utils/gql/mutations/add-to-cart";
 import Button from "@mui/material/Button";
 
-const AddToCart = (props) => {
+const AddToCart = (props: any) => {
   const { product } = props;
 
   const productQryInput = {

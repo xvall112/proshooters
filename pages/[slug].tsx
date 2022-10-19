@@ -1,4 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from "next";
+import { ParsedUrlQuery } from "querystring";
 import { useRouter } from "next/router";
 import { isEmpty } from "lodash";
 import client from "../src/utils/ApolloClient";
@@ -14,6 +15,10 @@ interface Props {
   categoryName: any;
   products: any;
   categoryChildren: any;
+}
+
+interface Params extends ParsedUrlQuery {
+  slug: string;
 }
 
 const CategorySingle = (props: Props) => {
@@ -40,9 +45,7 @@ const CategorySingle = (props: Props) => {
 export default CategorySingle;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const {
-    params: { slug },
-  } = context;
+  const { slug } = context.params as Params;
 
   const { data } = await client.query({
     query: PRODUCT_BY_CATEGORY_SLUG,
@@ -64,7 +67,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     query: PRODUCT_CATEGORIES_SLUGS,
   });
 
-  const pathsData = [];
+  const pathsData: any = [];
 
   data?.productCategories?.nodes &&
     data?.productCategories?.nodes.map((productCategory: any) => {

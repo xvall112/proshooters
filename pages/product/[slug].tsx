@@ -1,3 +1,5 @@
+import { GetStaticProps, GetStaticPaths } from "next";
+import { ParsedUrlQuery } from "querystring";
 import { useRouter } from "next/router";
 import client from "../../src/utils/ApolloClient";
 import {
@@ -10,7 +12,11 @@ import { isEmpty } from "lodash";
 import ProductOverview from "../../src/views/ProductOverview/ProductOverview";
 import Layout from "../../src/layouts/Layout";
 
-export default function Product(props) {
+interface Params extends ParsedUrlQuery {
+  slug: string;
+}
+
+export default function Product(props: any) {
   const { product } = props;
 
   const router = useRouter();
@@ -30,10 +36,8 @@ export default function Product(props) {
   );
 }
 
-export async function getStaticProps(context) {
-  const {
-    params: { slug },
-  } = context;
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { slug } = context.params as Params;
 
   const { data } = await client.query({
     query: PRODUCT_BY_SLUG_QUERY,
@@ -46,17 +50,17 @@ export async function getStaticProps(context) {
     },
     revalidate: 1,
   };
-}
+};
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const { data } = await client.query({
     query: PRODUCT_SLUGS,
   });
 
-  const pathsData = [];
+  const pathsData: any = [];
 
   data?.products?.nodes &&
-    data?.products?.nodes.map((product) => {
+    data?.products?.nodes.map((product: any) => {
       if (!isEmpty(product?.slug)) {
         pathsData.push({ params: { slug: product?.slug } });
       }
@@ -66,4 +70,4 @@ export async function getStaticPaths() {
     paths: pathsData,
     fallback: true,
   };
-}
+};
