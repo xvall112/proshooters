@@ -42,7 +42,7 @@ const Headline = ({ productCategories }: Props): JSX.Element => {
           <ArrowBackIosIcon />
         </IconButton>
       </Box>
-      <Breadcrumbs aria-label="breadcrumb">
+      <Breadcrumbs aria-label="breadcrumb" sx={{ cursor: "pointer" }}>
         <Link href="/">
           <MUILink underline="hover" color="primary">
             Home

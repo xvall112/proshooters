@@ -13,6 +13,8 @@ import ProductSliderControl from "./ProductSliderControl";
 //MUIcomponents
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface ProductSliderProps {
   children?: React.ReactNode[];
@@ -23,6 +25,10 @@ export const ProductSlider: React.FC<ProductSliderProps> = ({
   children,
   className = "",
 }) => {
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"), {
+    defaultMatches: true,
+  });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
@@ -90,7 +96,7 @@ export const ProductSlider: React.FC<ProductSliderProps> = ({
       }}
     >
       <Grid container direction="row">
-        <Grid item xs={2}>
+        <Grid item md={2} sx={{ display: { xs: "none", md: "block" } }}>
           <a.div className={s.album} ref={thumbsContainerRef}>
             {slider &&
               Children.map(children, (child, idx) => {
@@ -113,12 +119,15 @@ export const ProductSlider: React.FC<ProductSliderProps> = ({
               })}
           </a.div>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12} md={10}>
           <div
             ref={ref}
             className={cn(s.slider, { [s.show]: isMounted }, "keen-slider")}
           >
-            {slider && <ProductSliderControl onPrev={onPrev} onNext={onNext} />}
+            {isMd && slider && (
+              <ProductSliderControl onPrev={onPrev} onNext={onNext} />
+            )}
+
             {Children.map(children, (child) => {
               // Add the keen-slider__slide className to children
               if (isValidElement(child)) {
