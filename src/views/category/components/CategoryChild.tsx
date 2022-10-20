@@ -34,7 +34,7 @@ const MyPaper = React.forwardRef(({ onClick, href, name, image }, ref) => {
       <Image
         height={50}
         width={50}
-        sourceUrl={image?.sourceUrl ?? ""}
+        sourceUrl={image?.sourceUrl ?? DEFAULT_CATEGORY_IMG_URL}
         defaultImgUrl={DEFAULT_CATEGORY_IMG_URL}
         altText={image?.altText ?? "picture"}
       />

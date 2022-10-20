@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { isEmpty } from "lodash";
 import { ProductSlider } from "./components/ProductSlider/ProductSlider";
-import { Headline, Details, SimilarProducts, Newsletter } from "./components";
+import { Headline, Details, SimilarProducts } from "./components";
 
 import Describe from "./components/Reviews/Describe";
 import Container from "../../components/Container";
@@ -75,6 +75,7 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
       <Container paddingY={4}>
         <Divider />
       </Container>
+      {/* related products, generuje je woocommerce */}
       {!isEmpty(product.related.nodes) && (
         <Container>
           <SimilarProducts
@@ -83,20 +84,15 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
           />
         </Container>
       )}
+      {/* upsell produkty, zadavaji se ve woocommerce */}
       {!isEmpty(product.upsell.nodes) && (
         <Container>
           <SimilarProducts
             similarProducts={product.upsell.nodes}
-            title={"Upsell Product"}
+            title={"Lidé také nakupují"}
           />
         </Container>
       )}
-
-      <Box bgcolor={"alternate.main"}>
-        <Container>
-          <Newsletter />
-        </Container>
-      </Box>
     </>
   );
 };

@@ -6,9 +6,9 @@ import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 
-import Container from "../../components/Container";
-import TopNav from "./TopNav";
-import NavBar from "./NavBar";
+import Container from "../../../components/Container";
+import TopNav from "./components/TopNav";
+import NavBar from "./components/NavBar";
 
 const Header: React.FC = () => {
   const theme = useTheme();

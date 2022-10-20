@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 //components
 import Container from "../../components/Container";
-import Product from "./components/Product";
+import Product from "../../components/product/Product";
 import CategoryChildren from "./components/CategoryChild";
 interface Props {
   categoryName: string;
@@ -30,24 +30,27 @@ const Category = ({ categoryName, products, categoryChildren }: Props) => {
               ""
             )}
           </Grid>
-          <Grid
-            item
-            container
-            spacing={1}
-            xs={12}
-            sx={{ marginBottom: theme.spacing(2) }}
-          >
-            {undefined !== categoryChildren && categoryChildren?.length
-              ? categoryChildren.map((catChildren: any) => {
-                  return (
-                    <Grid item xs={12} sm={4} md={3} lg={2}>
-                      <CategoryChildren catChildren={catChildren} />
-                    </Grid>
-                  );
-                })
-              : ""}
-          </Grid>
-
+          {/* pokud ma kategorie podkategorie => vypise podkategorie*/}
+          {undefined !== categoryChildren && categoryChildren?.length ? (
+            <Grid
+              item
+              container
+              spacing={1}
+              xs={12}
+              sx={{ marginBottom: theme.spacing(2) }}
+            >
+              {categoryChildren.map((catChildren: any) => {
+                return (
+                  <Grid item xs={12} sm={4} md={3} lg={2}>
+                    <CategoryChildren catChildren={catChildren} />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          ) : (
+            ""
+          )}
+          {/* pokud ma podkategorie automaticky title nejnovejsi a vypise prvnich 20 ze vsech podrazenych kategorii*/}
           <Grid item xs={12}>
             {undefined !== categoryChildren && categoryChildren?.length ? (
               <Box component={Typography} variant="h5" fontWeight="bold">

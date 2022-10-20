@@ -31,7 +31,7 @@ const ProductSliderControl: FC<ProductSliderControl> = ({ onPrev, onNext }) => {
           borderRadius: "5px",
           border: "none",
           "&:hover": {
-            backgroundColor: theme.palette.secondary.light,
+            backgroundColor: theme.palette.secondary.main,
             cursor: "pointer",
           },
         }}
@@ -49,7 +49,7 @@ const ProductSliderControl: FC<ProductSliderControl> = ({ onPrev, onNext }) => {
           borderRadius: "5px",
           border: "none",
           "&:hover": {
-            backgroundColor: theme.palette.secondary.light,
+            backgroundColor: theme.palette.secondary.main,
             cursor: "pointer",
           },
         }}

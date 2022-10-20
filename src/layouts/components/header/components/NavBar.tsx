@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import GET_CATEGORIES_QUERY from "../../utils/gql/queries/get-categories";
+import GET_CATEGORIES_QUERY from "../../../../utils/gql/queries/get-categories";
 //materialUI
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
@@ -13,9 +13,9 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import Badge from "@mui/material/Badge";
-import logo from "../../images/pro-shooters_lg_web.svg";
+import logo from "../../../../images/pro-shooters_lg_web.svg";
 //context
-import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../../../context/AppContext";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -137,7 +137,7 @@ const NavBar = () => {
                       }
                     >
                       <Link key={id} href={`/${encodeURIComponent(slug)}`}>
-                        {name}
+                        <a>{name}</a>
                       </Link>
                     </Box>
                   );

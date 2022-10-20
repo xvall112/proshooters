@@ -4,7 +4,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 //components
-import Product from "./Product";
+//product has imperted from components
+import Product from "../../../../components/product/Product";
 import { useKeenSlider } from "keen-slider/react";
 interface Props {
   similarProducts: any;

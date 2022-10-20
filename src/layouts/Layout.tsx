@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
 import { ApolloProvider } from "@apollo/client";
 import client from "../utils/ApolloClient";
 

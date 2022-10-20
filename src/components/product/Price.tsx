@@ -3,7 +3,7 @@ import { isEmpty } from "lodash";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import theme from "../../../theme";
+import theme from "../../theme";
 
 const Price = ({ regularPrice = 0, salesPrice }) => {
   if (isEmpty(salesPrice)) {

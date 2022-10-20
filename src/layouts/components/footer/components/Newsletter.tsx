@@ -33,7 +33,7 @@ const Newsletter = (): JSX.Element => {
           Novinky
         </Typography>
         <Typography variant="h4" align={"center"} sx={{ fontWeight: 700 }}>
-          Odebírejte novinky ať vám nic neunikne
+          Odebírejte novinky a nic vám neunikne
         </Typography>
       </Box>
       <Box
