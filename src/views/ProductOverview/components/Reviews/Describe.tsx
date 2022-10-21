@@ -57,14 +57,14 @@ export default function BasicTabs({ description }: Props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <>
+        <Box px={{ xs: 0, md: 8 }}>
           <Typography variant={"h5"} fontWeight={700}>
             Popis
           </Typography>
           {description && (
             <div dangerouslySetInnerHTML={{ __html: description }} />
           )}
-        </>
+        </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Reviews />
