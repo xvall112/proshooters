@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -8,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Grid from "@mui/material/Grid";
 
 const Orders = ({
   key,
@@ -16,31 +18,34 @@ const Orders = ({
   products,
   handleRemoveProductClick,
   updateCart,
-}: any): JSX.Element => {
+}: any) => {
   const theme = useTheme();
   return (
     <>
       <Box display={"flex"}>
-        {/*  <Box
-              component={'img'}
-              src={item.image}
-              alt={item.title}
-              sx={{
-                borderRadius: 2,
-                width: 1,
-                height: 1,
-                maxWidth: { xs: 120, sm: 200 },
-                marginRight: 2,
-                filter:
-                  theme.palette.mode === 'dark' ? 'brightness(0.7)' : 'none',
-              }}
-            /> */}
+        <Box
+          sx={{
+            borderRadius: 2,
+            width: 1,
+            height: 1,
+            maxWidth: { xs: 120 },
+            marginRight: 2,
+            filter: theme.palette.mode === "dark" ? "brightness(0.7)" : "none",
+          }}
+        >
+          <Image
+            src={item.image?.sourceUrl}
+            alt={item.image?.altText}
+            height={100}
+            width={100}
+          />
+        </Box>
         <Box
           display={"flex"}
           flexDirection={{ xs: "column", sm: "row" }}
           justifyContent={"space-between"}
           alignItems={"flex-start"}
-          width={1}
+          width={{ xs: 1, md: 800 }}
         >
           <Box sx={{ order: 1 }}>
             <Typography fontWeight={700} gutterBottom>
@@ -190,7 +195,7 @@ const Orders = ({
               </Select>
             </FormControl>
             <Typography fontWeight={700} marginLeft={2}>
-              {item.price}
+              <div dangerouslySetInnerHTML={{ __html: item.totalPrice }} />
             </Typography>
           </Stack>
         </Box>

@@ -1,6 +1,6 @@
 export interface ICart {
   products?: Array<{
-    image: object;
+    image: { altText: string; sourceUrl: any; srcSet: any; title: string };
     name: string;
     price: number;
     productId: number;
