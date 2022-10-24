@@ -112,8 +112,8 @@ interface Props {
 
 const Details = ({ reviewCount, reviewScore, product }: Props): JSX.Element => {
   const theme = useTheme();
-  const [size, setSize] = useState("M");
-  const [color, setColor] = useState("white");
+  /*   const [size, setSize] = useState("M");
+  const [color, setColor] = useState("white"); */
   const { regularPrice, salePrice, shortDescription, name } = product;
   return (
     <Box>

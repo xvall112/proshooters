@@ -9,7 +9,8 @@ import { getFormattedCart } from "../functions";
 import GET_CART from "../utils/gql/queries/get-cart";
 import ADD_TO_CART from "../utils/gql/mutations/add-to-cart";
 import Button from "@mui/material/Button";
-
+//types
+import { CartContextType } from "../types/appContext";
 const AddToCart = (props: any) => {
   const { product } = props;
 
@@ -18,9 +19,9 @@ const AddToCart = (props: any) => {
     productId: product.productId,
   };
 
-  const [cart, setCart] = useContext(AppContext);
+  const { cart, setCart } = useContext(AppContext) as CartContextType;
   const [showViewCart, setShowViewCart] = useState(false);
-  const [requestError, setRequestError] = useState(null);
+  const [requestError, setRequestError] = useState("");
 
   // Get Cart Data.
   const { data, refetch } = useQuery(GET_CART, {
@@ -31,7 +32,7 @@ const AddToCart = (props: any) => {
       localStorage.setItem("woo-next-cart", JSON.stringify(updatedCart));
 
       // Update cart data in React Context.
-      setCart(updatedCart);
+      setCart(updatedCart === null ? {} : updatedCart);
     },
   });
 
@@ -59,7 +60,7 @@ const AddToCart = (props: any) => {
   });
 
   const handleAddToCartClick = async () => {
-    setRequestError(null);
+    setRequestError("");
     await addToCart();
   };
 

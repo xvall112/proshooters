@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Container from "../../../components/Container";
 
 const EmptyCart = (): JSX.Element => {
-  const MyLink = React.forwardRef(({ onClick, href }, ref) => {
+  const MyLink = React.forwardRef(({ onClick, href }: any, ref: any) => {
     return (
       <Button
         component="a"

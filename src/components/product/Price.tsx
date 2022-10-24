@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import theme from "../../theme";
 
-const Price = ({ regularPrice = 0, salesPrice }) => {
+const Price = ({ regularPrice, salesPrice }: any) => {
   if (isEmpty(salesPrice)) {
     return (
       <Box sx={{ color: theme.palette.text.primary }} fontWeight="bold">
@@ -20,7 +20,7 @@ const Price = ({ regularPrice = 0, salesPrice }) => {
    * @param {String} regularPrice
    * @param {String} salesPrice
    */
-  const discountPercent = (regularPrice, salesPrice) => {
+  const discountPercent = (regularPrice: any, salesPrice: any) => {
     if (isEmpty(regularPrice) || isEmpty(salesPrice)) {
       return null;
     }

@@ -1,21 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-interface ICart {
-  products?: Array<{
-    image: object;
-    name: string;
-    price: number;
-    productId: number;
-    qty: number;
-    totalPrice: string;
-  }>;
-  totalProductsCount?: number;
-  totalProductsPrice?: string;
-}
-
-type CartContextType = {
-  cart: ICart;
-};
+import { ICart, CartContextType } from "../types/appContext";
 
 export const AppContext = React.createContext<CartContextType | null>(null);
 
@@ -32,7 +16,7 @@ export const AppProvider = (props: any) => {
   }, []);
 
   return (
-    <AppContext.Provider value={[cart, setCart]}>
+    <AppContext.Provider value={{ cart, setCart }}>
       {props.children}
     </AppContext.Provider>
   );

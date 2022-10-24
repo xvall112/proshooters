@@ -31,7 +31,7 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
           <Grid container spacing={{ xs: 2, md: 4 }}>
             <Grid item xs={12} md={8}>
               <ProductSlider key={product.id}>
-                {product.galleryImages.nodes.map((image: any, i) => (
+                {product.galleryImages.nodes.map((image: any, i: any) => (
                   <Box
                     sx={{
                       textAlign: "center",

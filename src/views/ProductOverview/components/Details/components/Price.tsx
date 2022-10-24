@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 
-const Price = ({ regularPrice = 0, salesPrice }) => {
+const Price = ({ regularPrice, salesPrice }: any) => {
   const theme = useTheme();
   if (isEmpty(salesPrice)) {
     return (
@@ -20,7 +20,7 @@ const Price = ({ regularPrice = 0, salesPrice }) => {
    * @param {String} regularPrice
    * @param {String} salesPrice
    */
-  const discountPercent = (regularPrice, salesPrice) => {
+  const discountPercent = (regularPrice: any, salesPrice: any) => {
     if (isEmpty(regularPrice) || isEmpty(salesPrice)) {
       return null;
     }

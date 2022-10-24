@@ -16,6 +16,8 @@ import Badge from "@mui/material/Badge";
 import logo from "../../../../images/pro-shooters_lg_web.svg";
 //context
 import { AppContext } from "../../../../context/AppContext";
+//types
+import { CartContextType } from "../../../../types/appContext";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -54,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
 });
 
 //Link modification
-const MyLinkLogo = React.forwardRef(({ onClick, href }, ref) => {
+const MyLinkLogo = React.forwardRef(({ onClick, href }: any, ref) => {
   return (
     <Box component="a" onClick={onClick} ref={ref} href={href}>
       <Image
@@ -69,7 +71,7 @@ const MyLinkLogo = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
-const MyLinkCart = React.forwardRef(({ onClick, href }, ref) => {
+const MyLinkCart = React.forwardRef(({ onClick, href }: any, ref) => {
   const theme = useTheme();
   return (
     <Box component="a" onClick={onClick} ref={ref} href={href}>
@@ -79,7 +81,7 @@ const MyLinkCart = React.forwardRef(({ onClick, href }, ref) => {
 });
 
 const NavBar = () => {
-  const [cart] = useContext(AppContext);
+  const { cart } = useContext(AppContext) as CartContextType;
   const productsCount =
     null !== cart && Object.keys(cart).length ? cart.totalProductsCount : null;
   const totalPrice =

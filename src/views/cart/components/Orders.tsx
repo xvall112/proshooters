@@ -9,33 +9,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-const mock = [
-  {
-    title: "Adidas shoes",
-    size: "41",
-    price: "$69.90",
-    code: "D5268X149",
-    image: "https://assets.maccarianagency.com/backgrounds/img56.jpg",
-    gender: "Male",
-  },
-  {
-    title: "Nike",
-    size: "41",
-    price: "$49.90",
-    code: "P8763Y435",
-    image: "https://assets.maccarianagency.com/backgrounds/img57.jpg",
-    gender: "Female",
-  },
-  {
-    title: "Sneakers",
-    size: "41",
-    price: "$59.90",
-    code: "A1356F865",
-    image: "https://assets.maccarianagency.com/backgrounds/img58.jpg",
-    gender: "Unisex",
-  },
-];
-
 const Orders = ({
   key,
   item,
@@ -43,7 +16,7 @@ const Orders = ({
   products,
   handleRemoveProductClick,
   updateCart,
-}): JSX.Element => {
+}: any): JSX.Element => {
   const theme = useTheme();
   return (
     <>

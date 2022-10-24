@@ -19,7 +19,7 @@ interface Props {
   product: any;
 }
 
-const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+const MyButton = React.forwardRef(({ onClick, href }: any, ref: any) => {
   const theme = useTheme();
   return (
     <Button

@@ -20,10 +20,12 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
+//types
+import { CartContextType } from "../../types/appContext";
 
 const Cart = () => {
-  const [cart, setCart] = useContext(AppContext);
-  const [requestError, setRequestError] = useState(null);
+  const { cart, setCart } = useContext(AppContext) as CartContextType;
+  const [requestError, setRequestError] = useState("");
   // Get Cart Data.
   const { loading, error, data, refetch } = useQuery(GET_CART, {
     notifyOnNetworkStatusChange: true,
@@ -33,7 +35,7 @@ const Cart = () => {
       localStorage.setItem("woo-next-cart", JSON.stringify(updatedCart));
 
       // Update cart data in React Context.
-      setCart(updatedCart);
+      setCart(updatedCart || {});
     },
   });
 
@@ -85,7 +87,11 @@ const Cart = () => {
    *
    * @return {void}
    */
-  const handleRemoveProductClick = (event, cartKey, products) => {
+  const handleRemoveProductClick = (
+    event: any,
+    cartKey: any,
+    products: any
+  ) => {
     event.stopPropagation();
     if (products.length) {
       // By passing the newQty to 0 in updateCart Mutation, it will remove the item.
@@ -114,7 +120,7 @@ const Cart = () => {
                   Váš nákupní košík
                 </Typography>
                 {cart.products?.length &&
-                  cart.products.map((item) => (
+                  cart.products.map((item: any) => (
                     <Orders
                       key={item.productId}
                       item={item}
@@ -182,7 +188,9 @@ const Cart = () => {
                 </Box>
               </Grid>
             </Grid>
-            {cart.products?.length && cart.products.map((item) => item.name)}
+            {cart &&
+              cart.products?.length &&
+              cart.products.map((item) => item.name)}
           </>
         ) : (
           <EmptyCart />
