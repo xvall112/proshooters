@@ -26,6 +26,7 @@ import { CartContextType } from "../../types/appContext";
 const Cart = () => {
   const { cart, setCart } = useContext(AppContext) as CartContextType;
   const [requestError, setRequestError] = useState("");
+
   // Get Cart Data.
   const { loading, error, data, refetch } = useQuery(GET_CART, {
     notifyOnNetworkStatusChange: true,
@@ -87,6 +88,7 @@ const Cart = () => {
    *
    * @return {void}
    */
+
   const handleRemoveProductClick = (
     event: any,
     cartKey: any,
@@ -112,7 +114,7 @@ const Cart = () => {
   return (
     <>
       <Container>
-        {cart !== "" ? (
+        {cart !== null ? (
           <>
             <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
@@ -188,9 +190,6 @@ const Cart = () => {
                 </Box>
               </Grid>
             </Grid>
-            {cart &&
-              cart.products?.length &&
-              cart.products.map((item) => item.name)}
           </>
         ) : (
           <EmptyCart />

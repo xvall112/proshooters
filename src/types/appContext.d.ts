@@ -14,6 +14,8 @@ export interface ICart {
 export type CartContextType = {
   cart: ICart;
   setCart: (cart: ICart) => void;
+  handleAddToCartClick: (productId: string) => void;
+  addToCartLoading: boolean;
 };
 
 export interface ILink {

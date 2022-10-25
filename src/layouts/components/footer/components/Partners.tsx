@@ -22,9 +22,8 @@ const Partners = (): JSX.Element => {
       alignItems="center"
     >
       {brands.map((brand, i) => (
-        <Grid item xs={6} md={2}>
+        <Grid item xs={6} md={2} key={i}>
           <Box
-            key={i}
             marginX={{ xs: 2, md: 3 }}
             marginY={{ xs: 2, md: 3 }}
             sx={{ display: "block" }}

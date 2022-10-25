@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import CssBaseline from "@mui/material/CssBaseline";
 import getTheme from "../theme";
-import theme from "../theme";
+import theme from "../theme/index";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { AppProvider } from "../context/AppContext";
 import createEmotionCache from "../createEmotionCache";
@@ -64,8 +64,8 @@ export default function Page({ children }: Props): JSX.Element {
   useEffect(() => {}, [mountedComponent, themeMode]); */
   const emotionCache = clientSideEmotionCache;
   return (
-    <AppProvider>
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <AppProvider>
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
@@ -73,7 +73,7 @@ export default function Page({ children }: Props): JSX.Element {
             <Paper elevation={0}>{children}</Paper>
           </ThemeProvider>
         </CacheProvider>
-      </ApolloProvider>
-    </AppProvider>
+      </AppProvider>
+    </ApolloProvider>
   );
 }

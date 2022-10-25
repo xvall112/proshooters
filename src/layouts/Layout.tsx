@@ -10,11 +10,9 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <>
-      <ApolloProvider client={client}>
-        <Header />
-        {children}
-        <Footer />
-      </ApolloProvider>
+      <Header />
+      {children}
+      <Footer />
     </>
   );
 };

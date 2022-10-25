@@ -24,14 +24,12 @@ const Price = ({ regularPrice, salesPrice }: any) => {
     if (isEmpty(regularPrice) || isEmpty(salesPrice)) {
       return null;
     }
-    console.log(regularPrice);
 
     const RegularPrice = regularPrice.split(`&nbsp;`);
     const formattedRegularPrice = parseInt(RegularPrice[0]);
     const SalesPrice = salesPrice.split(`&nbsp;`);
     const formattedSalesPrice = parseInt(SalesPrice[0]);
 
-    console.log(formattedRegularPrice, formattedSalesPrice);
     const discountPercent =
       ((formattedRegularPrice - formattedSalesPrice) / formattedRegularPrice) *
       100;

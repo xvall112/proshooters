@@ -3,13 +3,15 @@ import Image from "next/image";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Link from "@mui/material/Link";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 
 const Orders = ({
   key,
@@ -47,7 +49,7 @@ const Orders = ({
           alignItems={"flex-start"}
           width={{ xs: 1, md: 800 }}
         >
-          <Box sx={{ order: 1 }}>
+          <Box sx={{ order: 1, width: "300px" }}>
             <Typography fontWeight={700} gutterBottom>
               {item.name}
             </Typography>
@@ -94,7 +96,7 @@ const Orders = ({
                 color={"inherit"}
                 fontWeight={700}
               >
-                {item.code}
+                {item.productId}
               </Typography>
             </Typography>
           </Box>
@@ -104,40 +106,15 @@ const Orders = ({
             marginTop={{ xs: 2, sm: 0 }}
             sx={{ order: { xs: 3, sm: 2 } }}
           >
-            <Link
-              href={"#"}
-              underline={"none"}
-              variant={"subtitle2"}
-              noWrap={true}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                color: "text.secondary",
-                "&:hover": {
-                  color: "primary.main",
-                },
-              }}
+            <IconButton
+              aria-label="delete"
+              onClick={(event) =>
+                handleRemoveProductClick(event, item.cartKey, products)
+              }
             >
-              <Box
-                component={"svg"}
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                marginRight={0.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </Box>
-              Remove
-            </Link>
-            <Link
+              <DeleteIcon />
+            </IconButton>
+            {/*  <Link
               href={"#"}
               underline={"none"}
               variant={"subtitle2"}
@@ -169,7 +146,7 @@ const Orders = ({
                 />
               </Box>
               Save
-            </Link>
+            </Link> */}
           </Stack>
           <Stack
             spacing={1}
@@ -194,7 +171,11 @@ const Orders = ({
                 ))}
               </Select>
             </FormControl>
-            <Typography fontWeight={700} marginLeft={2}>
+            <Typography
+              fontWeight={700}
+              marginLeft={2}
+              sx={{ minWidth: "100px" }}
+            >
               <div dangerouslySetInnerHTML={{ __html: item.totalPrice }} />
             </Typography>
           </Stack>
