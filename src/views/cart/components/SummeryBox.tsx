@@ -84,7 +84,7 @@ const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
         </Box>
         <Button
           component={Link}
-          href={"/demos/ecommerce/checkout"}
+          href={"/"}
           variant={"contained"}
           size={"large"}
           fullWidth

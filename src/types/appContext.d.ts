@@ -16,6 +16,10 @@ export type CartContextType = {
   setCart: (cart: ICart) => void;
   handleAddToCartClick: (productId: string) => void;
   addToCartLoading: boolean;
+  handleRemoveProductClick: (products: any, event: any, cartKey: any) => void;
+  handleQtyChange: (products: any, count: any, cartKey: any) => void;
+  updateCartProcessing: boolean;
+  loadingCart: boolean;
 };
 
 export interface ILink {

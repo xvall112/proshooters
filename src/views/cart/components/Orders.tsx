@@ -1,27 +1,63 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
+import { debounce } from "lodash";
+//MaterialUI
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Skeleton from "@mui/material/Skeleton";
 
-const Orders = ({
-  key,
-  item,
-  updateCartProcessing,
-  products,
-  handleRemoveProductClick,
-  updateCart,
-}: any) => {
+//context
+import { AppContext } from "../../../context/AppContext";
+//types
+import { CartContextType } from "../../../types/appContext";
+const Orders = ({ item, products }: any) => {
   const theme = useTheme();
+  const {
+    handleRemoveProductClick,
+    handleQtyChange,
+    updateCartProcessing,
+    loadingCart,
+  } = useContext(AppContext) as CartContextType;
+  const [productCount, setProductCount] = useState(item.qty);
+
+  //500ms debounce po zmene mnozstvi
+  const debouncedQtyChange = React.useRef(
+    debounce((count) => {
+      handleQtyChange(count, item.cartKey, products);
+    }, 500)
+  ).current;
+
+  //tlacitko + pridani mnostvi
+  const plusQty = () => {
+    setProductCount((productCount: any) => parseInt(productCount) + 1);
+    debouncedQtyChange(parseInt(productCount) + 1);
+  };
+  //tlacitko - pridani mnostvi
+  const minusQty = () => {
+    setProductCount((productCount: any) => parseInt(productCount) - 1);
+    debouncedQtyChange(parseInt(productCount) - 1);
+  };
+  //zmena mnozstvi v textovem poli
+  const changeQty = (event: any) => {
+    setProductCount(event.target.value);
+    debouncedQtyChange(event.target.value);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      debouncedQtyChange.cancel();
+    };
+  }, [debouncedQtyChange]);
+
   return (
     <>
       <Box display={"flex"}>
@@ -100,87 +136,90 @@ const Orders = ({
               </Typography>
             </Typography>
           </Box>
+
           <Stack
-            spacing={1}
-            direction={{ xs: "row", sm: "column" }}
-            marginTop={{ xs: 2, sm: 0 }}
-            sx={{ order: { xs: 3, sm: 2 } }}
-          >
-            <IconButton
-              aria-label="delete"
-              onClick={(event) =>
-                handleRemoveProductClick(event, item.cartKey, products)
-              }
-            >
-              <DeleteIcon />
-            </IconButton>
-            {/*  <Link
-              href={"#"}
-              underline={"none"}
-              variant={"subtitle2"}
-              noWrap={true}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                color: "text.secondary",
-                "&:hover": {
-                  color: "primary.main",
-                },
-              }}
-            >
-              <Box
-                component={"svg"}
-                xmlns="http://www.w3.org/2000/svg"
-                width={20}
-                height={20}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                marginRight={0.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </Box>
-              Save
-            </Link> */}
-          </Stack>
-          <Stack
-            spacing={1}
             direction={"row"}
             alignItems={"center"}
             marginTop={{ xs: 2, sm: 0 }}
             sx={{ order: { xs: 2, sm: 3 } }}
           >
-            <FormControl fullWidth>
-              <Select
-                defaultValue={1}
-                sx={{
-                  "& .MuiSelect-select": {
-                    paddingY: 0.5,
-                  },
+            <FormControl>
+              <TextField
+                type={"number"}
+                id="outlined-number"
+                label="Množství"
+                size="small"
+                InputLabelProps={{
+                  shrink: true,
                 }}
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-                  <MenuItem key={i} value={i}>
-                    {i}
-                  </MenuItem>
-                ))}
-              </Select>
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                data-cart-key={item.cartKey}
+                value={productCount}
+                onChange={(event) => changeQty(event)}
+                disabled={updateCartProcessing || loadingCart}
+                sx={{ width: "100px" }}
+              />
             </FormControl>
+            <ButtonGroup
+              size="small"
+              variant="outlined"
+              aria-label="outlined primary button group"
+              disabled={updateCartProcessing || loadingCart}
+            >
+              <Button onClick={() => minusQty()}>-</Button>
+              <Button onClick={() => plusQty()}>+</Button>
+            </ButtonGroup>
+            {/* <FormControl>
+              <TextField
+                id="outlined-number"
+                label="Množství"
+                type="number"
+                size="small"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                data-cart-key={item.cartKey}
+                value={productCount}
+                onChange={(event) => changeQty(event, item.cartKey, products)}
+                disabled={updateCartProcessing || loadingCart}
+                sx={{ width: "100px" }}
+              />
+            </FormControl> */}
+
             <Typography
               fontWeight={700}
               marginLeft={2}
               sx={{ minWidth: "100px" }}
             >
-              <div dangerouslySetInnerHTML={{ __html: item.totalPrice }} />
+              {updateCartProcessing || loadingCart ? (
+                <Skeleton
+                  variant="text"
+                  sx={{ fontSize: "1.2rem", minWidth: "100px" }}
+                />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: item.totalPrice }} />
+              )}
             </Typography>
           </Stack>
         </Box>
+        <Stack
+          spacing={1}
+          direction={{ xs: "row", sm: "column" }}
+          marginTop={{ xs: 2, sm: 0 }}
+          sx={{ order: { xs: 3, sm: 2 } }}
+        >
+          <IconButton
+            aria-label="delete"
+            onClick={(event) =>
+              handleRemoveProductClick(event, item.cartKey, products)
+            }
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
       </Box>
+
       <Divider
         sx={{
           marginY: { xs: 2, sm: 4 },
