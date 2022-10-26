@@ -1,67 +1,14 @@
-import { useState, useContext } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import Link from "next/link";
-import { v4 } from "uuid";
-import cx from "classnames";
-
+import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { getFormattedCart } from "../functions";
-import GET_CART from "../utils/gql/queries/get-cart";
-import ADD_TO_CART from "../utils/gql/mutations/add-to-cart";
 import Button from "@mui/material/Button";
+//types
+import { CartContextType } from "../types/appContext";
 
 const AddToCart = (props: any) => {
   const { product } = props;
-
-  const productQryInput = {
-    clientMutationId: v4(), // Generate a unique id.
-    productId: product.productId,
-  };
-
-  const [cart, setCart] = useContext(AppContext);
-  const [showViewCart, setShowViewCart] = useState(false);
-  const [requestError, setRequestError] = useState(null);
-
-  // Get Cart Data.
-  const { data, refetch } = useQuery(GET_CART, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: () => {
-      // Update cart in the localStorage.
-      const updatedCart = getFormattedCart(data);
-      localStorage.setItem("woo-next-cart", JSON.stringify(updatedCart));
-
-      // Update cart data in React Context.
-      setCart(updatedCart);
-    },
-  });
-
-  // Add to Cart Mutation.
-  const [
-    addToCart,
-    { data: addToCartRes, loading: addToCartLoading, error: addToCartError },
-  ] = useMutation(ADD_TO_CART, {
-    variables: {
-      input: productQryInput,
-    },
-    onCompleted: () => {
-      // On Success:
-      // 1. Make the GET_CART query to update the cart with new values in React context.
-      refetch();
-
-      // 2. Show View Cart Button
-      setShowViewCart(true);
-    },
-    onError: (error) => {
-      if (error) {
-        setRequestError(error?.graphQLErrors?.[0]?.message ?? "");
-      }
-    },
-  });
-
-  const handleAddToCartClick = async () => {
-    setRequestError(null);
-    await addToCart();
-  };
+  const { handleAddToCartClick, addToCartLoading } = useContext(
+    AppContext
+  ) as CartContextType;
 
   return (
     <div>
@@ -74,7 +21,7 @@ const AddToCart = (props: any) => {
                 ) : */}
       <Button
         disabled={addToCartLoading}
-        onClick={handleAddToCartClick}
+        onClick={() => handleAddToCartClick(product.productId)}
         variant={"contained"}
         color={"primary"}
         size={"large"}

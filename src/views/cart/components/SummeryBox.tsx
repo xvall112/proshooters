@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import isUndefined from "lodash/isUndefined";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
@@ -6,11 +7,16 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-
+import Skeleton from "@mui/material/Skeleton";
+//context
+import { AppContext } from "../../../context/AppContext";
+import { CartContextType } from "../../../types/appContext";
 interface Props {
   totalProductsPrice: any;
 }
 const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
+  const { originCart, loadingCart } = useContext(AppContext) as CartContextType;
+
   return (
     <Box>
       <Box
@@ -54,21 +60,46 @@ const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
         <Box display={"flex"} justifyContent={"space-between"}>
           <Typography color={"text.secondary"}>Mezisoučet</Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
-            {totalProductsPrice && (
-              <div dangerouslySetInnerHTML={{ __html: totalProductsPrice }} />
+            {loadingCart ? (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "1.2rem", minWidth: "100px" }}
+              />
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: !isUndefined(originCart) ? originCart.subtotal : "",
+                }}
+              />
             )}
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
           <Typography color={"text.secondary"}>Sleva</Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
-            -$0.00
+            {loadingCart ? (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "1.2rem", minWidth: "100px" }}
+              />
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{ __html: originCart.discountTotal }}
+              />
+            )}
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography color={"text.secondary"}>VAT (+20%)</Typography>
+          <Typography color={"text.secondary"}>DPH (+20%)</Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
-            $35,94
+            {loadingCart ? (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "1.2rem", minWidth: "100px" }}
+              />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: originCart.totalTax }} />
+            )}
           </Typography>
         </Box>
         <Divider />
@@ -77,14 +108,19 @@ const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
             Celekem (Vč. DPH)
           </Typography>
           <Typography variant={"h6"} fontWeight={700}>
-            {totalProductsPrice && (
-              <div dangerouslySetInnerHTML={{ __html: totalProductsPrice }} />
+            {loadingCart ? (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "1.2rem", minWidth: "100px" }}
+              />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: originCart.total }} />
             )}
           </Typography>
         </Box>
         <Button
           component={Link}
-          href={"/demos/ecommerce/checkout"}
+          href={"/"}
           variant={"contained"}
           size={"large"}
           fullWidth

@@ -16,6 +16,9 @@ import Badge from "@mui/material/Badge";
 import logo from "../../../../images/pro-shooters_lg_web.svg";
 //context
 import { AppContext } from "../../../../context/AppContext";
+//types
+import { CartContextType } from "../../../../types/appContext";
+import theme from "../../../../theme";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -29,6 +32,9 @@ const useStyles = makeStyles()((theme) => {
         alignItems: "center",
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
+        "&: first-child": {
+          paddingLeft: theme.spacing(0),
+        },
         "&: hover": {
           color: theme.palette.text.primary,
         },
@@ -45,6 +51,9 @@ const useStyles = makeStyles()((theme) => {
         alignItems: "center",
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
+        "&: first-child": {
+          paddingLeft: theme.spacing(0),
+        },
         "&: hover": {
           color: theme.palette.text.primary,
         },
@@ -54,7 +63,7 @@ const useStyles = makeStyles()((theme) => {
 });
 
 //Link modification
-const MyLinkLogo = React.forwardRef(({ onClick, href }, ref) => {
+const MyLinkLogo = React.forwardRef(({ onClick, href }: any, ref) => {
   return (
     <Box component="a" onClick={onClick} ref={ref} href={href}>
       <Image
@@ -69,7 +78,7 @@ const MyLinkLogo = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
-const MyLinkCart = React.forwardRef(({ onClick, href }, ref) => {
+const MyLinkCart = React.forwardRef(({ onClick, href }: any, ref) => {
   const theme = useTheme();
   return (
     <Box component="a" onClick={onClick} ref={ref} href={href}>
@@ -79,11 +88,10 @@ const MyLinkCart = React.forwardRef(({ onClick, href }, ref) => {
 });
 
 const NavBar = () => {
-  const [cart] = useContext(AppContext);
+  const { cart } = useContext(AppContext) as CartContextType;
   const productsCount =
     null !== cart && Object.keys(cart).length ? cart.totalProductsCount : null;
-  const totalPrice =
-    null !== cart && Object.keys(cart).length ? cart.totalProductsPrice : "";
+
   const { classes } = useStyles();
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_CATEGORIES_QUERY);
@@ -93,7 +101,7 @@ const NavBar = () => {
       container
       justifyContent="space-between"
       alignItems="center"
-      spacing={2}
+      spacing={{ xs: 0, md: 2 }}
       sx={{ gridAutoFlow: "row dense" }}
     >
       <Grid item xs={3} md={1} sx={{ order: { xs: 1, md: 1 } }}>
@@ -110,13 +118,23 @@ const NavBar = () => {
         alignItems="center"
         sx={{ order: { xs: 3, md: 2 } }}
       >
-        <nav style={{ width: "100%" }}>
+        <Box
+          component="nav"
+          sx={{
+            width: "100%",
+            padding: "10px 0 10px 0px",
+            [theme.breakpoints.down("md")]: {
+              borderTop: `1px solid ${theme.palette.primary.main}`,
+              borderBottom: `1px solid ${theme.palette.primary.main}`,
+            },
+          }}
+        >
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              overflowX: "auto",
+              overflowX: "scroll",
               whiteSpace: "nowrap",
               "&::-webkit-scrollbar": {
                 display: "none",
@@ -143,7 +161,7 @@ const NavBar = () => {
                   );
                 })}
           </Box>
-        </nav>
+        </Box>
       </Grid>
       <Grid
         container

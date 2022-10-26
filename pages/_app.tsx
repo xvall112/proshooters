@@ -8,7 +8,7 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "../src/theme/index";
 import createEmotionCache from "../src/createEmotionCache";
 import "keen-slider/keen-slider.min.css";
-
+import Page from "../src/components/Page";
 import Router from "next/router";
 import NProgress from "nprogress";
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -26,18 +26,15 @@ Router.events.on("routeChangeError", () => NProgress.done()); */
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
-    <AppProvider>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
 
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </CacheProvider>
-    </AppProvider>
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <Page>
+        <Component {...pageProps} />
+      </Page>
+    </CacheProvider>
   );
 }
