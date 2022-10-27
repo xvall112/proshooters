@@ -24,10 +24,10 @@ const SimilarProducts: React.FC<Props> = ({
     },
     breakpoints: {
       "(min-width: 600px)": {
-        slides: { perView: 2.3 },
+        slides: { perView: 2.3, spacing: 15 },
       },
       "(min-width: 900px)": {
-        slides: { perView: 4 },
+        slides: { perView: 4, spacing: 15 },
       },
     },
   });
@@ -38,14 +38,18 @@ const SimilarProducts: React.FC<Props> = ({
           {title}
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-        <div ref={ref} className="keen-slider">
-          {similarProducts.map((similarProduct: any) => (
-            <Box key={similarProduct.id} className="keen-slider__slide" px={1}>
-              <Product product={similarProduct} />
-            </Box>
-          ))}
-        </div>
+      <Grid container item xs={12} ref={ref} className="keen-slider">
+        {similarProducts.map((similarProduct: any) => (
+          <Grid
+            item
+            xs={10}
+            md={3}
+            key={similarProduct.id}
+            className="keen-slider__slide"
+          >
+            <Product product={similarProduct} />
+          </Grid>
+        ))}
       </Grid>
     </Grid>
   );

@@ -1,22 +1,24 @@
 import React from "react";
+import { GetStaticProps } from "next";
 import type { NextPage } from "next";
 import Index from "../src/views/index/Index";
 import client from "../src/utils/ApolloClient";
-import GET_CATEGORIES_QUERY from "../src/utils/gql/queries/get-categories";
+import GET_ALL_CATEGORIES_QUERY from "../src/utils/gql/queries/get-allCategories";
 import Layout from "../src/layouts/Layout";
 
-const Home: NextPage = () => {
+const Home: NextPage = (props: any) => {
+  const { productCategories } = props;
   return (
     <Layout>
-      <Index />
+      <Index productCategories={productCategories} />
     </Layout>
   );
 };
 export default Home;
 
-/* export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const { data } = await client.query({
-    query: GET_CATEGORIES_QUERY,
+    query: GET_ALL_CATEGORIES_QUERY,
   });
 
   return {
@@ -25,4 +27,4 @@ export default Home;
     },
     revalidate: 1,
   };
-} */
+};

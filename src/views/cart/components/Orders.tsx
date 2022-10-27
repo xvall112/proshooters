@@ -30,7 +30,6 @@ const Orders = ({ item, products }: any) => {
   } = useContext(AppContext) as CartContextType;
 
   const [productCount, setProductCount] = useState(item.qty);
-  const [loading, setLoading] = useState(false);
 
   const debouncedQtyUpdate = React.useRef(
     debounce(async (updatedItems) => {
