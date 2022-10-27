@@ -35,7 +35,6 @@ const useStyles = makeStyles()((theme) => ({
 const Carousel = () => {
   const theme = useTheme();
   const { classes } = useStyles();
-  const sliderContainerRef = useRef<HTMLDivElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -63,10 +62,10 @@ const Carousel = () => {
             />
           )}
           <div className="keen-slider__slide">
-            <Image src={Carousel1} alt="carousel" width={1400} height={400} />
+            <Image src={Carousel1} alt="carousel" width={1450} height={400} />
           </div>
           <div className="keen-slider__slide">
-            <Image src={Carousel2} alt="carousel" width={1400} height={400} />
+            <Image src={Carousel2} alt="carousel" width={1450} height={400} />
           </div>
         </div>
       </div>
