@@ -30,6 +30,12 @@ const useStyles = makeStyles()((theme) => ({
     padding: "10px 0 0 0",
     justifyContent: "center",
   },
+  slider: {
+    borderRadius: "5px",
+    "& img": {
+      borderRadius: "5px",
+    },
+  },
 }));
 
 const Carousel = () => {
@@ -54,7 +60,7 @@ const Carousel = () => {
   return (
     <>
       <div className="navigation-wrapper">
-        <div ref={sliderRef} className="keen-slider">
+        <div ref={sliderRef} className={`keen-slider ${classes.slider}`}>
           {isMd && loaded && instanceRef?.current && (
             <ProductSliderControl
               onPrev={() => instanceRef.current?.prev()}
@@ -62,10 +68,20 @@ const Carousel = () => {
             />
           )}
           <div className="keen-slider__slide">
-            <Image src={Carousel1} alt="carousel" width={1450} height={400} />
+            <Image
+              src={Carousel1}
+              alt="carousel"
+              width={1450}
+              height={isMd ? 400 : 1000}
+            />
           </div>
           <div className="keen-slider__slide">
-            <Image src={Carousel2} alt="carousel" width={1450} height={400} />
+            <Image
+              src={Carousel2}
+              alt="carousel"
+              width={1450}
+              height={isMd ? 400 : 1000}
+            />
           </div>
         </div>
       </div>

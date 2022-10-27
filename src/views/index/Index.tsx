@@ -3,12 +3,14 @@ import Container from "../../components/Container";
 import Advantages from "./components/Advantages";
 import Category from "./components/CategoryChild";
 import Carousel from "./components/Carousel/Carousel";
+import LatestProducts from "./components/LatestProducts";
 //MaterialUI
 import Grid from "@mui/material/Grid";
 interface Props {
   productCategories: any;
+  products: any;
 }
-const Index = ({ productCategories }: Props) => {
+const Index = ({ productCategories, products }: Props) => {
   return (
     <>
       <Container noPaddingY>
@@ -27,6 +29,9 @@ const Index = ({ productCategories }: Props) => {
       </Container>
       <Container>
         <Advantages />
+      </Container>
+      <Container>
+        <LatestProducts products={products} />
       </Container>
     </>
   );

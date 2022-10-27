@@ -127,7 +127,7 @@ const Advantages = (): JSX.Element => {
                 primary={item.title}
                 secondary={item.subtitle}
                 primaryTypographyProps={{
-                  variant: "h6",
+                  variant: "body1",
                   gutterBottom: true,
                   align: "left",
                 }}

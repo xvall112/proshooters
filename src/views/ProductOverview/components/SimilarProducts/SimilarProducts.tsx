@@ -38,14 +38,19 @@ const SimilarProducts: React.FC<Props> = ({
           {title}
         </Typography>
       </Grid>
-      <Grid container item xs={12} ref={ref} className="keen-slider">
+      <Grid
+        container
+        item
+        xs={12}
+        spacing={2} /* ref={ref} className="keen-slider" */
+      >
         {similarProducts.map((similarProduct: any) => (
           <Grid
             item
-            xs={10}
+            xs={6}
             md={3}
             key={similarProduct.id}
-            className="keen-slider__slide"
+            /*  className="keen-slider__slide" */
           >
             <Product product={similarProduct} />
           </Grid>

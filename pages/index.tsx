@@ -3,14 +3,14 @@ import { GetStaticProps } from "next";
 import type { NextPage } from "next";
 import Index from "../src/views/index/Index";
 import client from "../src/utils/ApolloClient";
-import GET_ALL_CATEGORIES_QUERY from "../src/utils/gql/queries/get-allCategories";
+import GET_ALL_CATEGORIES_QUERY from "../src/utils/gql/queries/get-allCategories-and-Products";
 import Layout from "../src/layouts/Layout";
 
 const Home: NextPage = (props: any) => {
-  const { productCategories } = props;
+  const { productCategories, products } = props;
   return (
     <Layout>
-      <Index productCategories={productCategories} />
+      <Index productCategories={productCategories} products={products} />
     </Layout>
   );
 };
@@ -24,6 +24,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       productCategories: data?.productCategories?.nodes || [],
+      products: data?.products?.nodes,
     },
     revalidate: 1,
   };

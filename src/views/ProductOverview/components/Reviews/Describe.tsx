@@ -25,7 +25,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ pt: 8 }}>{children}</Box>}
+      {value === index && <Box sx={{ pt: 4 }}>{children}</Box>}
     </div>
   );
 }
@@ -57,7 +57,7 @@ export default function BasicTabs({ description }: Props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Box px={{ xs: 0, md: 8 }}>
+        <Box px={{ xs: 0, md: 6 }}>
           <Typography variant={"h5"} fontWeight={700}>
             Popis
           </Typography>

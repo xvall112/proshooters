@@ -65,14 +65,14 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
       {/* <Container paddingY={4} id="reviews">
         <Divider />
       </Container> */}
-      <Container>
+      <Container noPaddingY>
         <Describe
           description={
             product.description ? product.description : product.shortDescription
           }
         />
       </Container>
-      <Container paddingY={4}>
+      <Container noPaddingY>
         <Divider />
       </Container>
       {/* related products, generuje je woocommerce */}

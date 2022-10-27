@@ -163,7 +163,7 @@ const Product = ({ product }: Props) => {
                 </svg>
               }
             >
-              {addToCartLoading ? "Vkládání do košíku" : "Přidat do košíku"}
+              {addToCartLoading ? "Vkládání do košíku" : "Do košíku"}
             </Button>
             <Link href={`/product/${encodeURIComponent(slug)}`} passHref>
               <MyButton />
