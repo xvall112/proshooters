@@ -13,14 +13,27 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 //types
 import { CartContextType } from "../../types/appContext";
 
 const Cart = () => {
-  const { cart } = useContext(AppContext) as CartContextType;
+  const { cart, updateCartProcessing } = useContext(
+    AppContext
+  ) as CartContextType;
 
   return (
     <>
+      <Backdrop
+        sx={{
+          color: (theme) => theme.palette.primary.main,
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={updateCartProcessing}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Container>
         {!isEmpty(cart) ? (
           <>

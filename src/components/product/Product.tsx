@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
+import LoadingButton from "@mui/lab/LoadingButton";
 //components
 import Price from "./Price";
 //types
@@ -144,8 +145,9 @@ const Product = ({ product }: Props) => {
           </Box>
 
           <Box marginTop={2}>
-            <Button
-              disabled={addToCartLoading}
+            <LoadingButton
+              loading={addToCartLoading}
+              loadingPosition="start"
               onClick={() => handleAddToCartClick(product.productId)}
               variant={"contained"}
               color={"primary"}
@@ -163,8 +165,8 @@ const Product = ({ product }: Props) => {
                 </svg>
               }
             >
-              {addToCartLoading ? "Vkládání do košíku" : "Do košíku"}
-            </Button>
+              Do košíku
+            </LoadingButton>
             <Link href={`/product/${encodeURIComponent(slug)}`} passHref>
               <MyButton />
             </Link>

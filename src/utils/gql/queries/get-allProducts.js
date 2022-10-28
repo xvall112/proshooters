@@ -19,8 +19,9 @@ const GET_ALL_CATEGORIES_QUERY = gql`
       name
       ... on SimpleProduct {
         price
-        regularPrice
-        id
+            regularPrice
+            salePrice
+            id
       }
       ... on VariableProduct {
         price

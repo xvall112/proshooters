@@ -30,11 +30,9 @@ const useStyles = makeStyles()((theme) => {
         display: "flex",
         color: theme.palette.text.secondary,
         alignItems: "center",
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        "&: first-child": {
-          paddingLeft: theme.spacing(0),
-        },
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+
         "&: hover": {
           color: theme.palette.text.primary,
         },
@@ -49,11 +47,9 @@ const useStyles = makeStyles()((theme) => {
         color: theme.palette.primary.main,
         fontWeight: "bold",
         alignItems: "center",
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        "&: first-child": {
-          paddingLeft: theme.spacing(0),
-        },
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+
         "&: hover": {
           color: theme.palette.text.primary,
         },

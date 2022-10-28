@@ -100,7 +100,7 @@ const Advantages = (): JSX.Element => {
 
   return (
     <Box>
-      <Grid container spacing={4}>
+      <Grid container spacing={{ xs: 1, md: 2 }}>
         {mock.map((item, i) => (
           <Grid key={i} item xs={6} md={3}>
             <ListItem

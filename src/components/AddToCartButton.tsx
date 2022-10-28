@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 //types
 import { CartContextType } from "../types/appContext";
 
@@ -19,8 +19,9 @@ const AddToCart = (props: any) => {
 						Buy now
                     </a>
                 ) : */}
-      <Button
-        disabled={addToCartLoading}
+      <LoadingButton
+        loading={addToCartLoading}
+        loadingPosition="start"
         onClick={() => handleAddToCartClick(product.productId)}
         variant={"contained"}
         color={"primary"}
@@ -38,8 +39,8 @@ const AddToCart = (props: any) => {
           </svg>
         }
       >
-        {addToCartLoading ? "Vkládání do košíku" : "Přidat do košíku"}
-      </Button>
+        Do košíku
+      </LoadingButton>
 
       {/* } */}
     </div>

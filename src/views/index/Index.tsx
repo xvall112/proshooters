@@ -6,11 +6,13 @@ import Carousel from "./components/Carousel/Carousel";
 import LatestProducts from "./components/LatestProducts";
 //MaterialUI
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 interface Props {
   productCategories: any;
   products: any;
+  saleProducts: any;
 }
-const Index = ({ productCategories, products }: Props) => {
+const Index = ({ productCategories, products, saleProducts }: Props) => {
   return (
     <>
       <Container noPaddingY>
@@ -27,11 +29,16 @@ const Index = ({ productCategories, products }: Props) => {
           })}
         </Grid>
       </Container>
+      <Box bgcolor={"alternate.main"}>
+        <Container>
+          <Advantages />
+        </Container>
+      </Box>
       <Container>
-        <Advantages />
+        <LatestProducts products={saleProducts} title={"Cenové trháky"} />
       </Container>
       <Container>
-        <LatestProducts products={products} />
+        <LatestProducts products={products} title={"Novinky"} />
       </Container>
     </>
   );

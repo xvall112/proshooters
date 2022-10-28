@@ -68,17 +68,21 @@ const CategoryChild = ({ catChildren }: IProps) => {
       <Link href={`${encodeURIComponent(slug)}`} passHref>
         <Paper
           component="a"
+          elevation={3}
           sx={{
             display: "flex",
             direction: "row",
             alignItems: "center",
-            color: "white",
+            color: theme.palette.text.primary,
             padding: "10px",
             textDecoration: "none",
-            background: `linear-gradient(90deg, rgba(198,21,23,1) 32%, rgba(250,31,33,1) 100%)`,
-            "&: hover": {
-              background: theme.palette.primary.dark,
+            transition: "all .2s ease-in-out",
+            "&:hover": {
+              transform: "translateY(-4px)",
             },
+            /* "&: hover": {
+              background: theme.palette.primary.dark,
+            }, */
           }}
         >
           <Image

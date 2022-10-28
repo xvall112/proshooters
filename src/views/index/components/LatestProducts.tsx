@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
+//components
+import Price from "../components/Price";
+//MaterialUI
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -15,12 +18,12 @@ import { useTheme } from "@mui/material/styles";
 import { CartContextType } from "../../../types/appContext";
 import { AppContext } from "../../../context/AppContext";
 
-const LatestProducts = ({ products }: any): JSX.Element => {
+const LatestProducts = ({ products, title }: any): JSX.Element => {
   const { handleAddToCartClick, addToCartLoading } = useContext(
     AppContext
   ) as CartContextType;
   const theme = useTheme();
-  console.log(products);
+
   return (
     <Box>
       <Box marginBottom={4}>
@@ -33,40 +36,17 @@ const LatestProducts = ({ products }: any): JSX.Element => {
             fontWeight: 700,
           }}
         >
-          Nejnovější produkty
+          {title}
         </Typography>
-        <Typography
-          variant="h6"
-          align={"left"}
-          color={"text.secondary"}
-          data-aos={"fade-up"}
-        >
-          Experience your music like never before. Buy music instruments &
-          accessories online.
-        </Typography>
-        <Box display="flex" justifyContent={"left"} marginTop={2}>
-          <Button variant="contained" color="primary" size="small">
-            Vidět vše
-          </Button>
-        </Box>
       </Box>
       <Grid container spacing={{ xs: 1, md: 4 }}>
         {undefined !== products && products?.length
           ? products.map((product: any, i: any) => (
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                md={3}
-                key={i}
-                data-aos={"fade-up"}
-                data-aos-delay={i * 100}
-                data-aos-offset={100}
-                data-aos-duration={600}
-              >
+              <Grid item xs={6} sm={6} md={3} key={i}>
                 <Box display={"block"} width={1} height={1}>
                   <Box
                     component={Card}
+                    elevation={3}
                     width={1}
                     height={1}
                     display={"flex"}
@@ -135,13 +115,24 @@ const LatestProducts = ({ products }: any): JSX.Element => {
                       </a>
                     </Link>
                     <CardContent>
-                      <Typography
-                        variant={"subtitle1"}
-                        align={"left"}
-                        sx={{ fontWeight: 700 }}
+                      <Link
+                        href={`/product/${encodeURIComponent(product.slug)}`}
+                        passHref
                       >
-                        {product.name}
-                      </Typography>
+                        <a style={{ textDecoration: "none" }}>
+                          <Typography
+                            variant={"subtitle1"}
+                            align={"left"}
+                            sx={{
+                              fontWeight: 700,
+                            }}
+                            color={theme.palette.text.primary}
+                          >
+                            {product.name}
+                          </Typography>
+                        </a>
+                      </Link>
+
                       <Box
                         display={"flex"}
                         justifyContent={"flex-start"}
@@ -174,38 +165,37 @@ const LatestProducts = ({ products }: any): JSX.Element => {
                           flexDirection: { xs: "column", md: "row" },
                         }}
                       >
-                        <Typography sx={{ fontWeight: 700 }} color={"primary"}>
+                        <Price
+                          salesPrice={product.salePrice}
+                          regularPrice={product.regularPrice}
+                        />
+                        {/*  <Typography sx={{ fontWeight: 700 }} color={"primary"}>
                           <Box
                             component="span"
                             dangerouslySetInnerHTML={{ __html: product?.price }}
                           />
-                        </Typography>
-                        <Button
-                          disabled={addToCartLoading}
+                        </Typography> */}
+                        <LoadingButton
                           onClick={() =>
                             handleAddToCartClick(product?.productId)
                           }
+                          loading={addToCartLoading}
+                          loadingPosition="start"
                           variant={"contained"}
                           startIcon={
-                            <Box
-                              component={"svg"}
+                            <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               width={20}
                               height={20}
                             >
-                              <path
-                                fillRule="evenodd"
-                                d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-                                clipRule="evenodd"
-                              />
-                              <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                            </Box>
+                              <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                            </svg>
                           }
                         >
                           Do košíku
-                        </Button>
+                        </LoadingButton>
                       </CardActions>
                     </CardContent>
                   </Box>
