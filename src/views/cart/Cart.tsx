@@ -65,7 +65,7 @@ const Cart = () => {
                   <Typography variant="h6" fontWeight={700} marginBottom={4}>
                     Celkem
                   </Typography>
-                  <SummeryBox totalProductsPrice={cart.totalProductsPrice} />
+                  <SummeryBox />
                 </Card>
                 <Box marginTop={4}>
                   <Typography gutterBottom>Potřebujete poradit?</Typography>

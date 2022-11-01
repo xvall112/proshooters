@@ -7,26 +7,24 @@ import { useMutation, useQuery } from "@apollo/client";
 import UPDATE_CART from "../utils/gql/mutations/update-cart";
 import GET_CART from "../utils/gql/queries/get-cart";
 import CLEAR_CART_MUTATION from "../utils/gql//mutations/clear-cart";
-import ADD_TO_CART from "../utils/gql/mutations/add-to-cart";
 import { getFormattedCart, getUpdatedItems } from "../functions";
+import { VariantType, useSnackbar } from "notistack";
 
 export const AppContext = createContext<CartContextType | null>({
   cart: {},
   setCart: () => {},
-  handleAddToCartClick: () => {},
-  addToCartLoading: false,
   updateCartProcessing: false,
   loadingCart: false,
   handleRemoveProductClick: (event, cartKey, products) => {},
   handleQtyChange: (updatedItems) => {},
   originCart: {},
+  setMessage: (variant, message) => {},
 });
 
 export const AppProvider = (props: any) => {
   const [originCart, setOriginCart] = useState<IOriginCart>({});
   const [cart, setCart] = useState<ICart>({});
-  const [showViewCart, setShowViewCart] = useState(false);
-  const [requestError, setRequestError] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     // @TODO Will add option to show the cart with localStorage later.
@@ -37,25 +35,20 @@ export const AppProvider = (props: any) => {
     }
   }, []);
 
+  const setMessage = (
+    variant: VariantType = "info",
+    message: string = "info"
+  ) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(`${message}`, { variant });
+  };
+
   const handleQtyChange = (updatedItems: any) => {
     updateCart({
       variables: {
         input: {
           clientMutationId: v4(),
           items: updatedItems,
-        },
-      },
-    });
-  };
-
-  //po stisknuti tlacitka pridat do kosiku
-  const handleAddToCartClick = async (productId: string) => {
-    setRequestError("");
-    await addToCart({
-      variables: {
-        input: {
-          clientMutationId: v4(), // Generate a unique id.
-          productId: productId,
         },
       },
     });
@@ -97,30 +90,6 @@ export const AppProvider = (props: any) => {
     },
   });
 
-  // Add to Cart Mutation.
-  const [
-    addToCart,
-    { data: addToCartRes, loading: addToCartLoading, error: addToCartError },
-  ] = useMutation(ADD_TO_CART, {
-    refetchQueries: [
-      { query: GET_CART }, // DocumentNode object parsed with gql
-      "GET_CART", // Query name
-    ],
-    onCompleted: () => {
-      // On Success:
-      // 1. Make the GET_CART query to update the cart with new values in React context.
-      /* refetch();
-      console.log("addtocart cal refetch"); */
-      // 2. Show View Cart Button
-      setShowViewCart(true);
-    },
-    onError: (error) => {
-      if (error) {
-        setRequestError(error?.graphQLErrors?.[0]?.message ?? "");
-      }
-    },
-  });
-
   // Update Cart Mutation.
   const [
     updateCart,
@@ -135,12 +104,7 @@ export const AppProvider = (props: any) => {
       "GET_CART", // Query name
     ],
     onError: (error) => {
-      if (error) {
-        const errorMessage = error?.graphQLErrors?.[0]?.message
-          ? error.graphQLErrors[0].message
-          : "";
-        setRequestError(errorMessage);
-      }
+      setMessage("error", `${error.message}`);
     },
   });
 
@@ -149,16 +113,12 @@ export const AppProvider = (props: any) => {
     clearCart,
     { data: clearCartRes, loading: clearCartProcessing, error: clearCartError },
   ] = useMutation(CLEAR_CART_MUTATION, {
-    onCompleted: () => {
-      refetch();
-    },
+    refetchQueries: [
+      { query: GET_CART }, // DocumentNode object parsed with gql
+      "GET_CART", // Query name
+    ],
     onError: (error) => {
-      if (error) {
-        const errorMessage = !isEmpty(error?.graphQLErrors?.[0])
-          ? error.graphQLErrors[0]?.message
-          : "";
-        setRequestError(errorMessage);
-      }
+      setMessage("error", `${error.message}`);
     },
   });
 
@@ -167,13 +127,12 @@ export const AppProvider = (props: any) => {
       value={{
         cart,
         setCart,
-        handleAddToCartClick,
-        addToCartLoading,
         handleRemoveProductClick,
         updateCartProcessing,
         loadingCart,
         handleQtyChange,
         originCart,
+        setMessage,
       }}
     >
       {props.children}

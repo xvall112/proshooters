@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 //components
 import Price from "../components/Price";
+import AddToCartButton from "../../../components/AddToCartButton";
 //MaterialUI
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import LoadingButton from "@mui/lab/LoadingButton";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -16,12 +16,8 @@ import CardActions from "@mui/material/CardActions";
 import { useTheme } from "@mui/material/styles";
 //types
 import { CartContextType } from "../../../types/appContext";
-import { AppContext } from "../../../context/AppContext";
 
 const LatestProducts = ({ products, title }: any): JSX.Element => {
-  const { handleAddToCartClick, addToCartLoading } = useContext(
-    AppContext
-  ) as CartContextType;
   const theme = useTheme();
 
   return (
@@ -175,27 +171,7 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
                             dangerouslySetInnerHTML={{ __html: product?.price }}
                           />
                         </Typography> */}
-                        <LoadingButton
-                          onClick={() =>
-                            handleAddToCartClick(product?.productId)
-                          }
-                          loading={addToCartLoading}
-                          loadingPosition="start"
-                          variant={"contained"}
-                          startIcon={
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              width={20}
-                              height={20}
-                            >
-                              <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                            </svg>
-                          }
-                        >
-                          Do košíku
-                        </LoadingButton>
+                        <AddToCartButton product={product} />
                       </CardActions>
                     </CardContent>
                   </Box>

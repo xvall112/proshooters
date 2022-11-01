@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,6 +10,7 @@ import createEmotionCache from "../createEmotionCache";
 import { ApolloProvider } from "@apollo/client";
 import client from "../utils/ApolloClient";
 import { AppProps } from "next/app";
+import { SnackbarProvider } from "notistack";
 
 /* export const useDarkMode = (): [string, () => void, boolean] => {
   const [themeMode, setTheme] = useState("light");
@@ -43,6 +44,8 @@ import { AppProps } from "next/app";
   return [themeMode, themeToggler, mountedComponent];
 };
 */
+
+//#endregion
 interface Props {
   children: React.ReactNode;
 }
@@ -62,18 +65,21 @@ export default function Page({ children }: Props): JSX.Element {
   const [themeMode, themeToggler, mountedComponent] = useDarkMode();
 
   useEffect(() => {}, [mountedComponent, themeMode]); */
+
   const emotionCache = clientSideEmotionCache;
   return (
     <ApolloProvider client={client}>
-      <AppProvider>
-        <CacheProvider value={emotionCache}>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <Paper elevation={0}>{children}</Paper>
-          </ThemeProvider>
-        </CacheProvider>
-      </AppProvider>
+      <SnackbarProvider maxSnack={3} autoHideDuration={6000}>
+        <AppProvider>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              <Paper elevation={0}>{children}</Paper>
+            </ThemeProvider>
+          </CacheProvider>
+        </AppProvider>
+      </SnackbarProvider>
     </ApolloProvider>
   );
 }

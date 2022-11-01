@@ -28,6 +28,7 @@
     "micro": "^9.4.1",
     "next": "latest",
     "node-fetch": "^2.6.1",
+    "notistack": "^2.0.8",
     "nprogress": "^0.2.0",
     "react": "latest",
     "react-dom": "latest",

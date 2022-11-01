@@ -11,51 +11,12 @@ import Skeleton from "@mui/material/Skeleton";
 //context
 import { AppContext } from "../../../context/AppContext";
 import { CartContextType } from "../../../types/appContext";
-interface Props {
-  totalProductsPrice: any;
-}
-const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
+
+const SummeryBox: React.FC = (): JSX.Element => {
   const { originCart, loadingCart } = useContext(AppContext) as CartContextType;
 
   return (
     <Box>
-      <Box
-        component={"form"}
-        noValidate
-        autoComplete="off"
-        sx={{
-          marginY: 4,
-          "& .MuiInputBase-input.MuiOutlinedInput-input": {
-            bgcolor: "background.paper",
-          },
-        }}
-      >
-        <Box>
-          <Box
-            flex={"1 1 auto"}
-            component={TextField}
-            label="Vložte slevový kód"
-            variant="outlined"
-            color="primary"
-            fullWidth
-            height={54}
-          />
-          <Box
-            component={Button}
-            color="primary"
-            size="large"
-            height={54}
-            marginTop={1}
-            fullWidth
-            sx={{
-              bgcolor: "divider",
-              color: "text.primary",
-            }}
-          >
-            uplatnit
-          </Box>
-        </Box>
-      </Box>
       <Stack spacing={2} marginY={{ xs: 2, sm: 4 }}>
         <Box display={"flex"} justifyContent={"space-between"}>
           <Typography color={"text.secondary"}>Mezisoučet</Typography>
@@ -70,6 +31,21 @@ const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
                 dangerouslySetInnerHTML={{
                   __html: !isUndefined(originCart) ? originCart.subtotal : "",
                 }}
+              />
+            )}
+          </Typography>
+        </Box>
+        <Box display={"flex"} justifyContent={"space-between"}>
+          <Typography color={"text.secondary"}>Poštovné</Typography>
+          <Typography color={"text.secondary"} fontWeight={700}>
+            {loadingCart ? (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "1.2rem", minWidth: "100px" }}
+              />
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{ __html: originCart.shippingTotal }}
               />
             )}
           </Typography>
@@ -128,6 +104,43 @@ const SummeryBox: React.FC<Props> = ({ totalProductsPrice }): JSX.Element => {
           PŘEJÍT K POKLADNĚ
         </Button>
       </Stack>
+      <Box
+        component={"form"}
+        noValidate
+        autoComplete="off"
+        sx={{
+          marginT: 4,
+          "& .MuiInputBase-input.MuiOutlinedInput-input": {
+            bgcolor: "background.paper",
+          },
+        }}
+      >
+        <Box>
+          <Box
+            flex={"1 1 auto"}
+            component={TextField}
+            label="Vložte slevový kód"
+            variant="outlined"
+            color="primary"
+            fullWidth
+            height={54}
+          />
+          <Box
+            component={Button}
+            color="primary"
+            size="large"
+            height={54}
+            marginTop={1}
+            fullWidth
+            sx={{
+              bgcolor: "divider",
+              color: "text.primary",
+            }}
+          >
+            uplatnit
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };

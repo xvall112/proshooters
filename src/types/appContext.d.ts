@@ -1,3 +1,4 @@
+import {  VariantType } from 'notistack';
 export interface ICart {
   products?: Array<{
     image: { altText: string; sourceUrl: any; srcSet: any; title: string };
@@ -15,18 +16,19 @@ export interface IOriginCart {
   discountTotal?: any;
   totalTax?: any;
   total?: any;
+  shippingTotal?: any
 }
 
 export type CartContextType = {
   cart: ICart;
   setCart: (cart: ICart) => void;
-  handleAddToCartClick: (productId: string) => void;
-  addToCartLoading: boolean;
   handleRemoveProductClick: (products: any, event: any, cartKey: any) => void;
   handleQtyChange: (updatedItems:any   ) => void;
   updateCartProcessing: boolean;
   loadingCart: boolean;
-  originCart: IOriginCart
+  originCart: IOriginCart;
+  setMessage: (variant: VariantType, message: string)=> void;
+  
 };
 
 export interface ILink {

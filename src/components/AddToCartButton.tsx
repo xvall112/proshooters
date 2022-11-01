@@ -1,14 +1,52 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import GET_CART from "../utils/gql/queries/get-cart";
+import ADD_TO_CART from "../utils/gql/mutations/add-to-cart";
 import { AppContext } from "../context/AppContext";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { v4 } from "uuid";
+
 //types
 import { CartContextType } from "../types/appContext";
 
 const AddToCart = (props: any) => {
   const { product } = props;
-  const { handleAddToCartClick, addToCartLoading } = useContext(
-    AppContext
-  ) as CartContextType;
+  const { setMessage } = useContext(AppContext) as CartContextType;
+
+  //po stisknuti tlacitka pridat do kosiku
+  const handleAddToCartClick = async (productId: string) => {
+    await addToCart({
+      variables: {
+        input: {
+          clientMutationId: v4(), // Generate a unique id.
+          productId: productId,
+        },
+      },
+    });
+  };
+
+  // Add to Cart Mutation.
+  const [
+    addToCart,
+    { data: addToCartRes, loading: addToCartLoading, error: addToCartError },
+  ] = useMutation(ADD_TO_CART, {
+    refetchQueries: [
+      { query: GET_CART }, // DocumentNode object parsed with gql
+      "GET_CART", // Query name
+    ],
+    onCompleted: () => {
+      // On Success:
+      // 1. Make the GET_CART query to update the cart with new values in React context.
+      /* refetch();
+      console.log("addtocart cal refetch"); */
+      // 2. Show View Cart Button
+
+      setMessage("success", `Produkt ${product.name} byl přidán do košíku`);
+    },
+    onError: (error) => {
+      setMessage("error", `${error.message}`);
+    },
+  });
 
   return (
     <div>
@@ -20,9 +58,11 @@ const AddToCart = (props: any) => {
                     </a>
                 ) : */}
       <LoadingButton
-        loading={addToCartLoading}
+        loading={addToCartLoading && product.productId}
         loadingPosition="start"
-        onClick={() => handleAddToCartClick(product.productId)}
+        onClick={() => {
+          handleAddToCartClick(product.productId);
+        }}
         variant={"contained"}
         color={"primary"}
         size={"large"}

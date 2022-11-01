@@ -28,7 +28,7 @@ const ProductSliderControl: FC<ProductSliderControl> = ({ onPrev, onNext }) => {
         component={"button"}
         sx={{
           paddingY: "20px",
-          borderRadius: "5px",
+          borderRadius: "0 5px 5px 0",
           border: "none",
           "&:hover": {
             backgroundColor: theme.palette.secondary.main,
@@ -46,7 +46,7 @@ const ProductSliderControl: FC<ProductSliderControl> = ({ onPrev, onNext }) => {
         aria-label="Next Product Image"
         sx={{
           paddingY: "20px",
-          borderRadius: "5px",
+          borderRadius: "5px 0 0 5px",
           border: "none",
           "&:hover": {
             backgroundColor: theme.palette.secondary.main,
