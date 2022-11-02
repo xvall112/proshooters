@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
+import Link from "next/link";
 import isUndefined from "lodash/isUndefined";
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -11,6 +11,22 @@ import Skeleton from "@mui/material/Skeleton";
 //context
 import { AppContext } from "../../../context/AppContext";
 import { CartContextType } from "../../../types/appContext";
+
+const MyLinkButton = React.forwardRef(({ onClick, href }: any, ref) => {
+  return (
+    <Box
+      component="a"
+      onClick={onClick}
+      ref={ref}
+      href={href}
+      sx={{ textDecoration: "none" }}
+    >
+      <Button variant={"contained"} size={"large"} fullWidth>
+        PŘEJÍT NA DOPRAVU
+      </Button>
+    </Box>
+  );
+});
 
 const SummeryBox: React.FC = (): JSX.Element => {
   const { originCart, loadingCart } = useContext(AppContext) as CartContextType;
@@ -94,15 +110,9 @@ const SummeryBox: React.FC = (): JSX.Element => {
             )}
           </Typography>
         </Box>
-        <Button
-          component={Link}
-          href={"/"}
-          variant={"contained"}
-          size={"large"}
-          fullWidth
-        >
-          PŘEJÍT K POKLADNĚ
-        </Button>
+        <Link href="/checkout/address" passHref>
+          <MyLinkButton />
+        </Link>
       </Stack>
       <Box
         component={"form"}

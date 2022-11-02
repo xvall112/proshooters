@@ -1,68 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 //materialUI
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
 import Grid from "@mui/material/Grid";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import Badge from "@mui/material/Badge";
 import logo from "../../../../images/pro-shooters_lg_web.svg";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
 //context
 import { AppContext } from "../../../../context/AppContext";
 //types
 import { CartContextType } from "../../../../types/appContext";
 import theme from "../../../../theme";
-
-interface Props {
-  parentCategories: any;
-}
-
-const useStyles = makeStyles()((theme) => {
-  return {
-    navLink: {
-      "& a": {
-        cursor: "pointer",
-        textDecoration: "none",
-        height: "20px",
-        display: "flex",
-        color: theme.palette.text.secondary,
-        alignItems: "center",
-        [theme.breakpoints.down("md")]: {
-          paddingLeft: theme.spacing(1),
-          paddingRight: theme.spacing(1),
-        },
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
-
-        "&: hover": {
-          color: theme.palette.text.primary,
-        },
-      },
-    },
-    navLinkActive: {
-      "& a": {
-        cursor: "pointer",
-        textDecoration: "none",
-        height: "20px",
-        display: "flex",
-        color: theme.palette.primary.main,
-        fontWeight: "bold",
-        alignItems: "center",
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
-
-        "&: hover": {
-          color: theme.palette.text.primary,
-        },
-      },
-    },
-  };
-});
 
 //Link modification
 const MyLinkLogo = React.forwardRef(({ onClick, href }: any, ref) => {
@@ -88,13 +45,13 @@ const MyLinkCart = React.forwardRef(({ onClick, href }: any, ref) => {
     </Box>
   );
 });
+const steps = ["Košík", "Doprava", "Platba", "Potvrdit", "Hotovo"];
 
-const NavBar: React.FC<Props> = ({ parentCategories }: any) => {
-  const { cart } = useContext(AppContext) as CartContextType;
+const CartNavBar: React.FC = () => {
+  const { cart, activeStep } = useContext(AppContext) as CartContextType;
   const productsCount =
     null !== cart && Object.keys(cart).length ? cart.totalProductsCount : null;
 
-  const { classes } = useStyles();
   const router = useRouter();
 
   return (
@@ -119,47 +76,14 @@ const NavBar: React.FC<Props> = ({ parentCategories }: any) => {
         alignItems="center"
         sx={{ order: { xs: 3, md: 2 } }}
       >
-        <Box
-          component="nav"
-          sx={{
-            width: "100%",
-            padding: "10px 0 10px 0px",
-            /*  [theme.breakpoints.down("md")]: { */
-            borderTop: `1px solid ${theme.palette.primary.main}`,
-            borderBottom: `1px solid ${theme.palette.primary.main}`,
-            /*    }, */
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              overflowX: "scroll",
-              whiteSpace: "nowrap",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-            }}
-          >
-            {parentCategories?.map((category: any) => {
-              const { id, name, slug } = category;
-              return (
-                <Box
-                  key={id}
-                  className={
-                    router.asPath === `/${encodeURIComponent(slug)}`
-                      ? classes.navLinkActive
-                      : classes.navLink
-                  }
-                >
-                  <Link key={id} href={`/${encodeURIComponent(slug)}`}>
-                    <a>{name}</a>
-                  </Link>
-                </Box>
-              );
-            })}
-          </Box>
+        <Box sx={{ width: "100%" }}>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
         </Box>
       </Grid>
       <Grid
@@ -192,4 +116,4 @@ const NavBar: React.FC<Props> = ({ parentCategories }: any) => {
   );
 };
 
-export default NavBar;
+export default CartNavBar;

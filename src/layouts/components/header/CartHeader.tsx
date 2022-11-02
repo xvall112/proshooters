@@ -8,14 +8,10 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 import Container from "../../../components/Container";
 import TopNav from "./components/TopNav";
-import NavBar from "./components/NavBar";
+import CartNavBar from "./components/CartNavBar";
 import { PropsOf } from "@emotion/react";
 
-interface Props {
-  parentCategories: any;
-}
-
-const Header: React.FC<Props> = ({ parentCategories }) => {
+const CartHeader: React.FC = () => {
   const theme = useTheme();
 
   const trigger = useScrollTrigger({
@@ -37,10 +33,10 @@ const Header: React.FC<Props> = ({ parentCategories }) => {
         </Container>
       </Box>
       <Container paddingY={1}>
-        <NavBar parentCategories={parentCategories} />
+        <CartNavBar />
       </Container>
     </AppBar>
   );
 };
 
-export default Header;
+export default CartHeader;

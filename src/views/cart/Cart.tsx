@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Container from "../../components/Container";
 import { AppContext } from "../../context/AppContext";
 import { isEmpty } from "lodash";
@@ -19,10 +19,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { CartContextType } from "../../types/appContext";
 
 const Cart = () => {
-  const { cart, updateCartProcessing } = useContext(
+  const { cart, updateCartProcessing, setActiveStep } = useContext(
     AppContext
   ) as CartContextType;
-
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
   return (
     <>
       <Backdrop

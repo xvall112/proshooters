@@ -28,7 +28,8 @@ export type CartContextType = {
   loadingCart: boolean;
   originCart: IOriginCart;
   setMessage: (variant: VariantType, message: string)=> void;
-  
+  setActiveStep: (step: number) => void,
+  activeStep: number
 };
 
 export interface ILink {

@@ -19,9 +19,12 @@ export const AppContext = createContext<CartContextType | null>({
   handleQtyChange: (updatedItems) => {},
   originCart: {},
   setMessage: (variant, message) => {},
+  setActiveStep: (step) => {},
+  activeStep: 0,
 });
 
 export const AppProvider = (props: any) => {
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [originCart, setOriginCart] = useState<IOriginCart>({});
   const [cart, setCart] = useState<ICart>({});
   const { enqueueSnackbar } = useSnackbar();
@@ -133,6 +136,8 @@ export const AppProvider = (props: any) => {
         handleQtyChange,
         originCart,
         setMessage,
+        setActiveStep,
+        activeStep,
       }}
     >
       {props.children}

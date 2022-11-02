@@ -39,7 +39,7 @@ const VideoSection = (): JSX.Element => {
             href={"/product/shooters-global-timer-sportovni-verze"}
             passHref
           >
-            <a>
+            <a style={{ textDecoration: "none" }}>
               <Button variant="contained" color="primary">
                 Detail produktu
               </Button>
