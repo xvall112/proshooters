@@ -9,7 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 interface Props {
-  productCategories: any /* {
+  productCategories: any;
+  productName: string /* {
     id: string;
     name: string;
     slug: string;
@@ -23,8 +24,7 @@ interface Props {
   }; */;
 }
 
-const Headline = ({ productCategories }: Props): JSX.Element => {
-  const { id, name, slug, parent } = productCategories;
+const Headline = ({ productCategories, productName }: Props): JSX.Element => {
   const router = useRouter();
   return (
     <Box
@@ -50,7 +50,7 @@ const Headline = ({ productCategories }: Props): JSX.Element => {
         </Link>
         {productCategories &&
           productCategories.map((productCategory: any) => {
-            const { id, name, slug, parent } = productCategory;
+            const { name, slug, parent } = productCategory;
             return (
               <Breadcrumbs aria-label="breadcrumb">
                 {parent && parent.node && (
@@ -69,7 +69,7 @@ const Headline = ({ productCategories }: Props): JSX.Element => {
             );
           })}
 
-        <Typography color="text.primary">Detail produktu</Typography>
+        <Typography color="text.primary">{productName}</Typography>
       </Breadcrumbs>
     </Box>
   );

@@ -2,8 +2,6 @@ import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useQuery } from "@apollo/client";
-import GET_CATEGORIES_QUERY from "../../../../utils/gql/queries/get-categories";
 //materialUI
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
@@ -30,6 +28,10 @@ const useStyles = makeStyles()((theme) => {
         display: "flex",
         color: theme.palette.text.secondary,
         alignItems: "center",
+        [theme.breakpoints.down("md")]: {
+          paddingLeft: theme.spacing(1),
+          paddingRight: theme.spacing(1),
+        },
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
 
@@ -83,14 +85,13 @@ const MyLinkCart = React.forwardRef(({ onClick, href }: any, ref) => {
   );
 });
 
-const NavBar = () => {
+const NavBar = ({ parentCategories }: any) => {
   const { cart } = useContext(AppContext) as CartContextType;
   const productsCount =
     null !== cart && Object.keys(cart).length ? cart.totalProductsCount : null;
 
   const { classes } = useStyles();
   const router = useRouter();
-  const { data, loading, error } = useQuery(GET_CATEGORIES_QUERY);
 
   return (
     <Grid
@@ -119,10 +120,10 @@ const NavBar = () => {
           sx={{
             width: "100%",
             padding: "10px 0 10px 0px",
-            [theme.breakpoints.down("md")]: {
-              borderTop: `1px solid ${theme.palette.primary.main}`,
-              borderBottom: `1px solid ${theme.palette.primary.main}`,
-            },
+            /*  [theme.breakpoints.down("md")]: { */
+            borderTop: `1px solid ${theme.palette.primary.main}`,
+            borderBottom: `1px solid ${theme.palette.primary.main}`,
+            /*    }, */
           }}
         >
           <Box
@@ -137,25 +138,23 @@ const NavBar = () => {
               },
             }}
           >
-            {loading
-              ? "Loading"
-              : data.productCategories.nodes.map((category: any) => {
-                  const { id, name, slug } = category;
-                  return (
-                    <Box
-                      key={id}
-                      className={
-                        router.asPath === `/${encodeURIComponent(slug)}`
-                          ? classes.navLinkActive
-                          : classes.navLink
-                      }
-                    >
-                      <Link key={id} href={`/${encodeURIComponent(slug)}`}>
-                        <a>{name}</a>
-                      </Link>
-                    </Box>
-                  );
-                })}
+            {parentCategories?.map((category: any) => {
+              const { id, name, slug } = category;
+              return (
+                <Box
+                  key={id}
+                  className={
+                    router.asPath === `/${encodeURIComponent(slug)}`
+                      ? classes.navLinkActive
+                      : classes.navLink
+                  }
+                >
+                  <Link key={id} href={`/${encodeURIComponent(slug)}`}>
+                    <a>{name}</a>
+                  </Link>
+                </Box>
+              );
+            })}
           </Box>
         </Box>
       </Grid>

@@ -1,14 +1,16 @@
 import React from "react";
 import Image from "next/image";
+//MaterialUI
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { isEmpty } from "lodash";
 import { ProductSlider } from "./components/ProductSlider/ProductSlider";
 import { Headline, Details, SimilarProducts } from "./components";
-
+//components
 import Describe from "./components/Reviews/Describe";
 import Container from "../../components/Container";
+import SEO from "../../components/SEO";
 
 const mock = {
   reviewScore: 4,
@@ -23,7 +25,10 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
     <>
       <Box bgcolor={"alternate.main"}>
         <Container paddingY={{ xs: 2, sm: 2.5 }}>
-          <Headline productCategories={product.productCategories.nodes} />
+          <Headline
+            productCategories={product.productCategories.nodes}
+            productName={product.name}
+          />
         </Container>
       </Box>
       <Container>
@@ -46,7 +51,6 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
                       width={600}
                       height={600}
                       priority={i === 0}
-                      quality="85"
                     />
                   </Box>
                 ))}
@@ -93,6 +97,23 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
           />
         </Container>
       )}
+      <SEO
+        title={product.name}
+        description={product.shortDescription}
+        openGraph={{
+          type: "website",
+          title: product.name,
+          description: product.shortDescription,
+          images: [
+            {
+              url: product.image?.sourceUrl,
+              width: "800",
+              height: "600",
+              alt: product.name,
+            },
+          ],
+        }}
+      />
     </>
   );
 };

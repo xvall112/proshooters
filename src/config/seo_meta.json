@@ -1,0 +1,25 @@
+{
+  "title": "ProShooters | Eshop s vybavením",
+  "titleTemplate": "%s - ProShooters",
+  "description": "Vybavení pro sportovní střelbu",
+  "openGraph": {
+    "title": "ProShooters | Eshop s vybavením",
+    "description": "Vybavení pro sportovní střelbu",
+    "type": "website",
+    "url": "https://proshooters.cz",
+    "site_name": "ProShooters",
+    "images": [
+      {
+        "url": "/src/images/pro-shooters_lg_negative_web.svg",
+        "width": "800",
+        "height": "600",
+        "alt": "ProShooters"
+      }
+    ]
+  },
+  "twitter": {
+    "handle": "@nextjs",
+    "site": "@nextjs",
+    "cardType": "summary_large_image"
+  }
+}

@@ -15,6 +15,7 @@ interface Props {
   categoryName: any;
   products: any;
   categoryChildren: any;
+  parentCategories: any;
 }
 
 interface Params extends ParsedUrlQuery {
@@ -30,10 +31,10 @@ const CategorySingle = (props: Props) => {
     return <div>Loading...</div>;
   }
 
-  const { categoryName, products, categoryChildren } = props;
+  const { categoryName, products, categoryChildren, parentCategories } = props;
 
   return (
-    <Layout>
+    <Layout parentCategories={parentCategories}>
       <Category
         categoryName={categoryName}
         products={products}
@@ -57,6 +58,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       categoryChildren: data?.productCategory?.children.nodes ?? [],
       categoryName: data?.productCategory?.name ?? "",
       products: data?.productCategory?.products?.nodes ?? [],
+      parentCategories: data?.parentCategories?.nodes,
     },
     revalidate: 1,
   };

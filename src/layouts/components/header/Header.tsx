@@ -10,7 +10,7 @@ import Container from "../../../components/Container";
 import TopNav from "./components/TopNav";
 import NavBar from "./components/NavBar";
 
-const Header: React.FC = () => {
+const Header: React.FC = ({ parentCategories }: any) => {
   const theme = useTheme();
 
   const trigger = useScrollTrigger({
@@ -32,7 +32,7 @@ const Header: React.FC = () => {
         </Container>
       </Box>
       <Container paddingY={1}>
-        <NavBar />
+        <NavBar parentCategories={parentCategories} />
       </Container>
     </AppBar>
   );

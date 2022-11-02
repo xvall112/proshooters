@@ -56,7 +56,7 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
                         <CardMedia
                           sx={{
                             position: "relative",
-                            height: { xs: 240, sm: 340, md: 280 },
+                            height: { xs: "auto", sm: 340, md: 280 },
                             overflow: "hidden",
                             padding: 3,
                             paddingBottom: 0,
@@ -72,7 +72,7 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
                             width={300}
                             height={300}
                           />
-                          <Box
+                          {/* <Box
                             display={"flex"}
                             justifyContent={"flex-end"}
                             position={"absolute"}
@@ -106,11 +106,18 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
                                 />
                               </Box>
                             </Box>
-                          </Box>
+                          </Box> */}
                         </CardMedia>
                       </a>
                     </Link>
-                    <CardContent>
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+
+                        height: "100%",
+                      }}
+                    >
                       <Link
                         href={`/product/${encodeURIComponent(product.slug)}`}
                         passHref
@@ -128,7 +135,7 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
                           </Typography>
                         </a>
                       </Link>
-
+                      <Box sx={{ flexGrow: 1 }} />
                       <Box
                         display={"flex"}
                         justifyContent={"flex-start"}
@@ -156,7 +163,8 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
 
                       <CardActions
                         sx={{
-                          justifyContent: "space-between",
+                          alignItems: "center",
+                          justifyContent: { xs: "center", md: "space-between" },
                           display: "flex",
                           flexDirection: { xs: "column", md: "row" },
                         }}
@@ -171,8 +179,8 @@ const LatestProducts = ({ products, title }: any): JSX.Element => {
                             dangerouslySetInnerHTML={{ __html: product?.price }}
                           />
                         </Typography> */}
-                        <AddToCartButton product={product} />
                       </CardActions>
+                      <AddToCartButton product={product} />
                     </CardContent>
                   </Box>
                 </Box>

@@ -114,6 +114,17 @@ export const PRODUCT_BY_SLUG_QUERY = gql`
         id
       }
     }
+    parentCategories: productCategories(where: { parent: 0 }) {
+      nodes {
+        id
+        name
+        slug
+        image {
+          sourceUrl
+          altText
+        }
+      }
+    }
   }
 `;
 

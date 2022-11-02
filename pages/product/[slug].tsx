@@ -17,7 +17,7 @@ interface Params extends ParsedUrlQuery {
 }
 
 export default function Product(props: any) {
-  const { product } = props;
+  const { product, parentCategories } = props;
 
   const router = useRouter();
 
@@ -29,7 +29,7 @@ export default function Product(props: any) {
 
   return (
     <>
-      <Layout>
+      <Layout parentCategories={parentCategories}>
         <ProductOverview product={product} />
       </Layout>
     </>
@@ -47,6 +47,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       product: data?.product || {},
+      parentCategories: data?.parentCategories?.nodes,
     },
     revalidate: 1,
   };

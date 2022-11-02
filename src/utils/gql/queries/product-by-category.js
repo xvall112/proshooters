@@ -16,6 +16,7 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql`
           }
         }
       }
+
       products(first: 50) {
         nodes {
           id
@@ -61,6 +62,17 @@ export const PRODUCT_BY_CATEGORY_SLUG = gql`
             }
             id
           }
+        }
+      }
+    }
+    parentCategories: productCategories(where: { parent: 0 }) {
+      nodes {
+        id
+        name
+        slug
+        image {
+          sourceUrl
+          altText
         }
       }
     }

@@ -72,7 +72,7 @@ const mock = [
       </svg>
     ),
   },
-  {
+  /* {
     title: "Doprava zdarma",
     subtitle: "Při nákupu nad 2000 Kč",
     icon: (
@@ -92,7 +92,7 @@ const mock = [
         />
       </svg>
     ),
-  },
+  }, */
 ];
 
 const Advantages = (): JSX.Element => {
@@ -102,7 +102,7 @@ const Advantages = (): JSX.Element => {
     <Box>
       <Grid container spacing={{ xs: 1, md: 2 }}>
         {mock.map((item, i) => (
-          <Grid key={i} item xs={6} md={3}>
+          <Grid key={i} item xs={6} md={4}>
             <ListItem
               component="div"
               disableGutters
@@ -112,7 +112,7 @@ const Advantages = (): JSX.Element => {
               data-aos-duration={600}
               sx={{
                 flexDirection: "column",
-                alignItems: "flex-start",
+                alignItems: "center",
                 padding: 0,
               }}
             >
@@ -129,9 +129,9 @@ const Advantages = (): JSX.Element => {
                 primaryTypographyProps={{
                   variant: "body1",
                   gutterBottom: true,
-                  align: "left",
+                  align: "center",
                 }}
-                secondaryTypographyProps={{ align: "left" }}
+                secondaryTypographyProps={{ align: "center" }}
                 sx={{
                   "& .MuiListItemText-primary": {
                     fontWeight: 700,

@@ -5,6 +5,17 @@ import { gql } from "@apollo/client";
  */
 const GET_ALL_CATEGORIES_QUERY = gql`
   query {
+    parentCategories: productCategories(where: { parent: 0 }) {
+      nodes {
+        id
+        name
+        slug
+        image {
+          sourceUrl
+          altText
+        }
+      }
+    }
     productCategories(first: 100) {
       nodes {
         id

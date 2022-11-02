@@ -7,9 +7,9 @@ import GET_ALL_CATEGORIES_QUERY from "../src/utils/gql/queries/get-allCategories
 import Layout from "../src/layouts/Layout";
 
 const Home: NextPage = (props: any) => {
-  const { productCategories, products, saleProducts } = props;
+  const { productCategories, products, saleProducts, parentCategories } = props;
   return (
-    <Layout>
+    <Layout parentCategories={parentCategories}>
       <Index
         productCategories={productCategories}
         products={products}
@@ -30,6 +30,7 @@ export const getStaticProps: GetStaticProps = async () => {
       productCategories: data?.productCategories?.nodes || [],
       products: data?.products?.nodes,
       saleProducts: data?.saleProducts?.nodes,
+      parentCategories: data?.parentCategories?.nodes,
     },
     revalidate: 1,
   };

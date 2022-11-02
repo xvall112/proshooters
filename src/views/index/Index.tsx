@@ -1,9 +1,12 @@
 import React from "react";
+//components
+import Overview from "./components/Overview";
 import Container from "../../components/Container";
 import Advantages from "./components/Advantages";
 import Category from "./components/CategoryChild";
 import Carousel from "./components/Carousel/Carousel";
 import LatestProducts from "./components/LatestProducts";
+import VideoSection from "./components/VideoSection";
 //MaterialUI
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -18,6 +21,7 @@ const Index = ({ productCategories, products, saleProducts }: Props) => {
       <Container noPaddingY>
         <Carousel />
       </Container>
+
       <Container>
         <Grid container spacing={1}>
           {productCategories.map((productCategory: any) => {
@@ -39,6 +43,13 @@ const Index = ({ productCategories, products, saleProducts }: Props) => {
       </Container>
       <Container>
         <LatestProducts products={products} title={"Novinky"} />
+      </Container>
+      <Container>
+        <Overview />
+      </Container>
+
+      <Container>
+        <VideoSection />
       </Container>
     </>
   );

@@ -1,12 +1,17 @@
 import React, { useState, useRef } from "react";
-import { useTheme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import Carousel1 from "../../../../images/carousel/alexander-jawfox-Mu0ExSKTOBs-unsplash.jpg";
 import Carousel2 from "../../../../images/carousel/Rectangle 1.png";
 import ProductSliderControl from "./components/ProductSliderControl";
+//MaterialUI
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import { makeStyles } from "tss-react/mui";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const useStyles = makeStyles()((theme) => ({
   dot: {
@@ -68,20 +73,48 @@ const Carousel = () => {
             />
           )}
           <div className="keen-slider__slide">
-            <Image
-              src={Carousel1}
-              alt="carousel"
-              width={1450}
-              height={isMd ? 400 : 1000}
-            />
+            <Box sx={{ display: "grid" }}>
+              <Box sx={{ gridArea: "1/1", height: 400 }}>
+                <Image src={Carousel1} alt="carousel" layout="fill" />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gridArea: "1/1",
+                  height: 400,
+                  overflow: "hidden",
+                  zIndex: 10,
+                  paddingX: { xs: 2, md: 15 },
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  align={"center"}
+                  fontWeight={700}
+                  color="primary"
+                >
+                  Terče pro IPSC střelbu
+                </Typography>
+                <Typography
+                  variant="h6"
+                  color="common.white"
+                  sx={{ paddingY: 2 }}
+                  align={"center"}
+                >
+                  Kvalitní kovové a papírové terče vyhovující těm nejnáročnějším
+                  podmínkám. Užijte si střelbu naplno.
+                </Typography>
+                <Button size={"large"} variant="contained">
+                  Vice
+                </Button>
+              </Box>
+            </Box>
           </div>
           <div className="keen-slider__slide">
-            <Image
-              src={Carousel2}
-              alt="carousel"
-              width={1450}
-              height={isMd ? 400 : 1000}
-            />
+            <Image src={Carousel2} alt="carousel" layout="fill" />
           </div>
         </div>
       </div>
