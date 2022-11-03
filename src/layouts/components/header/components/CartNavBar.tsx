@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,12 +14,11 @@ import logo from "../../../../images/pro-shooters_lg_web.svg";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+
 //context
 import { AppContext } from "../../../../context/AppContext";
 //types
 import { CartContextType } from "../../../../types/appContext";
-import theme from "../../../../theme";
 
 //Link modification
 const MyLinkLogo = React.forwardRef(({ onClick, href }: any, ref) => {
@@ -38,14 +37,19 @@ const MyLinkLogo = React.forwardRef(({ onClick, href }: any, ref) => {
 });
 
 const MyLinkCart = React.forwardRef(({ onClick, href }: any, ref) => {
-  const theme = useTheme();
   return (
     <Box component="a" onClick={onClick} ref={ref} href={href}>
       <LocalMallIcon fontSize="large" color="secondary" />
     </Box>
   );
 });
-const steps = ["Košík", "Doprava", "Platba", "Potvrdit", "Hotovo"];
+const steps = [
+  "Košík",
+  "Doprava a platba",
+  "Dodací údaje",
+  "Rekapitulace",
+  "Hotovo",
+];
 
 const CartNavBar: React.FC = () => {
   const { cart, activeStep } = useContext(AppContext) as CartContextType;

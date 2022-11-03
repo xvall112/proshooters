@@ -7,15 +7,12 @@ import AddToCartButton from "../../../components/AddToCartButton";
 //MaterialUI
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import { useTheme } from "@mui/material/styles";
-//types
-import { CartContextType } from "../../../types/appContext";
 
 const LatestProducts = ({ products, title }: any): JSX.Element => {
   const theme = useTheme();
