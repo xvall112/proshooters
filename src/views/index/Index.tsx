@@ -7,6 +7,7 @@ import Category from "./components/CategoryChild";
 import Carousel from "./components/Carousel/Carousel";
 import LatestProducts from "./components/LatestProducts";
 import VideoSection from "./components/VideoSection";
+import PromoGrid from "./components/PromoGrid";
 //MaterialUI
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -18,9 +19,15 @@ interface Props {
 const Index = ({ productCategories, products, saleProducts }: Props) => {
   return (
     <>
-      <Container noPaddingY>
+      <Box
+        sx={{
+          maxWidth: { md: 1436 },
+          width: 1,
+          margin: "0 auto",
+        }}
+      >
         <Carousel />
-      </Container>
+      </Box>
 
       <Container>
         <Grid container spacing={1}>
@@ -45,12 +52,15 @@ const Index = ({ productCategories, products, saleProducts }: Props) => {
         <LatestProducts products={products} title={"Novinky"} />
       </Container>
       <Container>
+        <PromoGrid />
+      </Container>
+      {/*  <Container>
         <Overview />
       </Container>
 
       <Container>
         <VideoSection />
-      </Container>
+      </Container> */}
     </>
   );
 };

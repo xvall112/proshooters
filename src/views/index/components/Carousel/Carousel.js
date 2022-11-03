@@ -75,7 +75,12 @@ const Carousel = () => {
           <div className="keen-slider__slide">
             <Box sx={{ display: "grid" }}>
               <Box sx={{ gridArea: "1/1", height: 400 }}>
-                <Image src={Carousel1} alt="carousel" layout="fill" />
+                <Image
+                  src={Carousel1}
+                  alt="carousel"
+                  layout="fill"
+                  objectFit="cover"
+                />
               </Box>
               <Box
                 sx={{
@@ -114,7 +119,12 @@ const Carousel = () => {
             </Box>
           </div>
           <div className="keen-slider__slide">
-            <Image src={Carousel2} alt="carousel" layout="fill" />
+            <Image
+              src={Carousel2}
+              alt="carousel"
+              layout="fill"
+              objectFit="cover"
+            />
           </div>
         </div>
       </div>
