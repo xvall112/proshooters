@@ -33,7 +33,7 @@ const Index = ({ productCategories, products, saleProducts }: Props) => {
         <Grid container spacing={1}>
           {productCategories.map((productCategory: any) => {
             return (
-              <Grid item xs={6} sm={4} md={2} key={productCategory.slug}>
+              <Grid item xs={6} sm={4} md={3} key={productCategory.slug}>
                 <Category catChildren={productCategory} />
               </Grid>
             );

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 //materialUi
 import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 //components
 import Image from "next/image";
@@ -93,7 +93,9 @@ const CategoryChild = ({ catChildren }: IProps) => {
             alt={image?.altText ?? "picture"}
           />
 
-          <Box ml={2}>{name}</Box>
+          <Typography fontWeight={500} color={"text.secondary"} ml={2}>
+            {name}
+          </Typography>
         </Paper>
       </Link>
     </>

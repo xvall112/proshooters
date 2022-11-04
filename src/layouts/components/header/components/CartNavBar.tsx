@@ -43,13 +43,7 @@ const MyLinkCart = React.forwardRef(({ onClick, href }: any, ref) => {
     </Box>
   );
 });
-const steps = [
-  "Košík",
-  "Doprava a platba",
-  "Dodací údaje",
-  "Rekapitulace",
-  "Hotovo",
-];
+const steps = ["Košík", "Doprava a platba", "Dodací údaje", "Rekapitulace"];
 
 const CartNavBar: React.FC = () => {
   const { cart, activeStep } = useContext(AppContext) as CartContextType;

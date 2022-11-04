@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-
+import React, { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import Carousel1 from "../../../../images/carousel/alexander-jawfox-Mu0ExSKTOBs-unsplash.jpg";
@@ -97,24 +97,42 @@ const Carousel = () => {
               >
                 <Typography
                   variant="h3"
+                  color="text.primary"
+                  sx={{ fontWeight: 700 }}
                   align={"center"}
-                  fontWeight={700}
-                  color="primary"
+                  gutterBottom
                 >
-                  Terče pro IPSC střelbu
+                  <Typography
+                    color={"primary"}
+                    component={"span"}
+                    variant={"inherit"}
+                    sx={{
+                      background: `linear-gradient(180deg, rgba(198,21,23,1) 32%, rgba(250,31,33,1) 100%)`,
+                      backgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    Terče pro IPSC střelbu
+                  </Typography>
                 </Typography>
                 <Typography
                   variant="h6"
+                  component={"p"}
                   color="common.white"
-                  sx={{ paddingY: 2 }}
                   align={"center"}
+                  fontWeight={300}
+                  gutterBottom
                 >
                   Kvalitní kovové a papírové terče vyhovující těm nejnáročnějším
-                  podmínkám. Užijte si střelbu naplno.
+                  podmínkám.
                 </Typography>
-                <Button size={"large"} variant="contained">
-                  Vice
-                </Button>
+                <Link href={"/terce"} passHref>
+                  <a style={{ textDecoration: "none" }}>
+                    <Button size={"large"} variant="contained">
+                      Vice
+                    </Button>
+                  </a>
+                </Link>
               </Box>
             </Box>
           </div>

@@ -105,7 +105,7 @@ const NavBar: React.FC<Props> = ({ parentCategories }: any) => {
       spacing={{ xs: 0, md: 2 }}
       sx={{ gridAutoFlow: "row dense" }}
     >
-      <Grid item xs={3} md={1} sx={{ order: { xs: 1, md: 1 } }}>
+      <Grid item xs={3} md={2} sx={{ order: { xs: 1, md: 1 } }}>
         <Link href="/" passHref>
           <MyLinkLogo />
         </Link>
@@ -115,7 +115,7 @@ const NavBar: React.FC<Props> = ({ parentCategories }: any) => {
         item
         container
         xs={12}
-        md={9}
+        md={8}
         alignItems="center"
         sx={{ order: { xs: 3, md: 2 } }}
       >
@@ -134,9 +134,11 @@ const NavBar: React.FC<Props> = ({ parentCategories }: any) => {
             sx={{
               display: "flex",
               flexDirection: "row",
+              justifyContent: { xs: "flex-start", sm: "center" },
               alignItems: "center",
               overflowX: "scroll",
               whiteSpace: "nowrap",
+              height: "25px",
               "&::-webkit-scrollbar": {
                 display: "none",
               },

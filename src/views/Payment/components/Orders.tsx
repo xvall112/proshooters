@@ -54,6 +54,7 @@ const Orders = (): JSX.Element => {
                 justifyContent={"space-between"}
                 alignItems={"flex-start"}
                 width={1}
+                ml={1}
               >
                 <Box>
                   <Typography fontWeight={700} variant={"subtitle2"}>
@@ -143,7 +144,7 @@ const Orders = (): JSX.Element => {
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography color={"text.secondary"}>Poštovné</Typography>
+          <Typography color={"text.secondary"}>Doprava</Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
             {loadingCart ? (
               <Skeleton
