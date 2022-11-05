@@ -51,7 +51,7 @@ const SummeryBox: React.FC = (): JSX.Element => {
             )}
           </Typography>
         </Box>
-        <Box display={"flex"} justifyContent={"space-between"}>
+        {/*  <Box display={"flex"} justifyContent={"space-between"}>
           <Typography color={"text.secondary"}>Poštovné</Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
             {loadingCart ? (
@@ -65,7 +65,7 @@ const SummeryBox: React.FC = (): JSX.Element => {
               />
             )}
           </Typography>
-        </Box>
+        </Box> */}
         <Box display={"flex"} justifyContent={"space-between"}>
           <Typography color={"text.secondary"}>Sleva</Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
