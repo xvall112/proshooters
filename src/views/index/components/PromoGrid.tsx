@@ -22,7 +22,7 @@ const mock = [
     title: "Air Jordan 1 Mid Banned",
     description:
       "All orders will be shipped with DHL Express, including On Demand Delivery service.",
-    image: "https://assets.maccarianagency.com/backgrounds/img64.png",
+    image: miroslavZapletal,
     href: "/demos/ecommerce/product-overview",
   },
 
@@ -30,7 +30,7 @@ const mock = [
     caption: "Timer",
     title: "Timer Shooters Global",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus.",
+      "Prvotřídní timer polské firmy Shooters Global, který přináší revoluci do segmentu střeleckých timerů.",
     image: "https://assets.maccarianagency.com/backgrounds/img66.png",
     href: "/product/shooters-global-timer-sportovni-verze",
   },
@@ -54,7 +54,7 @@ const PromoGrid = (): JSX.Element => {
         >
           <Box sx={{ p: 4, mb: 2 }}>
             <Image
-              src={miroslavZapletal}
+              src={mock[0].image}
               alt={"Miroslav Zapletal"}
               width={400}
               objectFit="contain"
@@ -112,7 +112,7 @@ const PromoGrid = (): JSX.Element => {
             >
               <Box sx={{ p: 4, mb: 2 }}>
                 <Image
-                  src={miroslavZapletal}
+                  src={mock[1].image}
                   alt={"Miroslav Zapletal"}
                   width={500}
                   objectFit="contain"

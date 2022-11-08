@@ -34,11 +34,6 @@ const Address = () => {
                 </Typography>
                 <Shipping />
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6" fontWeight={700} marginBottom={4}>
-                  Vyberte platbu
-                </Typography>
-              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} md={5}>

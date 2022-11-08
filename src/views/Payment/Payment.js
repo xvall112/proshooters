@@ -13,10 +13,12 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel, {
   FormControlLabelProps,
 } from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import FormHelperText from "@mui/material/FormHelperText";
 //components
 import Container from "../../components/Container";
 import Orders from "./components/Orders";
@@ -27,6 +29,9 @@ import PlatbaKartou from "../../images/doprava/platbaKartou.svg";
 import GoPay from "../../images/doprava/gopay.svg";
 import BankovnimPrevodem from "../../images/doprava/bankovnim-prevodem.svg";
 import PersonalPickup from "../../images/doprava/personal-pickup.svg";
+//formik
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const Label = ({ title, subtitle, image, price }) => {
   return (
@@ -79,13 +84,34 @@ function MyFormControlLabel(props) {
   return <StyledFormControlLabel checked={checked} {...props} />;
 }
 
+const validationSchema = yup.object({
+  typeOfDelivery: yup
+    .string("Vyberte způsob doručení")
+    .required("Vyberte způsob doručení"),
+  typeOfPayment: yup
+    .string("Vyberte způsob platby")
+    .required("Vyberte způsob platby"),
+});
+
 const Payment = () => {
   const [pointZasilkovna, setPointZasilkovna] = useState(null);
   const { setActiveStep, activeStep } = useContext(AppContext);
 
+  // set active step on navbar
   useEffect(() => {
     setActiveStep(1);
   }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      typeOfDelivery: "",
+      typeOfPayment: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   //set option Zasilkovna
   const packetaApiKey = "XXX XXX XXX";
@@ -109,119 +135,169 @@ const Payment = () => {
 
   return (
     <>
-      <Script
-        src="https://widget.packeta.com/v6/www/js/library.js"
-        onLoad={handleLoad}
-      />
       <Container>
         <Box>
           <Grid container spacing={{ xs: 4, md: 8 }}>
             <Grid item xs={12} md={7}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  <Typography variant="h6" fontWeight={700} marginBottom={4}>
-                    Zvolte způsob dopravy
-                  </Typography>
-                  <div className="packeta-selector-value"></div>
-                  <RadioGroup name="delivery-radio-group">
-                    <MyFormControlLabel
-                      className="packeta-selector-open"
-                      onClick={() => handleOpenZasilkovnaWidget()}
-                      value="zasilkovna"
-                      label={
-                        <Label
-                          title={"Zásilkovna"}
-                          subtitle={`Doručení na výdejní místo ${
-                            pointZasilkovna !== null ? pointZasilkovna : ""
-                          }
+              <form onSubmit={formik.handleSubmit}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" fontWeight={700} marginBottom={4}>
+                      Zvolte způsob dopravy
+                    </Typography>
+                    <FormControl fullWidth>
+                      <RadioGroup
+                        id="typeOfDelivery"
+                        name="typeOfDelivery"
+                        value={formik.values.typeOfDelivery}
+                        onChange={formik.handleChange}
+                      >
+                        <MyFormControlLabel
+                          className="packeta-selector-open"
+                          onClick={() => handleOpenZasilkovnaWidget()}
+                          value="zasilkovna"
+                          label={
+                            <Label
+                              title={"Zásilkovna"}
+                              subtitle={`Doručení na výdejní místo ${
+                                pointZasilkovna !== null ? pointZasilkovna : ""
+                              }
                           `}
-                          price={"89 Kč"}
-                          image={ZasilkovnaLogo}
-                        />
-                      }
-                      control={<Radio />}
-                    />
-                    <MyFormControlLabel
-                      onClick={() => {
-                        setPointZasilkovna(null);
-                      }}
-                      value="address"
-                      label={
-                        <Label
-                          title={"Dodání na adresu"}
-                          subtitle={"Doručení objednávky na vaší adresu"}
-                          price={"89 Kč"}
-                          image={DopravaNaAdresu}
-                        />
-                      }
-                      control={<Radio />}
-                    />
-                    <MyFormControlLabel
-                      onClick={() => {
-                        setPointZasilkovna(null);
-                      }}
-                      value="personal"
-                      label={
-                        <Label
-                          title={"Osobní odběr"}
-                          subtitle={"Po telefonické domluvě"}
-                          price={"0 Kč"}
-                          image={PersonalPickup}
-                        />
-                      }
-                      control={<Radio />}
-                    />
-                  </RadioGroup>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h6" fontWeight={700} marginBottom={4}>
-                    Zvolte způsob platby
-                  </Typography>
-                  <RadioGroup name="payment-radio-group">
-                    <MyFormControlLabel
-                      value="onlineBanknAccount"
-                      label={
-                        <Label
-                          title={"Okamžitý bankovní převod"}
-                          subtitle={
-                            "Po potvrzení objednávky budete přesměrováni na stránku GoPay"
+                              price={"89 Kč"}
+                              image={ZasilkovnaLogo}
+                            />
                           }
-                          price={"Zdarma"}
-                          image={GoPay}
+                          control={<Radio />}
                         />
-                      }
-                      control={<Radio />}
-                    />
-                    <MyFormControlLabel
-                      value="bankAccount"
-                      label={
-                        <Label
-                          title={"Klasický bankovní převod"}
-                          subtitle={
-                            "Po vytvoření objednávky vám zašleme instrukce, jak peníze převést bankovním převodem na náš účet."
+                        <MyFormControlLabel
+                          onClick={() => {
+                            setPointZasilkovna(null);
+                          }}
+                          value="address"
+                          label={
+                            <Label
+                              title={"Dodání na adresu"}
+                              subtitle={"Doručení objednávky na vaší adresu"}
+                              price={"89 Kč"}
+                              image={DopravaNaAdresu}
+                            />
                           }
-                          price={"Zdarma"}
-                          image={BankovnimPrevodem}
+                          control={<Radio />}
                         />
-                      }
-                      control={<Radio />}
-                    />
-                    <MyFormControlLabel
-                      value="card"
-                      label={
-                        <Label
-                          title={"Předem platební kartou"}
-                          subtitle={"Online platba CZK"}
-                          price={"Zdarma"}
-                          image={PlatbaKartou}
+                        <MyFormControlLabel
+                          onClick={() => {
+                            setPointZasilkovna(null);
+                          }}
+                          value="personal"
+                          label={
+                            <Label
+                              title={"Osobní odběr"}
+                              subtitle={"Po telefonické domluvě"}
+                              price={"0 Kč"}
+                              image={PersonalPickup}
+                            />
+                          }
+                          control={<Radio />}
                         />
+                      </RadioGroup>
+                      <FormHelperText
+                        error={
+                          formik.touched.typeOfDelivery &&
+                          Boolean(formik.errors.typeOfDelivery)
+                        }
+                      >
+                        {formik.touched.typeOfDelivery &&
+                          formik.errors.typeOfDelivery}
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" fontWeight={700} marginBottom={4}>
+                      Zvolte způsob platby
+                    </Typography>
+
+                    <FormControl
+                      fullWidth
+                      error={
+                        formik.touched.typeOfPayment &&
+                        Boolean(formik.errors.typeOfPayment)
                       }
-                      control={<Radio />}
-                    />
-                  </RadioGroup>
+                    >
+                      <RadioGroup
+                        name="typeOfPayment"
+                        id="typeOfPayment"
+                        value={formik.values.typeOfPayment}
+                        onChange={formik.handleChange}
+                        helperText={
+                          formik.touched.typeOfPayment &&
+                          formik.errors.typeOfPayment
+                        }
+                      >
+                        <MyFormControlLabel
+                          value="onlineBanknAccount"
+                          label={
+                            <Label
+                              title={"Okamžitý bankovní převod"}
+                              subtitle={
+                                "Po potvrzení objednávky budete přesměrováni na stránku GoPay"
+                              }
+                              price={"Zdarma"}
+                              image={GoPay}
+                            />
+                          }
+                          control={<Radio />}
+                        />
+                        <MyFormControlLabel
+                          value="bankAccount"
+                          label={
+                            <Label
+                              title={"Klasický bankovní převod"}
+                              subtitle={
+                                "Po vytvoření objednávky vám zašleme instrukce, jak peníze převést bankovním převodem na náš účet."
+                              }
+                              price={"Zdarma"}
+                              image={BankovnimPrevodem}
+                            />
+                          }
+                          control={<Radio />}
+                        />
+                        <MyFormControlLabel
+                          value="card"
+                          label={
+                            <Label
+                              title={"Předem platební kartou"}
+                              subtitle={"Online platba CZK"}
+                              price={"Zdarma"}
+                              image={PlatbaKartou}
+                            />
+                          }
+                          control={<Radio />}
+                        />
+                      </RadioGroup>
+                      <FormHelperText
+                        filled
+                        error={
+                          formik.touched.typeOfPayment &&
+                          Boolean(formik.errors.typeOfPayment)
+                        }
+                      >
+                        {formik.touched.typeOfPayment &&
+                          formik.errors.typeOfPayment}
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </form>
             </Grid>
+
             <Grid item xs={12} md={5}>
               <Typography variant="h6" fontWeight={700} marginBottom={4}>
                 Přehled objednávky
@@ -287,6 +363,7 @@ const Payment = () => {
           </Grid>
         </Box>
       </Container>
+      <Script src="https://widget.packeta.com/v6/www/js/library.js" />
     </>
   );
 };
