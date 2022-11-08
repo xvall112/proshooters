@@ -110,6 +110,10 @@ const Payment = () => {
 
   return (
     <>
+      <Script
+        src="https://widget.packeta.com/v6/www/js/library.js"
+        onLoad={handleLoad}
+      />
       <Container>
         <Box>
           <Grid container spacing={{ xs: 4, md: 8 }}>
@@ -275,7 +279,6 @@ const Payment = () => {
           </Grid>
         </Box>
       </Container>
-      <Script src="https://widget.packeta.com/v6/www/js/library.js" />
     </>
   );
 };
