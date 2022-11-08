@@ -8,6 +8,10 @@ const allowedImageWordPressDomain = new URL(
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: [allowedImageWordPressDomain, "via.placeholder.com"],
+    domains: [
+      allowedImageWordPressDomain,
+      "proshooters.cz",
+      "via.placeholder.com",
+    ],
   },
 };

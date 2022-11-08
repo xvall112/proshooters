@@ -3,7 +3,7 @@ import Script from "next/script";
 import Head from "next/head";
 import Image from "next/image";
 import { AppContext } from "../../context/AppContext";
-import { CartContextType } from "../../types/appContext";
+
 //materialUI
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -26,8 +26,9 @@ import DopravaNaAdresu from "../../images/doprava/dopravaNaAdresu.svg";
 import PlatbaKartou from "../../images/doprava/platbaKartou.svg";
 import GoPay from "../../images/doprava/gopay.svg";
 import BankovnimPrevodem from "../../images/doprava/bankovnim-prevodem.svg";
+import PersonalPickup from "../../images/doprava/personal-pickup.svg";
 
-const Label = ({ title, subtitle, image, price }: any) => {
+const Label = ({ title, subtitle, image, price }) => {
   return (
     <Grid
       item
@@ -39,7 +40,7 @@ const Label = ({ title, subtitle, image, price }: any) => {
       justifyContent="center"
     >
       <Grid item xs={3}>
-        <Image src={image} alt="zasilkovna logo" />
+        <Image src={image} alt="zasilkovna logo" height={40} />
       </Grid>
       <Grid container item xs={6} direction="column">
         <Typography fontWeight={700}>{title}</Typography>
@@ -54,11 +55,7 @@ const Label = ({ title, subtitle, image, price }: any) => {
   );
 };
 
-interface StyledFormControlLabelProps extends FormControlLabelProps {
-  checked: boolean;
-}
-
-const StyledFormControlLabel = styled((props: StyledFormControlLabelProps) => (
+const StyledFormControlLabel = styled((props) => (
   <FormControlLabel {...props} />
 ))(({ theme, checked }) => ({
   ".MuiFormControlLabel-label": {
@@ -73,7 +70,7 @@ const StyledFormControlLabel = styled((props: StyledFormControlLabelProps) => (
   },
 }));
 
-function MyFormControlLabel(props: FormControlLabelProps) {
+function MyFormControlLabel(props) {
   const radioGroup = useRadioGroup();
   let checked = false;
   if (radioGroup) {
@@ -84,9 +81,7 @@ function MyFormControlLabel(props: FormControlLabelProps) {
 
 const Payment = () => {
   const [pointZasilkovna, setPointZasilkovna] = useState(null);
-  const { setActiveStep, activeStep } = useContext(
-    AppContext
-  ) as CartContextType;
+  const { setActiveStep, activeStep } = useContext(AppContext);
 
   useEffect(() => {
     setActiveStep(1);
@@ -101,12 +96,16 @@ const Payment = () => {
     valueFormat: "carrierId,carrierPickupPointId,name,city,street",
   };
 
-  function showSelectedPickupPoint(point: any) {
+  function showSelectedPickupPoint(point) {
     // Add here an action on pickup point selection
     if (point) {
       setPointZasilkovna(point.formatedValue);
     }
   }
+
+  const handleOpenZasilkovnaWidget = () => {
+    Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions);
+  };
 
   return (
     <>
@@ -127,13 +126,7 @@ const Payment = () => {
                   <RadioGroup name="delivery-radio-group">
                     <MyFormControlLabel
                       className="packeta-selector-open"
-                      onClick={() => {
-                        Packeta.Widget.pick(
-                          packetaApiKey,
-                          showSelectedPickupPoint,
-                          packetaOptions
-                        );
-                      }}
+                      onClick={() => handleOpenZasilkovnaWidget()}
                       value="zasilkovna"
                       label={
                         <Label
@@ -159,6 +152,21 @@ const Payment = () => {
                           subtitle={"Doručení objednávky na vaší adresu"}
                           price={"89 Kč"}
                           image={DopravaNaAdresu}
+                        />
+                      }
+                      control={<Radio />}
+                    />
+                    <MyFormControlLabel
+                      onClick={() => {
+                        setPointZasilkovna(null);
+                      }}
+                      value="personal"
+                      label={
+                        <Label
+                          title={"Osobní odběr"}
+                          subtitle={"Po telefonické domluvě"}
+                          price={"0 Kč"}
+                          image={PersonalPickup}
                         />
                       }
                       control={<Radio />}
