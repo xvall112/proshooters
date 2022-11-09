@@ -35,7 +35,7 @@ const Orders = (): JSX.Element => {
     AppContext
   ) as CartContextType;
   const theme = useTheme();
-
+  console.log(originCart);
   return (
     <Box>
       {cart.products?.length &&

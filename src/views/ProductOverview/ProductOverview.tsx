@@ -21,6 +21,7 @@ interface Props {
   product: any;
 }
 const ProductOverview = ({ product }: Props): JSX.Element => {
+  console.log(product);
   return (
     <>
       <Box bgcolor={"alternate.main"}>
@@ -36,6 +37,20 @@ const ProductOverview = ({ product }: Props): JSX.Element => {
           <Grid container spacing={{ xs: 2, md: 4 }}>
             <Grid item xs={12} md={8}>
               <ProductSlider key={product.id}>
+                *{" "}
+                <Box
+                  sx={{
+                    textAlign: "center",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src={product.image.sourceUrl}
+                    alt={product.image.title || "Product Image"}
+                    width={600}
+                    height={600}
+                  />
+                </Box>
                 {product.galleryImages.nodes.map((image: any, i: any) => (
                   <Box
                     sx={{

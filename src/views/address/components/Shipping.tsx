@@ -10,7 +10,9 @@ import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
 
+import MuiPhoneNumber from "material-ui-phone-number-2";
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js
 const countries = [
   /*   { code: "AD", label: "Andorra", phone: "376" },
@@ -440,45 +442,6 @@ const countries = [
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const validationSchema = yup.object({
-  shippingAddress: yup.object({
-    email: yup
-      .string()
-      .email("Vložte správný tvar emailu")
-      .required("Povinný údaj"),
-    fullName: yup.string().required("Povinný údaj"),
-    address: yup.string().required("Povinný údaj"),
-    city: yup.string().required("Povinný údaj"),
-    psc: yup.string().required("Povinný údaj"),
-    state: yup.string().required("Povinný údaj"),
-    tel: yup
-      .string()
-      .matches(phoneRegExp, "Špatné číslo")
-      .min(9, "Špatné číslo")
-      .required("Povinný údaj"),
-    predvolbaTel: yup
-      .string()
-
-      .required("Povinný údaj"),
-  }),
-  billingAddress: yup.object({
-    fullName: yup.string().required("Povinný údaj"),
-    address: yup.string().required("Povinný údaj"),
-    city: yup.string().required("Povinný údaj"),
-    psc: yup.string().required("Povinný údaj"),
-    state: yup.string().required("Povinný údaj"),
-    tel: yup
-      .string()
-      .matches(phoneRegExp, "Špatné číslo")
-      .min(9, "Špatné číslo")
-      .required("Povinný údaj"),
-    predvolbaTel: yup
-      .string()
-
-      .required("Povinný údaj"),
-  }),
-});
-
 const Shipping = (): JSX.Element => {
   const [checked, setChecked] = React.useState(false);
 
@@ -486,6 +449,41 @@ const Shipping = (): JSX.Element => {
   const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+
+  const validationSchema = yup.object({
+    shippingAddress: yup.object({
+      email: yup
+        .string()
+        .email("Vložte správný tvar emailu")
+        .required("Povinný údaj"),
+      fullName: yup.string().required("Povinný údaj"),
+      address: yup.string().required("Povinný údaj"),
+      city: yup.string().required("Povinný údaj"),
+      postCode: yup.string().required("Povinný údaj"),
+      state: yup.string().required("Povinný údaj"),
+      tel: yup
+        .string()
+        /*   .matches(phoneRegExp, "Špatné číslo") */
+        .min(9, "Špatné číslo")
+        .required("Povinný údaj"),
+    }),
+
+    billingAddress:
+      checked &&
+      yup.object({
+        fullName: yup.string().required("Povinný údaj"),
+        address: yup.string().required("Povinný údaj"),
+        city: yup.string().required("Povinný údaj"),
+        postCode: yup.string().required("Povinný údaj"),
+        state: yup.string().required("Povinný údaj"),
+        tel: yup
+          .string()
+          /*  .matches(phoneRegExp, "Špatné číslo") */
+          .min(9, "Špatné číslo")
+          .required("Povinný údaj"),
+      }),
+  });
+
   const formik = useFormik({
     initialValues: {
       shippingAddress: {
@@ -494,18 +492,16 @@ const Shipping = (): JSX.Element => {
         companyName: "",
         address: "",
         city: "",
-        psc: "",
+        postCode: "",
         state: "CZ",
-        predvolbaTel: "+420",
         tel: "",
       },
       billingAddress: {
         fullName: "",
         address: "",
         city: "",
-        psc: "",
+        postCode: "",
         state: "CZ",
-        predvolbaTel: "+420",
         tel: "",
         ico: "",
         dic: "",
@@ -513,11 +509,15 @@ const Shipping = (): JSX.Element => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      alert(JSON.stringify(checked ? values : values.shippingAddress, null, 2));
     },
   });
+
   return (
     <Box>
+      <Typography variant="h6" fontWeight={700} marginBottom={4}>
+        Doručovací údaje
+      </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={{ xs: 2, md: 4 }}>
           <Grid item xs={12}>
@@ -627,17 +627,17 @@ const Shipping = (): JSX.Element => {
               type="text"
               label="PSČ *"
               variant="outlined"
-              name={"shippingAddress.psc"}
+              name={"shippingAddress.postCode"}
               fullWidth
-              value={formik.values.shippingAddress?.psc}
+              value={formik.values.shippingAddress?.postCode}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.psc &&
-                Boolean(formik.errors.shippingAddress?.psc)
+                formik.touched.shippingAddress?.postCode &&
+                Boolean(formik.errors.shippingAddress?.postCode)
               }
               helperText={
-                formik.touched.shippingAddress?.psc &&
-                formik.errors.shippingAddress?.psc
+                formik.touched.shippingAddress?.postCode &&
+                formik.errors.shippingAddress?.postCode
               }
             />
           </Grid>
@@ -689,65 +689,20 @@ const Shipping = (): JSX.Element => {
               )}
             />
           </Grid>
-          <Grid item xs={4} sm={3}>
-            <Autocomplete
-              onChange={(e, value) =>
-                formik.setFieldValue(
-                  "shippingAddress.predvolbaTel",
-                  value?.phone || ""
-                )
-              }
-              id={"predvolbaTel"}
-              options={countries}
-              autoHighlight
-              getOptionLabel={(option) => option.phone}
-              renderOption={(props, option) => (
-                <Box
-                  component="li"
-                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                  {...props}
-                >
-                  <img
-                    loading="lazy"
-                    width="20"
-                    src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                    srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                    alt=""
-                  />
-                  ({option.code}) {option.phone}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  value={formik.values.shippingAddress?.predvolbaTel}
-                  error={
-                    formik.touched.shippingAddress?.predvolbaTel &&
-                    Boolean(formik.errors.shippingAddress?.predvolbaTel)
-                  }
-                  helperText={
-                    formik.touched.shippingAddress?.predvolbaTel &&
-                    formik.errors.shippingAddress?.predvolbaTel
-                  }
-                  {...params}
-                  name={"shippingAddress.predvolbaTel"}
-                  label="Předvolba *"
-                  inputProps={{
-                    ...params.inputProps,
-                    autoComplete: "new-password", // disable autocomplete and autofill
-                  }}
-                />
-              )}
-            />
-          </Grid>
-          <Grid item xs={8} sm={9}>
-            <TextField
+
+          <Grid item xs={12} sm={12}>
+            <MuiPhoneNumber
+              regions={["europe"]}
+              defaultCountry={"cz"}
               type={"tel"}
               label="Telefon  *"
               variant="outlined"
               name={"shippingAddress.tel"}
               fullWidth
               value={formik.values.shippingAddress?.tel}
-              onChange={formik.handleChange}
+              onChange={(value: string) =>
+                formik.setFieldValue("shippingAddress.tel", value || "")
+              }
               error={
                 formik.touched.shippingAddress?.tel &&
                 Boolean(formik.errors.shippingAddress?.tel)
@@ -758,11 +713,9 @@ const Shipping = (): JSX.Element => {
               }
             />
           </Grid>
+
           <Grid item xs={12}>
-            <Divider />
-          </Grid>
-          <Grid item xs={12}>
-            <Box>
+            <Box mb={2}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -776,263 +729,233 @@ const Shipping = (): JSX.Element => {
               />
             </Box>
           </Grid>
-          <Grid item xs={12}>
-            <Divider />
-          </Grid>
         </Grid>
 
         {/*  if checked show up billing form */}
         {checked && (
-          <Grid container spacing={{ xs: 2, md: 4 }}>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                type={"text"}
-                label="Jméno a Příjmení (Název firmy) *"
-                variant="outlined"
-                name={"billingAddress.fullName"}
-                fullWidth
-                value={formik.values.billingAddress?.fullName}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.fullName &&
-                  Boolean(formik.errors.billingAddress?.fullName)
-                }
-                helperText={
-                  formik.touched.billingAddress?.fullName &&
-                  formik.errors.billingAddress?.fullName
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type="text"
-                label="Ulice a číslo popisné *"
-                variant="outlined"
-                name={"billingAddress.address"}
-                fullWidth
-                value={formik.values.billingAddress?.address}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.address &&
-                  Boolean(formik.errors.billingAddress?.address)
-                }
-                helperText={
-                  formik.touched.billingAddress?.address &&
-                  formik.errors.billingAddress?.address
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                type={"text"}
-                label="Město *"
-                variant="outlined"
-                name={"billingAddress.city"}
-                fullWidth
-                value={formik.values.billingAddress?.city}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.city &&
-                  Boolean(formik.errors.billingAddress?.city)
-                }
-                helperText={
-                  formik.touched.billingAddress?.city &&
-                  formik.errors.billingAddress?.city
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              {/*  <Typography
+          <>
+            <Typography variant="h6" fontWeight={700} marginBottom={4}>
+              Fakturační údaje
+            </Typography>
+            <Grid container spacing={{ xs: 2, md: 4 }}>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  type={"text"}
+                  label="Jméno a Příjmení (Název firmy) *"
+                  variant="outlined"
+                  name={"billingAddress.fullName"}
+                  fullWidth
+                  value={formik.values.billingAddress?.fullName}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billingAddress?.fullName &&
+                    Boolean(formik.errors.billingAddress?.fullName)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.fullName &&
+                    formik.errors.billingAddress?.fullName
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type="text"
+                  label="Ulice a číslo popisné *"
+                  variant="outlined"
+                  name={"billingAddress.address"}
+                  fullWidth
+                  value={formik.values.billingAddress?.address}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billingAddress?.address &&
+                    Boolean(formik.errors.billingAddress?.address)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.address &&
+                    formik.errors.billingAddress?.address
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  type={"text"}
+                  label="Město *"
+                  variant="outlined"
+                  name={"billingAddress.city"}
+                  fullWidth
+                  value={formik.values.billingAddress?.city}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billingAddress?.city &&
+                    Boolean(formik.errors.billingAddress?.city)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.city &&
+                    formik.errors.billingAddress?.city
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                {/*  <Typography
               variant={"subtitle2"}
               sx={{ marginBottom: 2 }}
               fontWeight={700}
             >
               PSČ
             </Typography> */}
-              <TextField
-                type="text"
-                label="PSČ *"
-                variant="outlined"
-                name={"billingAddress.psc"}
-                fullWidth
-                value={formik.values.billingAddress?.psc}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.psc &&
-                  Boolean(formik.errors.billingAddress?.psc)
-                }
-                helperText={
-                  formik.touched.billingAddress?.psc &&
-                  formik.errors.billingAddress?.psc
-                }
-              />
-            </Grid>
+                <TextField
+                  type="text"
+                  label="PSČ *"
+                  variant="outlined"
+                  name={"billingAddress.postCode"}
+                  fullWidth
+                  value={formik.values.billingAddress?.postCode}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billingAddress?.postCode &&
+                    Boolean(formik.errors.billingAddress?.postCode)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.postCode &&
+                    formik.errors.billingAddress?.postCode
+                  }
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <Autocomplete
-                onChange={(e, value) =>
-                  formik.setFieldValue(
-                    "billingAddress.state",
-                    value?.code || ""
-                  )
-                }
-                id={"state"}
-                options={countries}
-                autoHighlight
-                getOptionLabel={(option) => option.label}
-                renderOption={(props, option) => (
-                  <Box
-                    component="li"
-                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                    {...props}
-                  >
-                    <img
-                      loading="lazy"
-                      width="20"
-                      src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                      srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                      alt=""
+              <Grid item xs={12} sm={12}>
+                <Autocomplete
+                  onChange={(e, value) =>
+                    formik.setFieldValue(
+                      "billingAddress.state",
+                      value?.code || ""
+                    )
+                  }
+                  id={"state"}
+                  options={countries}
+                  autoHighlight
+                  getOptionLabel={(option) => option.label}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                        alt=""
+                      />
+                      {option.label} ({option.code})
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      value={formik.values.billingAddress?.state}
+                      error={
+                        formik.touched.billingAddress?.state &&
+                        Boolean(formik.errors.billingAddress?.state)
+                      }
+                      helperText={
+                        formik.touched.billingAddress?.state &&
+                        formik.errors.billingAddress?.state
+                      }
+                      {...params}
+                      name={"billingAddress.state"}
+                      label="Vyberte stát"
+                      inputProps={{
+                        ...params.inputProps,
+                        autoComplete: "new-password", // disable autocomplete and autofill
+                      }}
                     />
-                    {option.label} ({option.code})
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    value={formik.values.billingAddress?.state}
-                    error={
-                      formik.touched.billingAddress?.state &&
-                      Boolean(formik.errors.billingAddress?.state)
-                    }
-                    helperText={
-                      formik.touched.billingAddress?.state &&
-                      formik.errors.billingAddress?.state
-                    }
-                    {...params}
-                    name={"billingAddress.state"}
-                    label="Vyberte stát"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "new-password", // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={4} sm={3}>
-              <Autocomplete
-                onChange={(e, value) =>
-                  formik.setFieldValue(
-                    "billingAddress.predvolbaTel",
-                    value?.phone || ""
-                  )
-                }
-                id={"predvolbaTel"}
-                options={countries}
-                autoHighlight
-                getOptionLabel={(option) => option.phone}
-                renderOption={(props, option) => (
-                  <Box
-                    component="li"
-                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                    {...props}
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <MuiPhoneNumber
+                  onChange={(value: string) =>
+                    formik.setFieldValue("billingAddress.tel", value || "")
+                  }
+                  regions={["europe"]}
+                  defaultCountry={"cz"}
+                  type={"tel"}
+                  label="Telefon *"
+                  variant="outlined"
+                  name={"billingAddress.tel"}
+                  fullWidth
+                  value={formik.values.billingAddress?.tel}
+                  error={
+                    formik.touched.billingAddress?.tel &&
+                    Boolean(formik.errors.billingAddress?.tel)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.tel &&
+                    formik.errors.billingAddress?.tel
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  type={"text"}
+                  label="ICO"
+                  variant="outlined"
+                  name={"billingAddress.ico"}
+                  fullWidth
+                  value={formik.values.billingAddress?.ico}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billingAddress?.ico &&
+                    Boolean(formik.errors.billingAddress?.ico)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.ico &&
+                    formik.errors.billingAddress?.ico
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  type={"text"}
+                  label="DIC"
+                  variant="outlined"
+                  name={"billingAddress.dic"}
+                  fullWidth
+                  value={formik.values.billingAddress?.dic}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billingAddress?.dic &&
+                    Boolean(formik.errors.billingAddress?.dic)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.dic &&
+                    formik.errors.billingAddress?.dic
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+              <Grid container item xs={12} justifyContent={"space-between"}>
+                <Grid item xs={12} md={4}>
+                  <Button color="primary" variant="outlined" fullWidth>
+                    ZPET
+                  </Button>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                    type="submit"
                   >
-                    <img
-                      loading="lazy"
-                      width="20"
-                      src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                      srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                      alt=""
-                    />
-                    ({option.code}) {option.phone}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    value={formik.values.billingAddress?.predvolbaTel}
-                    error={
-                      formik.touched.billingAddress?.predvolbaTel &&
-                      Boolean(formik.errors.billingAddress?.predvolbaTel)
-                    }
-                    helperText={
-                      formik.touched.billingAddress?.predvolbaTel &&
-                      formik.errors.billingAddress?.predvolbaTel
-                    }
-                    {...params}
-                    name={"billingAddress.predvolbaTel"}
-                    label="Předvolba *"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "new-password", // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-              />
+                    POKRAČOVAT
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={8} sm={9}>
-              <TextField
-                type={"tel"}
-                label="Telefon *"
-                variant="outlined"
-                name={"billingAddress.tel"}
-                fullWidth
-                value={formik.values.billingAddress?.tel}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.tel &&
-                  Boolean(formik.errors.billingAddress?.tel)
-                }
-                helperText={
-                  formik.touched.billingAddress?.tel &&
-                  formik.errors.billingAddress?.tel
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                type={"text"}
-                label="ICO"
-                variant="outlined"
-                name={"billingAddress.ico"}
-                fullWidth
-                value={formik.values.billingAddress?.ico}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.ico &&
-                  Boolean(formik.errors.billingAddress?.ico)
-                }
-                helperText={
-                  formik.touched.billingAddress?.ico &&
-                  formik.errors.billingAddress?.ico
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                type={"text"}
-                label="DIC"
-                variant="outlined"
-                name={"billingAddress.dic"}
-                fullWidth
-                value={formik.values.billingAddress?.dic}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.billingAddress?.dic &&
-                  Boolean(formik.errors.billingAddress?.dic)
-                }
-                helperText={
-                  formik.touched.billingAddress?.dic &&
-                  formik.errors.billingAddress?.dic
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-          </Grid>
+          </>
         )}
-        <Button color="primary" variant="contained" fullWidth type="submit">
-          Submit
-        </Button>
       </form>
     </Box>
   );

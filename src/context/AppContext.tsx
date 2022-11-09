@@ -80,10 +80,14 @@ export const AppProvider = (props: any) => {
   };
 
   // Get Cart Data.
-  const { data, loading: loadingCart, refetch } = useQuery(GET_CART, {
+  const {
+    data,
+    loading: loadingCart,
+    refetch,
+  } = useQuery(GET_CART, {
     onCompleted: (data) => {
       // Update cart in the localStorage.
-      console.log("cart", data);
+
       setOriginCart(data.cart);
       const updatedCart = getFormattedCart(data);
       localStorage.setItem("woo-next-cart", JSON.stringify(updatedCart));

@@ -113,6 +113,9 @@ const SummeryBox: React.FC = (): JSX.Element => {
         <Link href="/checkout/payment" passHref>
           <MyLinkButton />
         </Link>
+        <Button variant={"outlined"} size={"large"} fullWidth>
+          CHECKOUT
+        </Button>
       </Stack>
       <Box
         component={"form"}

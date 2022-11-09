@@ -29,9 +29,6 @@ const Address = () => {
           <Grid item xs={12} md={7}>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                <Typography variant="h6" fontWeight={700} marginBottom={4}>
-                  Doručovací adresa
-                </Typography>
                 <Shipping />
               </Grid>
             </Grid>
