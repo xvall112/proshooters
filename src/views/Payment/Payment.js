@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Script from "next/script";
 import Image from "next/image";
 import { AppContext } from "../../context/AppContext";
-import { v4 } from "uuid";
+import { useRouter } from "next/router";
 
 //materialUI
 import Box from "@mui/material/Box";
@@ -19,6 +19,7 @@ import FormControlLabel, {
 } from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import FormHelperText from "@mui/material/FormHelperText";
+import Alert from "@mui/material/Alert";
 //components
 import Container from "../../components/Container";
 import Orders from "./components/Orders";
@@ -32,12 +33,6 @@ import PersonalPickup from "../../images/doprava/personal-pickup.svg";
 //formik
 import { useFormik } from "formik";
 import * as yup from "yup";
-
-//GQL
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_SHIPPING_METHODS } from "../../utils/gql/queries/get-shippingMethods";
-import UPDATE_SHIPPING_METHOD from "../../utils/gql/mutations/update-shippingMethods";
-import GET_CART from "../../utils/gql/queries/get-cart";
 
 const Label = ({ title, subtitle, image, price }) => {
   return (
@@ -101,23 +96,13 @@ const validationSchema = yup.object({
 
 const Payment = () => {
   const [pointZasilkovna, setPointZasilkovna] = useState(null);
-  const { setActiveStep, activeStep } = useContext(AppContext);
-
+  const { setActiveStep, handleSetPaymentandDeliveryMethod, createOrderInput } =
+    useContext(AppContext);
+  const router = useRouter();
   // set active step on navbar
   useEffect(() => {
     setActiveStep(1);
   }, []);
-
-  //gql
-  const { data, loading, error } = useQuery(GET_SHIPPING_METHODS);
-
-  const [updateShippingMethod, { loading: updateShippingMethodLoading }] =
-    useMutation(UPDATE_SHIPPING_METHOD, {
-      refetchQueries: [
-        { query: GET_CART }, // DocumentNode object parsed with gql
-        "GET_CART", // Query name
-      ],
-    });
 
   const formik = useFormik({
     initialValues: {
@@ -127,6 +112,11 @@ const Payment = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
+      handleSetPaymentandDeliveryMethod(values.typeOfPayment, [
+        values.typeOfDelivery,
+      ]);
+      alert(JSON.stringify(createOrderInput, null, 2));
+      router.push("/checkout/address");
     },
   });
 
@@ -143,6 +133,7 @@ const Payment = () => {
     // Add here an action on pickup point selection
     if (point) {
       setPointZasilkovna(point.formatedValue);
+      console.log(point);
     }
   }
 
@@ -150,16 +141,6 @@ const Payment = () => {
     Packeta.Widget.pick(packetaApiKey, showSelectedPickupPoint, packetaOptions);
   };
 
-  const heandleShippingMethodChange = async (shippingMethods) => {
-    await updateShippingMethod({
-      variables: {
-        input: {
-          clientMutationId: v4(), // Generate a unique id.
-          shippingMethods: shippingMethods,
-        },
-      },
-    });
-  };
   return (
     <>
       <Container>
@@ -177,30 +158,9 @@ const Payment = () => {
                         id="typeOfDelivery"
                         name="typeOfDelivery"
                         value={formik.values.typeOfDelivery}
-                        /*   onChange={formik.handleChange} */
-                        onChange={(e, value) =>
-                          heandleShippingMethodChange(value)
-                        }
+                        onChange={formik.handleChange}
                       >
-                        {loading
-                          ? "loading"
-                          : data.shippingMethods.nodes.map((method) => {
-                              return (
-                                <MyFormControlLabel
-                                  value={method.databaseId}
-                                  label={
-                                    <Label
-                                      title={method.title}
-                                      subtitle={method.description}
-                                      price={"89 Kč"}
-                                      image={ZasilkovnaLogo}
-                                    />
-                                  }
-                                  control={<Radio />}
-                                />
-                              );
-                            })}
-                        {/*     <MyFormControlLabel
+                        <MyFormControlLabel
                           className="packeta-selector-open"
                           onClick={() => handleOpenZasilkovnaWidget()}
                           value="zasilkovna"
@@ -241,12 +201,12 @@ const Payment = () => {
                             <Label
                               title={"Osobní odběr"}
                               subtitle={"Po telefonické domluvě"}
-                              price={"0 Kč"}
+                              price={"ZDARMA"}
                               image={PersonalPickup}
                             />
                           }
                           control={<Radio />}
-                        /> */}
+                        />
                       </RadioGroup>
                       <FormHelperText
                         error={
@@ -341,7 +301,7 @@ const Payment = () => {
                   fullWidth
                   type="submit"
                 >
-                  Submit
+                  POKRAČOVAT
                 </Button>
               </form>
             </Grid>

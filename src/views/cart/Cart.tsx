@@ -6,7 +6,6 @@ import { isEmpty } from "lodash";
 import EmptyCart from "./components/EmptyCart";
 import Orders from "./components/Orders";
 import SummeryBox from "./components/SummeryBox";
-import CheckoutButton from "./components/checkoutButton";
 //materialUI
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -69,7 +68,6 @@ const Cart = () => {
                     Celkem
                   </Typography>
                   <SummeryBox />
-                  <CheckoutButton />
                 </Card>
                 <Box marginTop={4}>
                   <Typography gutterBottom>Potřebujete poradit?</Typography>

@@ -1,5 +1,10 @@
 import React, { useState, useEffect, createContext } from "react";
-import { ICart, CartContextType, IOriginCart } from "../types/appContext";
+import {
+  ICart,
+  CartContextType,
+  IOriginCart,
+  IOrderInput,
+} from "../types/appContext";
 import { v4 } from "uuid";
 import { isEmpty } from "lodash";
 //GQL
@@ -21,9 +26,13 @@ export const AppContext = createContext<CartContextType | null>({
   setMessage: (variant, message) => {},
   setActiveStep: (step) => {},
   activeStep: 0,
+  setCreateOrderInput: (input) => {},
+  createOrderInput: {},
+  handleSetPaymentandDeliveryMethod: (deliveryMethod, paymentMethod) => {},
 });
 
 export const AppProvider = (props: any) => {
+  const [createOrderInput, setCreateOrderInput] = useState<IOrderInput>({});
   const [activeStep, setActiveStep] = useState<number>(0);
   const [originCart, setOriginCart] = useState<IOriginCart>({});
   const [cart, setCart] = useState<ICart>({});
@@ -37,6 +46,20 @@ export const AppProvider = (props: any) => {
       setCart(cartData);
     }
   }, []);
+
+  //set createorderInput paymentMethod and delivery method
+  const handleSetPaymentandDeliveryMethod = (
+    deliveryMethod: string,
+    paymentMethod: any
+  ) => {
+    setCreateOrderInput((prevState: any) => {
+      return {
+        ...prevState,
+        deliveryMethod: deliveryMethod,
+        paymentMethod: paymentMethod,
+      };
+    });
+  };
 
   const setMessage = (
     variant: VariantType = "info",
@@ -132,6 +155,9 @@ export const AppProvider = (props: any) => {
   return (
     <AppContext.Provider
       value={{
+        handleSetPaymentandDeliveryMethod,
+        setCreateOrderInput,
+        createOrderInput,
         cart,
         setCart,
         handleRemoveProductClick,

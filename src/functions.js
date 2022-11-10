@@ -291,6 +291,7 @@ export const createCheckoutData = (order) => {
     },
     shipToDifferentAddress: order.billingDifferentThanShipping,
     paymentMethod: order.paymentMethod,
+    shippingMethod: order.shippingMethod,
     isPaid: false,
   };
 

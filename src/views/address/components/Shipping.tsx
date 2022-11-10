@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { createCheckoutData } from "../../../functions";
 //materialUI
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -11,8 +12,12 @@ import Autocomplete from "@mui/material/Autocomplete";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
-
 import MuiPhoneNumber from "material-ui-phone-number-2";
+
+//context
+import { AppContext } from "../../../context/AppContext";
+//types
+import { CartContextType } from "../../../types/appContext";
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js
 const countries = [
   /*   { code: "AD", label: "Andorra", phone: "376" },
@@ -443,6 +448,9 @@ const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const Shipping = (): JSX.Element => {
+  const { setCreateOrderInput, createOrderInput } = useContext(
+    AppContext
+  ) as CartContextType;
   const [checked, setChecked] = React.useState(false);
 
   //is delivery address is same like billing address
@@ -451,65 +459,78 @@ const Shipping = (): JSX.Element => {
   };
 
   const validationSchema = yup.object({
-    shippingAddress: yup.object({
+    shipping: yup.object({
       email: yup
         .string()
         .email("Vložte správný tvar emailu")
         .required("Povinný údaj"),
-      fullName: yup.string().required("Povinný údaj"),
-      address: yup.string().required("Povinný údaj"),
+      firstName: yup.string().required("Povinný údaj"),
+      lastName: yup.string().required("Povinný údaj"),
+      address1: yup.string().required("Povinný údaj"),
       city: yup.string().required("Povinný údaj"),
-      postCode: yup.string().required("Povinný údaj"),
-      state: yup.string().required("Povinný údaj"),
-      tel: yup
+      postcode: yup.string().required("Povinný údaj"),
+      country: yup.string().required("Povinný údaj"),
+      phone: yup
         .string()
         /*   .matches(phoneRegExp, "Špatné číslo") */
         .min(9, "Špatné číslo")
         .required("Povinný údaj"),
     }),
 
-    billingAddress:
-      checked &&
-      yup.object({
-        fullName: yup.string().required("Povinný údaj"),
-        address: yup.string().required("Povinný údaj"),
-        city: yup.string().required("Povinný údaj"),
-        postCode: yup.string().required("Povinný údaj"),
-        state: yup.string().required("Povinný údaj"),
-        tel: yup
-          .string()
-          /*  .matches(phoneRegExp, "Špatné číslo") */
-          .min(9, "Špatné číslo")
-          .required("Povinný údaj"),
-      }),
+    billing: checked
+      ? yup.object({
+          firstName: yup.string().required("Povinný údaj"),
+          lastName: yup.string().required("Povinný údaj"),
+          address1: yup.string().required("Povinný údaj"),
+          city: yup.string().required("Povinný údaj"),
+          postcode: yup.string().required("Povinný údaj"),
+          country: yup.string().required("Povinný údaj"),
+          phone: yup
+            .string()
+            /*  .matches(phoneRegExp, "Špatné číslo") */
+            .min(9, "Špatné číslo")
+            .required("Povinný údaj"),
+        })
+      : yup.object({}),
   });
 
   const formik = useFormik({
     initialValues: {
-      shippingAddress: {
+      shipping: {
         email: "",
-        fullName: "",
-        companyName: "",
-        address: "",
+        firstName: "",
+        lastName: "",
+        company: "",
+        address1: "",
         city: "",
-        postCode: "",
-        state: "CZ",
-        tel: "",
+        postcode: "",
+        country: "CZ",
+        phone: "",
       },
-      billingAddress: {
-        fullName: "",
-        address: "",
+      billing: {
+        firstName: "",
+        lastName: "",
+        company: "",
+        address1: "",
         city: "",
-        postCode: "",
-        state: "CZ",
-        tel: "",
+        postcode: "",
+        country: "CZ",
+        phone: "",
         ico: "",
         dic: "",
       },
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(checked ? values : values.shippingAddress, null, 2));
+      alert(JSON.stringify(checked ? values : values.shipping, null, 2));
+      setCreateOrderInput((prevState: any) => ({
+        ...prevState,
+        shipping: values.shipping,
+        billing: values.billing,
+        billingDifferentThanShipping: checked,
+      }));
+      const checkOutData = createCheckoutData(createOrderInput);
+      alert(JSON.stringify(createOrderInput, null, 2));
     },
   });
 
@@ -525,36 +546,54 @@ const Shipping = (): JSX.Element => {
               type="email"
               label="Email *"
               variant="outlined"
-              name={"shippingAddress.email"}
+              name={"shipping.email"}
               fullWidth
-              value={formik.values.shippingAddress.email}
+              value={formik.values.shipping.email}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.email &&
-                Boolean(formik.errors.shippingAddress?.email)
+                formik.touched.shipping?.email &&
+                Boolean(formik.errors.shipping?.email)
               }
               helperText={
-                formik.touched.shippingAddress?.email &&
-                formik.errors.shippingAddress?.email
+                formik.touched.shipping?.email && formik.errors.shipping?.email
               }
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               type={"text"}
-              label="Jméno a Příjmení *"
+              label="Jméno "
               variant="outlined"
-              name={"shippingAddress.fullName"}
+              name={"shipping.firstName"}
               fullWidth
-              value={formik.values.shippingAddress?.fullName}
+              value={formik.values.shipping?.firstName}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.fullName &&
-                Boolean(formik.errors.shippingAddress?.fullName)
+                formik.touched.shipping?.firstName &&
+                Boolean(formik.errors.shipping?.firstName)
               }
               helperText={
-                formik.touched.shippingAddress?.fullName &&
-                formik.errors.shippingAddress?.fullName
+                formik.touched.shipping?.firstName &&
+                formik.errors.shipping?.firstName
+              }
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              type={"text"}
+              label="Příjmení *"
+              variant="outlined"
+              name={"shipping.lastName"}
+              fullWidth
+              value={formik.values.shipping?.lastName}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.shipping?.lastName &&
+                Boolean(formik.errors.shipping?.lastName)
+              }
+              helperText={
+                formik.touched.shipping?.lastName &&
+                formik.errors.shipping?.lastName
               }
             />
           </Grid>
@@ -563,17 +602,17 @@ const Shipping = (): JSX.Element => {
               type={"text"}
               label="Název firmy"
               variant="outlined"
-              name={"shippingAddress.companyName"}
+              name={"shipping.company"}
               fullWidth
-              value={formik.values.shippingAddress?.companyName}
+              value={formik.values.shipping?.company}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.companyName &&
-                Boolean(formik.errors.shippingAddress?.companyName)
+                formik.touched.shipping?.company &&
+                Boolean(formik.errors.shipping?.company)
               }
               helperText={
-                formik.touched.shippingAddress?.companyName &&
-                formik.errors.shippingAddress?.companyName
+                formik.touched.shipping?.company &&
+                formik.errors.shipping?.company
               }
             />
           </Grid>
@@ -582,40 +621,39 @@ const Shipping = (): JSX.Element => {
               type="text"
               label="Ulice a číslo popisné *"
               variant="outlined"
-              name={"shippingAddress.address"}
+              name={"shipping.address1"}
               fullWidth
-              value={formik.values.shippingAddress?.address}
+              value={formik.values.shipping?.address1}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.address &&
-                Boolean(formik.errors.shippingAddress?.address)
+                formik.touched.shipping?.address1 &&
+                Boolean(formik.errors.shipping?.address1)
               }
               helperText={
-                formik.touched.shippingAddress?.address &&
-                formik.errors.shippingAddress?.address
+                formik.touched.shipping?.address1 &&
+                formik.errors.shipping?.address1
               }
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={8}>
             <TextField
               type={"text"}
               label="Město *"
               variant="outlined"
-              name={"shippingAddress.city"}
+              name={"shipping.city"}
               fullWidth
-              value={formik.values.shippingAddress?.city}
+              value={formik.values.shipping?.city}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.city &&
-                Boolean(formik.errors.shippingAddress?.city)
+                formik.touched.shipping?.city &&
+                Boolean(formik.errors.shipping?.city)
               }
               helperText={
-                formik.touched.shippingAddress?.city &&
-                formik.errors.shippingAddress?.city
+                formik.touched.shipping?.city && formik.errors.shipping?.city
               }
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={4}>
             {/*  <Typography
               variant={"subtitle2"}
               sx={{ marginBottom: 2 }}
@@ -627,17 +665,17 @@ const Shipping = (): JSX.Element => {
               type="text"
               label="PSČ *"
               variant="outlined"
-              name={"shippingAddress.postCode"}
+              name={"shipping.postcode"}
               fullWidth
-              value={formik.values.shippingAddress?.postCode}
+              value={formik.values.shipping?.postcode}
               onChange={formik.handleChange}
               error={
-                formik.touched.shippingAddress?.postCode &&
-                Boolean(formik.errors.shippingAddress?.postCode)
+                formik.touched.shipping?.postcode &&
+                Boolean(formik.errors.shipping?.postcode)
               }
               helperText={
-                formik.touched.shippingAddress?.postCode &&
-                formik.errors.shippingAddress?.postCode
+                formik.touched.shipping?.postcode &&
+                formik.errors.shipping?.postcode
               }
             />
           </Grid>
@@ -645,9 +683,9 @@ const Shipping = (): JSX.Element => {
           <Grid item xs={12} sm={12}>
             <Autocomplete
               onChange={(e, value) =>
-                formik.setFieldValue("shippingAddress.state", value?.code || "")
+                formik.setFieldValue("shipping.country", value?.code || "")
               }
-              id={"state"}
+              id={"country"}
               options={countries}
               autoHighlight
               getOptionLabel={(option) => option.label}
@@ -669,17 +707,17 @@ const Shipping = (): JSX.Element => {
               )}
               renderInput={(params) => (
                 <TextField
-                  value={formik.values.shippingAddress?.state}
+                  value={formik.values.shipping?.country}
                   error={
-                    formik.touched.shippingAddress?.state &&
-                    Boolean(formik.errors.shippingAddress?.state)
+                    formik.touched.shipping?.country &&
+                    Boolean(formik.errors.shipping?.country)
                   }
                   helperText={
-                    formik.touched.shippingAddress?.state &&
-                    formik.errors.shippingAddress?.state
+                    formik.touched.shipping?.country &&
+                    formik.errors.shipping?.country
                   }
                   {...params}
-                  name={"shippingAddress.state"}
+                  name={"shipping.country"}
                   label="Vyberte stát"
                   inputProps={{
                     ...params.inputProps,
@@ -697,19 +735,18 @@ const Shipping = (): JSX.Element => {
               type={"tel"}
               label="Telefon  *"
               variant="outlined"
-              name={"shippingAddress.tel"}
+              name={"shipping.phone"}
               fullWidth
-              value={formik.values.shippingAddress?.tel}
-              onChange={(value: string) =>
-                formik.setFieldValue("shippingAddress.tel", value || "")
+              value={formik.values.shipping?.phone}
+              onChange={(value: any) =>
+                formik.setFieldValue("shipping.phone", value || "")
               }
               error={
-                formik.touched.shippingAddress?.tel &&
-                Boolean(formik.errors.shippingAddress?.tel)
+                formik.touched.shipping?.phone &&
+                Boolean(formik.errors.shipping?.phone)
               }
               helperText={
-                formik.touched.shippingAddress?.tel &&
-                formik.errors.shippingAddress?.tel
+                formik.touched.shipping?.phone && formik.errors.shipping?.phone
               }
             />
           </Grid>
@@ -738,22 +775,60 @@ const Shipping = (): JSX.Element => {
               Fakturační údaje
             </Typography>
             <Grid container spacing={{ xs: 2, md: 4 }}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type={"text"}
+                  label="Jméno "
+                  variant="outlined"
+                  name={"billing.firstName"}
+                  fullWidth
+                  value={formik.values.billing?.firstName}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billing?.firstName &&
+                    Boolean(formik.errors.billing?.firstName)
+                  }
+                  helperText={
+                    formik.touched.billing?.firstName &&
+                    formik.errors.billing?.firstName
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type={"text"}
+                  label="Příjmení *"
+                  variant="outlined"
+                  name={"billing.lastName"}
+                  fullWidth
+                  value={formik.values.billing?.lastName}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.billing?.lastName &&
+                    Boolean(formik.errors.billing?.lastName)
+                  }
+                  helperText={
+                    formik.touched.billing?.lastName &&
+                    formik.errors.billing?.lastName
+                  }
+                />
+              </Grid>
               <Grid item xs={12} sm={12}>
                 <TextField
                   type={"text"}
-                  label="Jméno a Příjmení (Název firmy) *"
+                  label="Název firmy"
                   variant="outlined"
-                  name={"billingAddress.fullName"}
+                  name={"billing.company"}
                   fullWidth
-                  value={formik.values.billingAddress?.fullName}
+                  value={formik.values.billing?.company}
                   onChange={formik.handleChange}
                   error={
-                    formik.touched.billingAddress?.fullName &&
-                    Boolean(formik.errors.billingAddress?.fullName)
+                    formik.touched.billing?.company &&
+                    Boolean(formik.errors.billing?.company)
                   }
                   helperText={
-                    formik.touched.billingAddress?.fullName &&
-                    formik.errors.billingAddress?.fullName
+                    formik.touched.billing?.company &&
+                    formik.errors.billing?.company
                   }
                 />
               </Grid>
@@ -762,40 +837,39 @@ const Shipping = (): JSX.Element => {
                   type="text"
                   label="Ulice a číslo popisné *"
                   variant="outlined"
-                  name={"billingAddress.address"}
+                  name={"billing.address1"}
                   fullWidth
-                  value={formik.values.billingAddress?.address}
+                  value={formik.values.billing?.address1}
                   onChange={formik.handleChange}
                   error={
-                    formik.touched.billingAddress?.address &&
-                    Boolean(formik.errors.billingAddress?.address)
+                    formik.touched.billing?.address1 &&
+                    Boolean(formik.errors.billing?.address1)
                   }
                   helperText={
-                    formik.touched.billingAddress?.address &&
-                    formik.errors.billingAddress?.address
+                    formik.touched.billing?.address1 &&
+                    formik.errors.billing?.address1
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={8}>
                 <TextField
                   type={"text"}
                   label="Město *"
                   variant="outlined"
-                  name={"billingAddress.city"}
+                  name={"billing.city"}
                   fullWidth
-                  value={formik.values.billingAddress?.city}
+                  value={formik.values.billing?.city}
                   onChange={formik.handleChange}
                   error={
-                    formik.touched.billingAddress?.city &&
-                    Boolean(formik.errors.billingAddress?.city)
+                    formik.touched.billing?.city &&
+                    Boolean(formik.errors.billing?.city)
                   }
                   helperText={
-                    formik.touched.billingAddress?.city &&
-                    formik.errors.billingAddress?.city
+                    formik.touched.billing?.city && formik.errors.billing?.city
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={4}>
                 {/*  <Typography
               variant={"subtitle2"}
               sx={{ marginBottom: 2 }}
@@ -807,17 +881,17 @@ const Shipping = (): JSX.Element => {
                   type="text"
                   label="PSČ *"
                   variant="outlined"
-                  name={"billingAddress.postCode"}
+                  name={"billing.postcode"}
                   fullWidth
-                  value={formik.values.billingAddress?.postCode}
+                  value={formik.values.billing?.postcode}
                   onChange={formik.handleChange}
                   error={
-                    formik.touched.billingAddress?.postCode &&
-                    Boolean(formik.errors.billingAddress?.postCode)
+                    formik.touched.billing?.postcode &&
+                    Boolean(formik.errors.billing?.postcode)
                   }
                   helperText={
-                    formik.touched.billingAddress?.postCode &&
-                    formik.errors.billingAddress?.postCode
+                    formik.touched.billing?.postcode &&
+                    formik.errors.billing?.postcode
                   }
                 />
               </Grid>
@@ -825,12 +899,9 @@ const Shipping = (): JSX.Element => {
               <Grid item xs={12} sm={12}>
                 <Autocomplete
                   onChange={(e, value) =>
-                    formik.setFieldValue(
-                      "billingAddress.state",
-                      value?.code || ""
-                    )
+                    formik.setFieldValue("billing.country", value?.code || "")
                   }
-                  id={"state"}
+                  id={"country"}
                   options={countries}
                   autoHighlight
                   getOptionLabel={(option) => option.label}
@@ -852,17 +923,17 @@ const Shipping = (): JSX.Element => {
                   )}
                   renderInput={(params) => (
                     <TextField
-                      value={formik.values.billingAddress?.state}
+                      value={formik.values.billing?.country}
                       error={
-                        formik.touched.billingAddress?.state &&
-                        Boolean(formik.errors.billingAddress?.state)
+                        formik.touched.billing?.country &&
+                        Boolean(formik.errors.billing?.country)
                       }
                       helperText={
-                        formik.touched.billingAddress?.state &&
-                        formik.errors.billingAddress?.state
+                        formik.touched.billing?.country &&
+                        formik.errors.billing?.country
                       }
                       {...params}
-                      name={"billingAddress.state"}
+                      name={"billing.country"}
                       label="Vyberte stát"
                       inputProps={{
                         ...params.inputProps,
@@ -874,24 +945,24 @@ const Shipping = (): JSX.Element => {
               </Grid>
               <Grid item xs={12} sm={12}>
                 <MuiPhoneNumber
-                  onChange={(value: string) =>
-                    formik.setFieldValue("billingAddress.tel", value || "")
+                  onChange={(value: any) =>
+                    formik.setFieldValue("billing.phone", value || "")
                   }
                   regions={["europe"]}
                   defaultCountry={"cz"}
                   type={"tel"}
                   label="Telefon *"
                   variant="outlined"
-                  name={"billingAddress.tel"}
+                  name={"billing.phone"}
                   fullWidth
-                  value={formik.values.billingAddress?.tel}
+                  value={formik.values.billing?.phone}
                   error={
-                    formik.touched.billingAddress?.tel &&
-                    Boolean(formik.errors.billingAddress?.tel)
+                    formik.touched.billing?.phone &&
+                    Boolean(formik.errors.billing?.phone)
                   }
                   helperText={
-                    formik.touched.billingAddress?.tel &&
-                    formik.errors.billingAddress?.tel
+                    formik.touched.billing?.phone &&
+                    formik.errors.billing?.phone
                   }
                 />
               </Grid>
@@ -900,17 +971,16 @@ const Shipping = (): JSX.Element => {
                   type={"text"}
                   label="ICO"
                   variant="outlined"
-                  name={"billingAddress.ico"}
+                  name={"billing.ico"}
                   fullWidth
-                  value={formik.values.billingAddress?.ico}
+                  value={formik.values.billing?.ico}
                   onChange={formik.handleChange}
                   error={
-                    formik.touched.billingAddress?.ico &&
-                    Boolean(formik.errors.billingAddress?.ico)
+                    formik.touched.billing?.ico &&
+                    Boolean(formik.errors.billing?.ico)
                   }
                   helperText={
-                    formik.touched.billingAddress?.ico &&
-                    formik.errors.billingAddress?.ico
+                    formik.touched.billing?.ico && formik.errors.billing?.ico
                   }
                 />
               </Grid>
@@ -919,43 +989,32 @@ const Shipping = (): JSX.Element => {
                   type={"text"}
                   label="DIC"
                   variant="outlined"
-                  name={"billingAddress.dic"}
+                  name={"billing.dic"}
                   fullWidth
-                  value={formik.values.billingAddress?.dic}
+                  value={formik.values.billing?.dic}
                   onChange={formik.handleChange}
                   error={
-                    formik.touched.billingAddress?.dic &&
-                    Boolean(formik.errors.billingAddress?.dic)
+                    formik.touched.billing?.dic &&
+                    Boolean(formik.errors.billing?.dic)
                   }
                   helperText={
-                    formik.touched.billingAddress?.dic &&
-                    formik.errors.billingAddress?.dic
+                    formik.touched.billing?.dic && formik.errors.billing?.dic
                   }
                 />
               </Grid>
               <Grid item xs={12}>
                 <Divider />
               </Grid>
-              <Grid container item xs={12} justifyContent={"space-between"}>
-                <Grid item xs={12} md={4}>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    ZPET
-                  </Button>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                    type="submit"
-                  >
-                    POKRAČOVAT
-                  </Button>
-                </Grid>
-              </Grid>
             </Grid>
           </>
         )}
+        <Grid container item xs={12}>
+          <Grid item xs={12} md={12}>
+            <Button color="primary" variant="contained" fullWidth type="submit">
+              OBJEDNAT
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </Box>
   );
