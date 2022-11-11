@@ -13,32 +13,9 @@ import { AppContext } from "../../../context/AppContext";
 import Skeleton from "@mui/material/Skeleton";
 //types
 import { CartContextType } from "../../../types/appContext";
-const mock = [
-  {
-    title: "Adidas shoes",
-    size: "41",
-    price: "$69.90",
-    code: "D5268X149",
-    image: "https://assets.maccarianagency.com/backgrounds/img56.jpg",
-  },
-  {
-    title: "Nike",
-    size: "41",
-    price: "$49.90",
-    code: "P8763Y435",
-    image: "https://assets.maccarianagency.com/backgrounds/img57.jpg",
-  },
-  {
-    title: "Sneakers",
-    size: "41",
-    price: "$59.90",
-    code: "A1356F865",
-    image: "https://assets.maccarianagency.com/backgrounds/img58.jpg",
-  },
-];
 
 const Orders = (): JSX.Element => {
-  const { cart, originCart, loadingCart } = useContext(
+  const { cart, originCart, loadingCart, delivery } = useContext(
     AppContext
   ) as CartContextType;
   const theme = useTheme();
@@ -149,7 +126,12 @@ const Orders = (): JSX.Element => {
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography color={"text.secondary"}>Doprava</Typography>
+          <Box>
+            <Typography color={"text.secondary"}>Doprava:</Typography>
+            <Typography color={"text.secondary"} fontSize={"14px"}>
+              {delivery?.title}
+            </Typography>
+          </Box>
           <Typography color={"text.secondary"} fontWeight={700}>
             {loadingCart ? (
               <Skeleton
@@ -157,9 +139,7 @@ const Orders = (): JSX.Element => {
                 sx={{ fontSize: "1.2rem", minWidth: "100px" }}
               />
             ) : (
-              <div
-                dangerouslySetInnerHTML={{ __html: originCart.shippingTotal }}
-              />
+              <>{delivery.price} Kč</>
             )}
           </Typography>
         </Box>
@@ -179,7 +159,7 @@ const Orders = (): JSX.Element => {
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography color={"text.secondary"}>DPH (+19%)</Typography>
+          <Typography color={"text.secondary"}>DPH </Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
             {loadingCart ? (
               <Skeleton
@@ -203,7 +183,7 @@ const Orders = (): JSX.Element => {
                 sx={{ fontSize: "1.2rem", minWidth: "100px" }}
               />
             ) : (
-              <div dangerouslySetInnerHTML={{ __html: originCart.total }} />
+              <>{parseInt(originCart.total) + delivery.price} Kč</>
             )}
           </Typography>
         </Box>

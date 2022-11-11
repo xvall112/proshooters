@@ -95,9 +95,13 @@ const validationSchema = yup.object({
 });
 
 const Payment = () => {
-  const [pointZasilkovna, setPointZasilkovna] = useState(null);
-  const { setActiveStep, handleSetPaymentandDeliveryMethod, createOrderInput } =
-    useContext(AppContext);
+  const {
+    setActiveStep,
+    handleSetDelivery,
+    setCreateOrderInput,
+    setPointZasilkovna,
+    pointZasilkovna,
+  } = useContext(AppContext);
   const router = useRouter();
   // set active step on navbar
   useEffect(() => {
@@ -112,13 +116,19 @@ const Payment = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
-      handleSetPaymentandDeliveryMethod(values.typeOfPayment, [
-        values.typeOfDelivery,
-      ]);
-      alert(JSON.stringify(createOrderInput, null, 2));
+      setCreateOrderInput((prevState) => ({
+        ...prevState,
+        paymentMethod: values.typeOfPayment,
+        shippingMethod: [values.typeOfDelivery],
+      }));
+
       router.push("/checkout/address");
     },
   });
+
+  const handleChangeTypeOfDelivery = (title, price) => {
+    handleSetDelivery(title, price);
+  };
 
   //set option Zasilkovna
   const packetaApiKey = "XXX XXX XXX";
@@ -132,8 +142,7 @@ const Payment = () => {
   function showSelectedPickupPoint(point) {
     // Add here an action on pickup point selection
     if (point) {
-      setPointZasilkovna(point.formatedValue);
-      console.log(point);
+      setPointZasilkovna(point);
     }
   }
 
@@ -162,16 +171,21 @@ const Payment = () => {
                       >
                         <MyFormControlLabel
                           className="packeta-selector-open"
-                          onClick={() => handleOpenZasilkovnaWidget()}
+                          onClick={() => {
+                            handleOpenZasilkovnaWidget(),
+                              handleChangeTypeOfDelivery("Zásilkovna", 74);
+                          }}
                           value="zasilkovna"
                           label={
                             <Label
                               title={"Zásilkovna"}
                               subtitle={`Doručení na výdejní místo ${
-                                pointZasilkovna !== null ? pointZasilkovna : ""
+                                pointZasilkovna !== null
+                                  ? pointZasilkovna.formatedValue
+                                  : ""
                               }
                           `}
-                              price={"89 Kč"}
+                              price={"74 Kč"}
                               image={ZasilkovnaLogo}
                             />
                           }
@@ -180,13 +194,14 @@ const Payment = () => {
                         <MyFormControlLabel
                           onClick={() => {
                             setPointZasilkovna(null);
+                            handleChangeTypeOfDelivery("Dodání na adresu", 99);
                           }}
                           value="address"
                           label={
                             <Label
                               title={"Dodání na adresu"}
                               subtitle={"Doručení objednávky na vaší adresu"}
-                              price={"89 Kč"}
+                              price={"99Kč"}
                               image={DopravaNaAdresu}
                             />
                           }
@@ -195,6 +210,7 @@ const Payment = () => {
                         <MyFormControlLabel
                           onClick={() => {
                             setPointZasilkovna(null);
+                            handleChangeTypeOfDelivery("Osobní odběr", 0);
                           }}
                           value="personal"
                           label={

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { createCheckoutData } from "../../../functions";
+
 //materialUI
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -448,9 +448,12 @@ const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const Shipping = (): JSX.Element => {
-  const { setCreateOrderInput, createOrderInput } = useContext(
-    AppContext
-  ) as CartContextType;
+  const {
+    setCreateOrderInput,
+
+    pointZasilkovna,
+    createOrder,
+  } = useContext(AppContext) as CartContextType;
   const [checked, setChecked] = React.useState(false);
 
   //is delivery address is same like billing address
@@ -501,9 +504,9 @@ const Shipping = (): JSX.Element => {
         firstName: "",
         lastName: "",
         company: "",
-        address1: "",
-        city: "",
-        postcode: "",
+        address1: pointZasilkovna ? pointZasilkovna?.street : "",
+        city: pointZasilkovna ? pointZasilkovna?.city : "",
+        postcode: pointZasilkovna ? pointZasilkovna?.zip : "",
         country: "CZ",
         phone: "",
       },
@@ -529,8 +532,7 @@ const Shipping = (): JSX.Element => {
         billing: values.billing,
         billingDifferentThanShipping: checked,
       }));
-      const checkOutData = createCheckoutData(createOrderInput);
-      alert(JSON.stringify(createOrderInput, null, 2));
+      createOrder();
     },
   });
 
@@ -629,6 +631,7 @@ const Shipping = (): JSX.Element => {
                 formik.touched.shipping?.address1 &&
                 Boolean(formik.errors.shipping?.address1)
               }
+              disabled={pointZasilkovna === null ? false : true}
               helperText={
                 formik.touched.shipping?.address1 &&
                 formik.errors.shipping?.address1
@@ -642,6 +645,7 @@ const Shipping = (): JSX.Element => {
               variant="outlined"
               name={"shipping.city"}
               fullWidth
+              disabled={pointZasilkovna === null ? false : true}
               value={formik.values.shipping?.city}
               onChange={formik.handleChange}
               error={
@@ -673,6 +677,7 @@ const Shipping = (): JSX.Element => {
                 formik.touched.shipping?.postcode &&
                 Boolean(formik.errors.shipping?.postcode)
               }
+              disabled={pointZasilkovna === null ? false : true}
               helperText={
                 formik.touched.shipping?.postcode &&
                 formik.errors.shipping?.postcode
@@ -966,7 +971,7 @@ const Shipping = (): JSX.Element => {
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   type={"text"}
                   label="ICO"
@@ -984,7 +989,7 @@ const Shipping = (): JSX.Element => {
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   type={"text"}
                   label="DIC"

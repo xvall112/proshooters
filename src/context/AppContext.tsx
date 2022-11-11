@@ -1,9 +1,11 @@
 import React, { useState, useEffect, createContext } from "react";
+import { createCheckoutData } from "../functions";
 import {
   ICart,
   CartContextType,
   IOriginCart,
   IOrderInput,
+  IDelivery,
 } from "../types/appContext";
 import { v4 } from "uuid";
 import { isEmpty } from "lodash";
@@ -12,7 +14,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import UPDATE_CART from "../utils/gql/mutations/update-cart";
 import GET_CART from "../utils/gql/queries/get-cart";
 import CLEAR_CART_MUTATION from "../utils/gql//mutations/clear-cart";
+import CHECKOUT_MUTATION from "../utils/gql/mutations/checkout";
 import { getFormattedCart, getUpdatedItems } from "../functions";
+import { getCreateOrderData, createTheOrder } from "../utils/order";
 import { VariantType, useSnackbar } from "notistack";
 
 export const AppContext = createContext<CartContextType | null>({
@@ -28,11 +32,24 @@ export const AppContext = createContext<CartContextType | null>({
   activeStep: 0,
   setCreateOrderInput: (input) => {},
   createOrderInput: {},
-  handleSetPaymentandDeliveryMethod: (deliveryMethod, paymentMethod) => {},
+  handleSetDelivery: (title, price) => {},
+  delivery: { price: 0, title: null },
+  setPointZasilkovna: (point) => {},
+  pointZasilkovna: {},
+  createCheckout: () => {},
+  createOrder: () => {},
 });
 
 export const AppProvider = (props: any) => {
+  const [pointZasilkovna, setPointZasilkovna] = useState<any>({
+    point: null,
+  });
+  const [orderData, setOrderData] = useState<any>(null);
   const [createOrderInput, setCreateOrderInput] = useState<IOrderInput>({});
+  const [delivery, setDelivery] = useState<IDelivery>({
+    title: null,
+    price: 0,
+  });
   const [activeStep, setActiveStep] = useState<number>(0);
   const [originCart, setOriginCart] = useState<IOriginCart>({});
   const [cart, setCart] = useState<ICart>({});
@@ -47,16 +64,20 @@ export const AppProvider = (props: any) => {
     }
   }, []);
 
-  //set createorderInput paymentMethod and delivery method
-  const handleSetPaymentandDeliveryMethod = (
-    deliveryMethod: string,
-    paymentMethod: any
-  ) => {
-    setCreateOrderInput((prevState: any) => {
+  useEffect(() => {
+    if (null !== orderData) {
+      // Call the checkout mutation when the value for orderData changes/updates.
+      checkout();
+    }
+  }, [orderData]);
+
+  //set delivery title and price use it in summary box
+  const handleSetDelivery = (title: string, price: number) => {
+    setDelivery((prevState: any) => {
       return {
         ...prevState,
-        deliveryMethod: deliveryMethod,
-        paymentMethod: paymentMethod,
+        title: title,
+        price: price,
       };
     });
   };
@@ -152,10 +173,42 @@ export const AppProvider = (props: any) => {
     },
   });
 
+  //create order
+  const createOrder = async () => {
+    const orderData = await getCreateOrderData(createOrderInput, cart.products);
+
+    await createTheOrder(orderData, setMessage, "");
+  };
+
+  const createCheckout = () => {
+    const checkOutData = createCheckoutData(createOrderInput);
+
+    /**
+     *  When order data is set, checkout mutation will automatically be called,
+     *  because 'orderData' is added in useEffect as a dependency.
+     */
+    setOrderData(checkOutData);
+  };
+
+  // Create New order: Checkout Mutation.
+  const [checkout, { data: checkoutResponse, loading: checkoutLoading }] =
+    useMutation(CHECKOUT_MUTATION, {
+      variables: {
+        input: orderData,
+      },
+      onError: (error) => {
+        if (error) {
+          setMessage("error", `${error.message}`);
+        }
+      },
+    });
   return (
     <AppContext.Provider
       value={{
-        handleSetPaymentandDeliveryMethod,
+        setPointZasilkovna,
+        pointZasilkovna,
+        delivery,
+        handleSetDelivery,
         setCreateOrderInput,
         createOrderInput,
         cart,
@@ -168,6 +221,8 @@ export const AppProvider = (props: any) => {
         setMessage,
         setActiveStep,
         activeStep,
+        createCheckout,
+        createOrder,
       }}
     >
       {props.children}

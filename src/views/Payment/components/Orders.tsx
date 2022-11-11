@@ -31,11 +31,11 @@ const MyLinkButton = React.forwardRef(({ onClick, href }: any, ref) => {
 });
 
 const Orders = (): JSX.Element => {
-  const { cart, originCart, loadingCart } = useContext(
+  const { cart, originCart, loadingCart, delivery } = useContext(
     AppContext
   ) as CartContextType;
   const theme = useTheme();
-  console.log(originCart);
+
   return (
     <Box>
       {cart.products?.length &&
@@ -144,7 +144,12 @@ const Orders = (): JSX.Element => {
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography color={"text.secondary"}>Doprava</Typography>
+          <Box>
+            <Typography color={"text.secondary"}>Doprava:</Typography>
+            <Typography color={"text.secondary"} fontSize={"14px"}>
+              {delivery?.title}
+            </Typography>
+          </Box>
           <Typography color={"text.secondary"} fontWeight={700}>
             {loadingCart ? (
               <Skeleton
@@ -152,9 +157,7 @@ const Orders = (): JSX.Element => {
                 sx={{ fontSize: "1.2rem", minWidth: "100px" }}
               />
             ) : (
-              <div
-                dangerouslySetInnerHTML={{ __html: originCart.shippingTotal }}
-              />
+              <>{delivery.price} Kč</>
             )}
           </Typography>
         </Box>
@@ -174,7 +177,7 @@ const Orders = (): JSX.Element => {
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography color={"text.secondary"}>DPH (+19%)</Typography>
+          <Typography color={"text.secondary"}>DPH </Typography>
           <Typography color={"text.secondary"} fontWeight={700}>
             {loadingCart ? (
               <Skeleton
@@ -198,7 +201,7 @@ const Orders = (): JSX.Element => {
                 sx={{ fontSize: "1.2rem", minWidth: "100px" }}
               />
             ) : (
-              <div dangerouslySetInnerHTML={{ __html: originCart.total }} />
+              <>{parseInt(originCart.total) + delivery.price} Kč</>
             )}
           </Typography>
         </Box>

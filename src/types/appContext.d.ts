@@ -32,10 +32,12 @@ export type CartContextType = {
   activeStep: number;
   setCreateOrderInput: (input: any) => void;
   createOrderInput: IOrderInput;
-  handleSetPaymentandDeliveryMethod: (
-    deliveryMethod: string,
-    paymentMethod: any
-  ) => void;
+  handleSetDelivery: (title, price) => void;
+  delivery: IDelivery;
+  setPointZasilkovna: (point: any) => void;
+  pointZasilkovna: any;
+  createCheckout: () => void;
+  createOrder: () => void;
 };
 
 export interface ILink {
@@ -55,4 +57,9 @@ export interface IOrderInput {
   shippingLines?: object;
   shippingMethod?: Array;
   billingDifferentThanShipping?: bollean;
+}
+
+export interface IDelivery {
+  price: number;
+  title: string | null;
 }
