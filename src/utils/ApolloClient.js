@@ -21,6 +21,7 @@ export const middleware = new ApolloLink((operation, forward) => {
     operation.setContext(({ headers = {} }) => ({
       headers: {
         "woocommerce-session": `Session ${session}`,
+        "Access-Control-Allow-Origin: *"
       },
     }));
   }
