@@ -34,9 +34,7 @@ export const getCreateOrderLineItems = (products) => {
   if (isEmpty(products) || !isArray(products)) {
     return [];
   }
-
   console.log("products", products);
-
   return products?.map(({ productId, qty: quantity }) => {
     return {
       quantity,
@@ -53,43 +51,51 @@ export const getCreateOrderLineItems = (products) => {
  * @param products
  * @return {{shipping: {country: *, city: *, phone: *, address_1: (string|*), address_2: (string|*), postcode: (string|*), last_name: (string|*), company: *, state: *, first_name: (string|*), email: *}, payment_method_title: string, line_items: (*[]|*), payment_method: string, billing: {country: *, city: *, phone: *, address_1: (string|*), address_2: (string|*), postcode: (string|*), last_name: (string|*), company: *, state: *, first_name: (string|*), email: *}}}
  */
-export const getCreateOrderData = (order, products) => {
-  // Set the billing Data to shipping, if applicable.
-  const billingData = order.billingDifferentThanShipping
-    ? order.billing
-    : order.shipping;
-
+export const getCreateOrderData = (
+  address,
+  products,
+  paymentDelivery,
+  delivery
+) => {
   // Checkout data.
+  console.log(getCreateOrderLineItems(products));
   return {
     shipping: {
-      first_name: order?.shipping?.firstName,
-      last_name: order?.shipping?.lastName,
-      address_1: order?.shipping?.address1,
-      address_2: order?.shipping?.address2,
-      city: order?.shipping?.city,
-      country: order?.shipping?.country,
-      state: order?.shipping?.state,
-      postcode: order?.shipping?.postcode,
-      email: order?.shipping?.email,
-      phone: order?.shipping?.phone,
-      company: order?.shipping?.company,
+      first_name: address?.shipping?.firstName,
+      last_name: address?.shipping?.lastName,
+      address_1: address?.shipping?.address1,
+      address_2: address?.shipping?.address2,
+      city: address?.shipping?.city,
+      country: address?.shipping?.country,
+      state: address?.shipping?.state,
+      postcode: address?.shipping?.postcode,
+      email: address?.shipping?.email,
+      phone: address?.shipping?.phone,
+      company: address?.shipping?.company,
     },
     billing: {
-      first_name: billingData?.firstName,
-      last_name: billingData?.lastName,
-      address_1: billingData?.address1,
-      address_2: billingData?.address2,
-      city: billingData?.city,
-      country: billingData?.country,
-      state: billingData?.state,
-      postcode: billingData?.postcode,
-      email: billingData?.email,
-      phone: billingData?.phone,
-      company: billingData?.company,
+      first_name: address.billing?.firstName,
+      last_name: address.billing?.lastName,
+      address_1: address.billing?.address1,
+      address_2: address.billing?.address2,
+      city: address.billing?.city,
+      country: address.billing?.country,
+      state: address.billing?.state,
+      postcode: address.billing?.postcode,
+      email: address.shipping?.email,
+      phone: address.billing?.phone,
+      company: address.billing?.company,
     },
-    payment_method: "stripe",
-    payment_method_title: order.paymentMethod,
+    payment_method: paymentDelivery.paymentMethod,
+    payment_method_title: paymentDelivery.paymentMethod,
     line_items: getCreateOrderLineItems(products),
+    shipping_lines: [
+      {
+        method_id: "flat_rate",
+        method_title: "Flat Rate",
+        total: "10.00",
+      },
+    ],
   };
 };
 
@@ -133,13 +139,16 @@ export const createTheOrder = async (
     if (result.error) {
       response.error = result.error;
       setOrderFailedError("error", `${response.error}`);
+      throw new Error("Něco se pokazilo");
     }
+
     response.orderId = result?.orderId ?? "";
     response.total = result.total ?? "";
     response.currency = result.currency ?? "";
   } catch (error) {
     // @TODO to be handled later.
-    console.warn("Handle create order error", error?.message);
+    setOrderFailedError("error", `${error?.message}`);
+    throw new Error("Něco se pokazilo");
   }
 
   return response;

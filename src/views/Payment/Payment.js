@@ -98,7 +98,7 @@ const Payment = () => {
   const {
     setActiveStep,
     handleSetDelivery,
-    setCreateOrderInput,
+    setPaymentDelivery,
     setPointZasilkovna,
     pointZasilkovna,
   } = useContext(AppContext);
@@ -115,12 +115,10 @@ const Payment = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      setCreateOrderInput((prevState) => ({
-        ...prevState,
+      setPaymentDelivery({
         paymentMethod: values.typeOfPayment,
         shippingMethod: [values.typeOfDelivery],
-      }));
+      });
 
       router.push("/checkout/address");
     },

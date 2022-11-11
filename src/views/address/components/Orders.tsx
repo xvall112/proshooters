@@ -183,19 +183,11 @@ const Orders = (): JSX.Element => {
                 sx={{ fontSize: "1.2rem", minWidth: "100px" }}
               />
             ) : (
-              <>{parseInt(originCart.total) + delivery.price} Kč</>
+              //TODO pricitat cenu k celkove castce
+              <div dangerouslySetInnerHTML={{ __html: originCart.total }} />
             )}
           </Typography>
         </Box>
-        <Button
-          component={Link}
-          href={"/demos/ecommerce/order-complete"}
-          variant={"contained"}
-          size={"large"}
-          fullWidth
-        >
-          Objednat
-        </Button>
       </Stack>
     </Box>
   );

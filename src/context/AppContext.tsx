@@ -1,11 +1,12 @@
 import React, { useState, useEffect, createContext } from "react";
-import { createCheckoutData } from "../functions";
+import { useRouter } from "next/router";
 import {
   ICart,
   CartContextType,
   IOriginCart,
-  IOrderInput,
   IDelivery,
+  IAddress,
+  IPaymentDelivery,
 } from "../types/appContext";
 import { v4 } from "uuid";
 import { isEmpty } from "lodash";
@@ -14,7 +15,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import UPDATE_CART from "../utils/gql/mutations/update-cart";
 import GET_CART from "../utils/gql/queries/get-cart";
 import CLEAR_CART_MUTATION from "../utils/gql//mutations/clear-cart";
-import CHECKOUT_MUTATION from "../utils/gql/mutations/checkout";
 import { getFormattedCart, getUpdatedItems } from "../functions";
 import { getCreateOrderData, createTheOrder } from "../utils/order";
 import { VariantType, useSnackbar } from "notistack";
@@ -30,22 +30,22 @@ export const AppContext = createContext<CartContextType | null>({
   setMessage: (variant, message) => {},
   setActiveStep: (step) => {},
   activeStep: 0,
-  setCreateOrderInput: (input) => {},
-  createOrderInput: {},
+  setPaymentDelivery: (input) => {},
+  paymentDelivery: {},
   handleSetDelivery: (title, price) => {},
   delivery: { price: 0, title: null },
   setPointZasilkovna: (point) => {},
   pointZasilkovna: {},
-  createCheckout: () => {},
   createOrder: () => {},
+  orderLoading: false,
 });
 
 export const AppProvider = (props: any) => {
+  const [orderLoading, setOrderLoading] = useState(false);
   const [pointZasilkovna, setPointZasilkovna] = useState<any>({
     point: null,
   });
-  const [orderData, setOrderData] = useState<any>(null);
-  const [createOrderInput, setCreateOrderInput] = useState<IOrderInput>({});
+  const [paymentDelivery, setPaymentDelivery] = useState<IPaymentDelivery>({});
   const [delivery, setDelivery] = useState<IDelivery>({
     title: null,
     price: 0,
@@ -54,7 +54,7 @@ export const AppProvider = (props: any) => {
   const [originCart, setOriginCart] = useState<IOriginCart>({});
   const [cart, setCart] = useState<ICart>({});
   const { enqueueSnackbar } = useSnackbar();
-
+  const router = useRouter();
   useEffect(() => {
     // @TODO Will add option to show the cart with localStorage later.
     if (process.browser) {
@@ -63,13 +63,6 @@ export const AppProvider = (props: any) => {
       setCart(cartData);
     }
   }, []);
-
-  useEffect(() => {
-    if (null !== orderData) {
-      // Call the checkout mutation when the value for orderData changes/updates.
-      checkout();
-    }
-  }, [orderData]);
 
   //set delivery title and price use it in summary box
   const handleSetDelivery = (title: string, price: number) => {
@@ -124,11 +117,7 @@ export const AppProvider = (props: any) => {
   };
 
   // Get Cart Data.
-  const {
-    data,
-    loading: loadingCart,
-    refetch,
-  } = useQuery(GET_CART, {
+  const { data, loading: loadingCart, refetch } = useQuery(GET_CART, {
     onCompleted: (data) => {
       // Update cart in the localStorage.
 
@@ -174,43 +163,39 @@ export const AppProvider = (props: any) => {
   });
 
   //create order
-  const createOrder = async () => {
-    const orderData = await getCreateOrderData(createOrderInput, cart.products);
-
-    await createTheOrder(orderData, setMessage, "");
+  const createOrder = async ({ address }: IAddress) => {
+    setOrderLoading(true);
+    const orderData = await getCreateOrderData(
+      address,
+      cart.products,
+      paymentDelivery,
+      delivery
+    );
+    console.log("orderData", orderData);
+    await createTheOrder(orderData, setMessage, "")
+      .then((response) => {
+        router.push("/checkout/success"),
+          console.log(response),
+          clearCart({
+            variables: {
+              input: { all: true, clientMutationId: v4() },
+            },
+          }),
+          localStorage.removeItem("woo-next-cart");
+        setOrderLoading(false);
+      })
+      .catch((error) => setOrderLoading(false));
   };
 
-  const createCheckout = () => {
-    const checkOutData = createCheckoutData(createOrderInput);
-
-    /**
-     *  When order data is set, checkout mutation will automatically be called,
-     *  because 'orderData' is added in useEffect as a dependency.
-     */
-    setOrderData(checkOutData);
-  };
-
-  // Create New order: Checkout Mutation.
-  const [checkout, { data: checkoutResponse, loading: checkoutLoading }] =
-    useMutation(CHECKOUT_MUTATION, {
-      variables: {
-        input: orderData,
-      },
-      onError: (error) => {
-        if (error) {
-          setMessage("error", `${error.message}`);
-        }
-      },
-    });
   return (
     <AppContext.Provider
       value={{
         setPointZasilkovna,
         pointZasilkovna,
         delivery,
+        paymentDelivery,
         handleSetDelivery,
-        setCreateOrderInput,
-        createOrderInput,
+        setPaymentDelivery,
         cart,
         setCart,
         handleRemoveProductClick,
@@ -221,8 +206,8 @@ export const AppProvider = (props: any) => {
         setMessage,
         setActiveStep,
         activeStep,
-        createCheckout,
         createOrder,
+        orderLoading,
       }}
     >
       {props.children}

@@ -28,6 +28,22 @@ const MyLinkButton = React.forwardRef(({ onClick, href }: any, ref) => {
   );
 });
 
+const MyLinkButtonZpet = React.forwardRef(({ onClick, href }: any, ref) => {
+  return (
+    <Box
+      component="a"
+      onClick={onClick}
+      ref={ref}
+      href={href}
+      sx={{ textDecoration: "none" }}
+    >
+      <Button variant={"outlined"} size={"large"} fullWidth>
+        Zpět do obchodu
+      </Button>
+    </Box>
+  );
+});
+
 const SummeryBox: React.FC = (): JSX.Element => {
   const { originCart, loadingCart } = useContext(AppContext) as CartContextType;
 
@@ -113,9 +129,9 @@ const SummeryBox: React.FC = (): JSX.Element => {
         <Link href="/checkout/payment" passHref>
           <MyLinkButton />
         </Link>
-        <Button variant={"outlined"} size={"large"} fullWidth>
-          CHECKOUT
-        </Button>
+        <Link href="/" passHref>
+          <MyLinkButtonZpet />
+        </Link>
       </Stack>
       <Box
         component={"form"}

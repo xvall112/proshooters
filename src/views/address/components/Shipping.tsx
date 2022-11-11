@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
+import { isNull } from "lodash";
 //materialUI
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -444,22 +444,24 @@ const countries = [
   { code: "ZW", label: "Zimbabwe", phone: "263" }, */
 ];
 
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const Shipping = (): JSX.Element => {
-  const {
-    setCreateOrderInput,
-
-    pointZasilkovna,
-    createOrder,
-  } = useContext(AppContext) as CartContextType;
+  const { pointZasilkovna, createOrder } = useContext(
+    AppContext
+  ) as CartContextType;
   const [checked, setChecked] = React.useState(false);
 
   //is delivery address is same like billing address
   const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+
+  useEffect(() => {
+    formik.setFieldValue("shipping.address1", pointZasilkovna?.street);
+    formik.setFieldValue("shipping.postcode", pointZasilkovna?.zip);
+    formik.setFieldValue("shipping.city", pointZasilkovna?.city);
+  }, [pointZasilkovna]);
 
   const validationSchema = yup.object({
     shipping: yup.object({
@@ -504,9 +506,9 @@ const Shipping = (): JSX.Element => {
         firstName: "",
         lastName: "",
         company: "",
-        address1: pointZasilkovna ? pointZasilkovna?.street : "",
-        city: pointZasilkovna ? pointZasilkovna?.city : "",
-        postcode: pointZasilkovna ? pointZasilkovna?.zip : "",
+        address1: "",
+        city: "",
+        postcode: "",
         country: "CZ",
         phone: "",
       },
@@ -525,14 +527,13 @@ const Shipping = (): JSX.Element => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(checked ? values : values.shipping, null, 2));
-      setCreateOrderInput((prevState: any) => ({
-        ...prevState,
-        shipping: values.shipping,
-        billing: values.billing,
-        billingDifferentThanShipping: checked,
-      }));
-      createOrder();
+      createOrder({
+        address: {
+          shipping: values.shipping,
+          billing: checked ? values.billing : values.shipping,
+          billingDifferentThanShipping: checked,
+        },
+      });
     },
   });
 

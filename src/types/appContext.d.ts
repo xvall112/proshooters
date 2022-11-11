@@ -30,14 +30,14 @@ export type CartContextType = {
   setMessage: (variant: VariantType, message: string) => void;
   setActiveStep: (step: number) => void;
   activeStep: number;
-  setCreateOrderInput: (input: any) => void;
-  createOrderInput: IOrderInput;
+  setPaymentDelivery: (input: IPaymentDelivery) => void;
+  paymentDelivery: IPaymentDelivery;
   handleSetDelivery: (title, price) => void;
   delivery: IDelivery;
   setPointZasilkovna: (point: any) => void;
   pointZasilkovna: any;
-  createCheckout: () => void;
-  createOrder: () => void;
+  createOrder: (address: IAddress) => void;
+  orderLoading: boolean
 };
 
 export interface ILink {
@@ -45,18 +45,37 @@ export interface ILink {
   href: any;
 }
 
-export interface IOrderInput {
-  billing?: object;
-  cupons?: Array;
-  currency?: strng;
-  customerId?: Int;
-  isPaid?: bollean;
-  lineItems?: Array;
-  paymentMethod?: string;
-  shipping?: object;
-  shippingLines?: object;
-  shippingMethod?: Array;
-  billingDifferentThanShipping?: bollean;
+export interface IAddress {
+  address:{
+    shipping: {
+      email: string
+      firstName: string
+      lastName: string
+      company?:string
+      address1: any
+      city:any
+      postcode: any
+      country: string
+      phone: string
+    },
+    billing: {
+      firstName: string
+      lastName: string
+      company?: string
+      address1: string
+      city: string
+      postcode: string
+      country: string
+      phone: string
+      ico?: string
+      dic?: string
+    },
+    billingDifferentThanShipping: boolean
+}
+}
+export interface IPaymentDelivery {
+  paymentMethod?: string,
+  shippingMethod?: string[],
 }
 
 export interface IDelivery {

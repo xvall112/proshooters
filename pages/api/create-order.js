@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   };
 
   if (isEmpty(req.body)) {
-    responseData.error = "Required data not sent";
+    responseData.error = "Něco se pokazilo, zkuste znovu";
     return responseData;
   }
 
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     responseData.total = data.total;
     responseData.currency = data.currency;
 
-    res.json(responseData);
+    res.status(200).json(responseData);
   } catch (error) {
     /**
      * Request usually fails if the data in req.body is not sent in the format required.
