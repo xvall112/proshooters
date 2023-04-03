@@ -1,44 +1,24 @@
-# Next.js with TypeScript example
+# Pro Shooters - An E-commerce Website for Selling Weapons
+This project is an e-commerce website built for Pro Shooters, a company that specializes in selling firearms, ammunition, and shooting accessories. The website offers a user-friendly interface for customers to browse and purchase products, and connect to headless WordPress WooCommerce. 
 
-## How to use
+## Features
+Pro Shooters offers the following features:
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+- A homepage with featured products and promotions.
+- A product page with details and specifications for each product.
+- A shopping cart and checkout process for purchasing products.
 
-<!-- #default-branch-switch -->
+## Technology
+Pro Shooters is built using the following technologies:
 
-```sh
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/nextjs-with-typescript
-cd nextjs-with-typescript
-```
+- Nextjs
+- WooCommerce
+- graphQL
+- Stripe (for payment processing)
+- MaterialUi
 
-Install it and run:
+License
+Pro Shooters is available under the MIT license.
 
-```sh
-npm install
-npm run dev
-```
-
-or:
-
-<!-- #default-branch-switch -->
-
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/nextjs-with-typescript)
-
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui/material-ui/tree/master/examples/nextjs-with-typescript)
-
-## The idea behind the example
-
-The project uses [Next.js](https://github.com/vercel/next.js), which is a framework for server-rendered React apps.
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5. If you prefer, you can [use styled-components instead](https://mui.com/material-ui/guides/interoperability/#styled-components).
-
-## The link component
-
-The [example folder](https://github.com/mui/material-ui/tree/HEAD/examples/nextjs-with-typescript) provides an adapter for the use of [Next.js's Link component](https://nextjs.org/docs/api-reference/next/link) with MUI.
-More information [in the documentation](https://mui.com/material-ui/guides/routing/#next-js).
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+Contact
+If you have any questions or comments about the project, please contact us at valtalukas@seznam.cz.
